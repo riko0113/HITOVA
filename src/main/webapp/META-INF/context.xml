@@ -1,0 +1,11 @@
+<Context reloadable="true">
+    <Resource
+        name="jdbc/hitova"
+        auth="Container"
+        type="javax.sql.DataSource"
+        driverClassName="org.postgresql.Driver"
+        url="jdbc:postgresql://localhost:5432/hitova"
+        username="postgres"
+        password="post"
+    />
+</Context>
