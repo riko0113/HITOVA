@@ -1,0 +1,37 @@
+/* 作品追加ボタンの配置 */
+.add-area {
+    text-align: right;
+    margin-bottom: 20px;
+}
+.add {
+	font-size: 24px;
+}
+/* 作品名 */
+.work-card {
+	display: flex;
+	justify-content: space-between;
+    font-size: 20px;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+/* 作品一覧 */
+h2 {
+	text-align: center;
+}
+
+.details:hover {
+    background-color: rgb(182, 241, 188);
+}
+
+.details {
+	background-color: rgb(255, 255, 255);
+	padding: 13px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+	border: 2px solid black;
+	padding: 10px;
+	border-radius: 5px;
+	text-decoration: none;
+	text-decoration-color: black;
+}
+
