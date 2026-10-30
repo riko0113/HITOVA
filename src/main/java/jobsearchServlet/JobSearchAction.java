@@ -10,8 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 // このServletに「/jobSearch」というURLを割り当てる
-@WebServlet("/jobSearch")
-public class JobSearchServlet extends HttpServlet {
+@WebServlet("/JobSearch.action")
+public class JobSearchAction extends HttpServlet {
 
     // GETリクエストを受け取ったときに実行される
     @Override
