@@ -14,6 +14,7 @@
     <div class="">
         <button>ログイン</button>
         <button>新規登録</button>
+        
     </div>
 </main>
 
