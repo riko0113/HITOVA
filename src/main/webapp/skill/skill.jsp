@@ -1,5 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
 <title>スキル一覧</title>
 <style>
     body { font-family: sans-serif; text-align: center; margin-top: 50px; }
@@ -9,19 +12,15 @@
 </style>
 </head>
 <body>
-
 <div class="container">
     <h2>スキル一覧</h2>
-    
     <div style="margin-bottom: 20px; text-align: left; border-bottom: 1px solid #eee; padding-bottom: 10px;">
         <span>趣味のデザインで〇万インプレッション達成</span>
-        <a href="#" style="float: right; color: #0066cc;">削除</a>
+        <a href="${pageContext.request.contextPath}/skillServlet/SkillDelete.action?id=1" style="float: right; color: #0066cc;">削除</a>
     </div>
-
     <div style="margin-top: 30px;">
-        <a href="SkillRegister.action" class="btn">新規スキル登録へ</a>
+        <a href="${pageContext.request.contextPath}/skillServlet/SkillRegister.action" class="btn">新規スキル登録へ</a>
     </div>
 </div>
-
 </body>
 </html>
