@@ -16,18 +16,63 @@
 	margin-left: 60px;
 }
 
-.form-box textarea:nth-of-type(1){
-	width: 100%;
-	height: 50px;
-	padding: 10px;
-	resize: vertical;
-	box-sizing: border-box;
+.form-box input[type="text"] {
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 30px;
 }
 
-.form-box textarea:nth-of-type(2){
+.form-box textarea:nth-of-type(1){
 	width: 100%;
 	height: 150px;
 	padding: 10px;
 	resize: vertical;
 	box-sizing: border-box;
+}
+
+.but:hover {
+    background-color: rgb(182, 241, 188);
+}
+
+.button-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.button-area form {
+    margin: 0;
+}
+
+.but {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 120px;
+    height: 45px;
+    box-sizing: border-box;
+
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    border: 2px solid black;
+    border-radius: 5px;
+
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+    font-size: 13px;
+    margin-top: 5px;
+}
+.tuika{
+	position: relative;
+    text-align: center;
 }
