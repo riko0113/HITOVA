@@ -16,7 +16,7 @@
     </div>
     <div class="work-card">
         <h3>作品名</h3>
-        <a href="" class="details">作品詳細</a>
+        <a href="${pageContext.request.contextPath}/portfolio/jsp/portfoliodetails.jsp" class="details">作品詳細</a>
     </div>
 
 </html>

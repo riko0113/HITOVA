@@ -1,0 +1,80 @@
+.form-box{
+	width: 600px;
+	margin: 30px auto;
+	padding: 25px;
+	border: 2px solid black;
+	border-radius: 5px;
+	background-color: white;
+}
+
+label{
+	font-size: 20px;
+}
+
+.setumei{
+	font-size: 20px;
+}
+
+h1{
+	text-align: center;
+}
+
+.sakuzyo:hover {
+    background-color: rgb(182, 241, 188);
+}
+
+.hensyu:hover {
+    background-color: rgb(182, 241, 188);
+}
+
+.title-area {
+    position: relative;
+    text-align: center;
+}
+
+.button-area {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.hensyu {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 120px;
+    height: 45px;
+    box-sizing: border-box;
+
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    border: 2px solid black;
+    border-radius: 5px;
+
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.sakuzyo {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 120px;
+    height: 45px;
+    box-sizing: border-box;
+
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    border: 2px solid black;
+    border-radius: 5px;
+
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+}
