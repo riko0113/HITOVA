@@ -20,8 +20,8 @@
 
         <div style="margin-top: 50px; display: flex; justify-content: center; gap: 20px;">
             <!-- スキル一覧（またはマイページ）へ遷移するボタン -->
-            <button type="button" onclick="location.href='../skillServlet/Skill.action'" style="padding: 10px 40px; background: white; border: 1px solid gray;">戻る</button>
-            <button type="button" onclick="location.href='../skillServlet/Skill.action'" style="padding: 10px 40px; background: #4CAF50; color: white; border: none;">完了</button>
+            <button type="button" onclick="location.href='${pageContext.request.contextPath}/skillServlet/Skill.action'" style="...">戻る</button>
+			<button type="button" onclick="location.href='${pageContext.request.contextPath}/skillServlet/Skill.action'" style="...">完了</button>
         </div>
     </main>
 </body>

@@ -63,8 +63,7 @@
         <form action="../jobsearchServlet/JobSearchExecute.action" method="post">
             <!-- 検索バーとボタン -->
             <div class="search-bar-row">
-                <!-- 虫眼鏡アイコン（絵文字で代用、必要に応じて画像タグに変更してください） -->
-                <span style="font-size: 30px; margin-right: 15px; transform: rotate(-45deg);">🔍</span>
+                <span style="font-size: 30px; margin-right: 15px; transform: rotate(-45deg);"></span>
                 <input type="text" name="keyword" class="search-input" placeholder="検索">
                 <button type="submit" class="search-btn">検索</button>
             </div>
@@ -74,7 +73,6 @@
                 <label class="filter-label">職種</label>
                 <select name="occupation" class="filter-select">
                     <option value="">選択してください</option>
-                    <!-- 以降、マスタテーブルから取得した職種をループで追加 -->
                 </select>
             </div>
             

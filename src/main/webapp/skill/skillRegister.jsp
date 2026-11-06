@@ -24,12 +24,18 @@
     <h2>スキル登録</h2>
     <div class="note">持っているスキルを自由に登録できます<br>例）趣味、海外留学、言語習得、アルバイト・サークル活動等アピールポイント</div>
     <form action="${pageContext.request.contextPath}/skillServlet/SkillRegisterExecute.action" method="post">
+        
+        <!-- ログイン機能実装までのダミー求職者ID -->
+        <input type="hidden" name="candidate_account_id" value="1">
+
         <div class="form-group">
-            <input type="text" name="skillTitle" placeholder="例）趣味のイラスト投稿でインプレッション〇万達成" required>
+            <!-- nameをskill_nameに変更 -->
+            <input type="text" name="skill_name" placeholder="例）趣味のイラスト投稿でインプレッション〇万達成" required>
         </div>
         <div class="form-group">
             <label style="font-size: 0.9em; display: block; margin-bottom: 5px;">詳細</label>
-            <textarea name="skillDetail"></textarea>
+            <!-- nameをskill_contentに変更 -->
+            <textarea name="skill_content"></textarea>
         </div>
         <a href="#" class="add-more">さらに追加</a>
         <div class="btn-group">
