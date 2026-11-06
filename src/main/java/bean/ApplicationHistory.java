@@ -9,6 +9,8 @@ public class ApplicationHistory implements java.io.Serializable{
 	private Long job_id;
 	private String profile;
 	private LocalDateTime application_at;
+	private Job job;
+    private JobSeekerAccount jobSeekerAccount;
 	
 	
 	//応募履歴ID
@@ -54,6 +56,24 @@ public class ApplicationHistory implements java.io.Serializable{
 	
 	public void setJob_id(Long job_id) {
         this.job_id = job_id;
+    }
+	
+	//求人テーブル情報
+	public Job getJob() {
+		return job; 
+	}
+	
+    public void setJob(Job job) {
+    	this.job = job; 
+    }
+    
+    //求職者テーブル情報
+    public JobSeekerAccount getJobSeekerAccount() {
+    	return jobSeekerAccount; 
+    }
+    
+    public void setJobSeekerAccount(JobSeekerAccount jobSeekerAccount) { 
+    	this.jobSeekerAccount = jobSeekerAccount; 
     }
 	
 }
