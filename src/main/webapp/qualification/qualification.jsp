@@ -14,7 +14,6 @@
     .list-wrapper { display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .list-item { display: flex; align-items: center; gap: 15px; }
     
-    /* 入力枠のような見た目 */
     .item-input { 
         padding: 5px 10px; 
         border: 1px solid #ddd; 
