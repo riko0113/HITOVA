@@ -24,7 +24,7 @@ public class DAO {
 
             // ② データ取得
             // jdbc/book という名前のDB設定を取得
-            ds = (DataSource) ic.lookup("java:/comp/env/jdbc/system");
+            ds = (DataSource) ic.lookup("java:/comp/env/jdbc/hitova");
         }
 
         // データソースからDB接続を取得して返す
