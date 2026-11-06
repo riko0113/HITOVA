@@ -1,25 +1,44 @@
 package skillServlet;
 
 import DAO.SkillDAO;
+import bean.Skill;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import tool.Action;
 
 public class SkillRegisterExecuteAction extends Action {
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // 1. JSPのフォーム（name属性）から入力された文字列を直接受け取る
-        String skillName = request.getParameter("skillTitle");
-        String skillContent = request.getParameter("skillDetail");
+        
+        // 1. 画面（JSP）からの入力値を受け取る
+        // ※本来はセッションからログイン中の求職者IDを取得しますが、テスト用に画面から受け取る想定にしています
+        String candidateIdStr = request.getParameter("candidate_account_id");
+        String skillName = request.getParameter("skill_name");
+        String skillContent = request.getParameter("skill_content");
 
-        // 2. 誰のスキルかを指定するID（※後述の重要注意事項を参照）
-        long candidateId = 1L; 
+        // 入力チェック（空の場合はエラー画面へ弾くなどの処理）
+        if (candidateIdStr == null || skillName == null || skillContent == null) {
+            return "/skill/skillRegisterError.jsp"; 
+        }
 
-        // 3. DAOを呼び出してデータベースに保存
+        // 2. 受け取ったデータをSkill Beanにセットする
+        Skill skill = new Skill();
+        skill.setCandidate_account_id(Long.parseLong(candidateIdStr));
+        skill.setSkill_name(skillName);
+        skill.setSkill_content(skillContent);
+
+        // 3. DAOを呼び出してデータベースにINSERT（登録）
         SkillDAO dao = new SkillDAO();
-        dao.insert(candidateId, skillName, skillContent);
+        int result = dao.insert(skill);
 
-        // 4. 保存が終わったら、登録完了画面へ進む（変更箇所）
-        return "/skill/skillRegisterComplete.jsp";
+        // 4. 登録結果に応じて次の画面へ遷移
+        if (result > 0) {
+            // 登録成功時
+        	return "/skill/skillRegisterComplete.jsp";
+        } else {
+            // 登録失敗時
+            return "/skill/skillRegisterError.jsp";
+        }
     }
 }

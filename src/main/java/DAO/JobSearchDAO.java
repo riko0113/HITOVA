@@ -5,41 +5,44 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import bean.Job;
 
 public class JobSearchDAO {
-    // 先ほど直した小文字の「hitova」を指定します
+    // PostgreSQL接続
     private final String URL = "jdbc:postgresql://localhost:5432/hitova";
     private final String USER = "postgres";
-    private final String PASS = "post"; // ご自身のパスワードに変更
+    private final String PASS = "post";
 
-    // Beanがないため、Mapを使ってデータをまとめます
-    public List<Map<String, String>> search(String keyword) throws Exception {
-    	List<Map<String, String>> jobList = new ArrayList<>();
-        
-        // title（求人タイトル）にキーワードを含むものを検索
-        String sql = "SELECT job_id, title, location, salary FROM jobs WHERE title LIKE ?";
+    public List<Job> searchJobs(String keyword) throws Exception {
+        List<Job> list = new ArrayList<>();
+
+        String sql = "SELECT * FROM jobs WHERE title LIKE ? OR location LIKE ?";
 
         Class.forName("org.postgresql.Driver");
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASS);
              PreparedStatement st = con.prepareStatement(sql)) {
-            
-            // 前方一致・後方一致検索（%キーワード%）
-            st.setString(1, "%" + keyword + "%");
-            ResultSet rs = st.executeQuery();
 
-            while (rs.next()) {
-                Map<String, String> job = new HashMap<>();
-                job.put("id", String.valueOf(rs.getLong("job_id")));
-                job.put("title", rs.getString("title"));
-                job.put("location", rs.getString("location"));
-                job.put("salary", rs.getString("salary"));
-                jobList.add(job);
+            st.setString(1, "%" + keyword + "%");
+            st.setString(2, "%" + keyword + "%");
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Job job = new Job();
+                    
+                    job.setJob_id(rs.getLong("job_id")); 
+                    job.setTitle(rs.getString("title"));
+                    job.setLocation(rs.getString("location"));
+                    job.setSalary(rs.getString("salary"));
+                    job.setaccess(rs.getString("access"));
+                    
+                    list.add(job);
+                }
             }
         }
-        return jobList;
+
+        return list;
     }
 }
