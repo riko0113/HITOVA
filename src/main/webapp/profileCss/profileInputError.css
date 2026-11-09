@@ -1,0 +1,65 @@
+
+.profile-container {
+    width: 90%;
+    margin: 30px auto;
+}
+
+.profile-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-container h3 {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin: 15px 0;
+}
+
+.form-group label {
+    margin-right: 10px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"] {
+    margin: 5px;
+    padding: 5px;
+}
+
+.form-group select {
+    margin: 5px;
+    padding: 5px;
+    min-width: 200px;
+}
+
+.form-group textarea {
+    display: block;
+    width: 50%;
+    height: 100px;
+    margin: 5px;
+}
+
+.input-note {
+    margin: 3px 0 3px 80px;
+    font-size: 12px;
+}
+
+.error {
+    color: red;
+    font-size: 13px;
+    margin: 3px 0 3px 80px;
+}
+
+.register-button-area {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.register-button-area button {
+    padding: 8px 15px;
+    cursor: pointer;
+}

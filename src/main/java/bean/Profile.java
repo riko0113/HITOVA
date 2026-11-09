@@ -3,62 +3,56 @@ package bean;
 
 import java.time.LocalDateTime;
 
-public class Profile implements java.io.Serializable {
+public class Profile implements java.io.Serializable{
 
-    private Long profile_id;
-    private int desired_employment_type_id;
-    private String desired_employment_type_name;
-    private Integer desired_job_type_id;
-    private String desired_job_type_name;
-    private Long candidate_account_id;
-
-    private String last_name;
-    private String first_name;
-    private String last_name_kana;
-    private String first_name_kana;
-
-    private LocalDateTime birth_date;
-    private Boolean gender;
-
-    private String current_postal_code;
-    private String current_address;
-    private String desired_work_location;
-
-    private String highest_education;
-    private String work_history;
-
-    // 求職者アカウント情報
-    private JobSeekerAccount jobSeekerAccount;
-
-    // プロフィールID
-    public Long getProfile_id() {
+	private Long profile_id;
+	private int desired_employment_type_id;
+	private String desired_employment_type_name;
+	private Long desired_job_type_id;
+	private String desired_job_type_name;
+	private Long candidate_account_id;
+	private String last_name;
+	private String first_name;
+	private String last_name_kana;
+	private String first_name_kana;
+	private LocalDateTime birth_date;
+	private Boolean gender;
+	private String current_postal_code;
+	private String current_address;
+	private String desired_work_location;
+	private String highest_education;
+	private String work_history;
+	
+	
+	//プロフィールID
+	public Long getProfile_id() {
         return profile_id;
     }
 
     public void setProfile_id(Long profile_id) {
         this.profile_id = profile_id;
     }
-
-    // 希望雇用形態ID
-    public int getDesired_employment_type_id() {
+	
+	//希望雇用形態ID
+	public int getDesired_employment_type_id() {
         return desired_employment_type_id;
     }
-
-    public void setDesired_employment_type_id(int desired_employment_type_id) {
+	
+	public void setDesired_employment_type_id(int desired_employment_type_id) {
         this.desired_employment_type_id = desired_employment_type_id;
     }
-
-    // 希望雇用形態名
-    public String getDesired_employment_type_name() {
-        return desired_employment_type_name;
-    }
-
-    public void setDesired_employment_type_name(String desired_employment_type_name) {
-        this.desired_employment_type_name = desired_employment_type_name;
-    }
-
-    // 希望職種ID
-    public Integer getDesired_job_type_id() {
+	
+	//希望雇用形態名
+	public String getDesired_employment_type_name() {
+	    return desired_employment_type_name;
+	}
+		
+	public void setDesired_employment_type_name(String desired_employment_type_name) {
+	    this.desired_employment_type_name = desired_employment_type_name;
+	}
+	
+	//希望職種ID
+	public Long getDesired_job_type_id() {
         return desired_job_type_id;
     }
 

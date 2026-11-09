@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+/* 応募者一覧のコンテナ */
+.user-list-container {
+    max-width: 800px;
+    margin: 20px auto;
+    font-family: sans-serif;
+}
+
+/* 1行分のレイアウト（フレックスボックスで左右に配置） */
+.user-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #fff;
+}
+
+/* 左側のエリア（アイコン、テキスト情報を縦または横に配置） */
+.user-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+/* 人物アイコンのスタイル */
+.user-icon {
+    background-color: #512da8; /* パープル系の背景 */
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* ユーザー情報のテキスト */
+.user-info h3 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.user-info p {
+    margin: 2px 0;
+    font-size: 13px;
+    color: #666;
+}
+
+/* 詳細ボタンのスタイル */
+.detail-btn {
+    display: inline-block;
+    padding: 6px 16px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.detail-btn:hover {
+    background-color: #f0f0f0;
+}
