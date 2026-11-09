@@ -1,29 +1,52 @@
 package portfolio;
-import java.io.IOException;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
+import java.util.List;
+
+import DAO.ApplicationHistoryDAO;
+import bean.ApplicationHistory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import tool.Action;
 
-@WebServlet("/portfolio")
-public class PortfolioAction extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
-    protected void doGet(HttpServletRequest request,
-            HttpServletResponse response)
-            throws ServletException, IOException {
-
-        // 作品一覧画面へ移動
-    	request.getRequestDispatcher("/portfolio/jsp/portfolio.jsp")
-        .forward(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request,
-            HttpServletResponse response)
-            throws ServletException, IOException {
-
-        doGet(request, response);
+public class PortfolioAction extends Action {
+    // executeメソッド：FrontControllerから呼ばれるメイン処理
+    @Override
+    public String execute(
+        HttpServletRequest request, HttpServletResponse response
+    ) {
+        try {
+        	HttpSession session = request.getSession();
+        	
+        	Long userId = (Long) session.getAttribute("candidate_account_id");
+            
+            //未ログインの場合のチェック
+            if (userId == null) {
+                // ログイン画面へフォワードする処理
+                request.setAttribute("errorMessage", "ログインしてください。");
+                return "";
+            }
+            
+         // ポートフォリオDAOのインスタンス生成
+            ApplicationHistoryDAO dao = new ApplicationHistoryDAO();
+            
+            // Listにポートフォリオ一覧の結果を返す
+            List<ApplicationHistory> portfolioList = dao.searchList(userId);
+            
+            request.setAttribute("historyList", historyList);
+        	
+            // 作品一覧画面のJSPパスを返す
+            return "/portfolio/jsp/portfolio.jsp";
+            
+        } catch (Exception e) {
+            // サーバー側のログにエラーの詳細を出力する
+            e.printStackTrace();
+            
+            // ユーザー向けのエラーメッセージをリクエストにセットする
+            request.setAttribute("errorMessage", "画面の表示中にエラーが発生しました。しばらく経ってから再度お試しください。");
+            
+            // エラー時の遷移先を返す（必要に応じてエラー用JSP等を指定）
+            return ""; 
+        }
     }
 }
