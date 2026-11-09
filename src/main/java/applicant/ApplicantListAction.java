@@ -4,10 +4,8 @@ import java.util.List;
 
 import DAO.ApplicationHistoryDAO;
 import bean.ApplicationHistory;
-import bean.CompanyAccount;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
 public class ApplicantListAction extends Action {
@@ -16,27 +14,25 @@ public class ApplicantListAction extends Action {
         HttpServletRequest request, HttpServletResponse response
     ) {
         try {
-            HttpSession session = request.getSession();
-            
-            CompanyAccount company = (CompanyAccount) session.getAttribute("company");
 
-            // 企業IDを取り出す
-            Long companyAccountId = null;
-            if (company != null) {
-                companyAccountId = company.getCompany_account_id(); 
-            }
-            
-            // 企業IDがセッションにない場合
-            if (companyAccountId == null) {
-                request.setAttribute("errorMessage", "セッションが切れました。再度ログインしてください。");
-                return ""; 
+            //求人IDを取り出す
+            String jobIdStr = request.getParameter("job_id");
+            Long jobId = null;
+
+            if (jobIdStr != null && !jobIdStr.isEmpty()) {
+                try {
+                    jobId = Long.valueOf(jobIdStr);
+                } catch (NumberFormatException e) {
+                    // パラメータが数値に変換できない場合のエラー処理
+                    e.printStackTrace();
+                }
             }
             
             // 応募履歴DAOのインスタンス生成
             ApplicationHistoryDAO dao = new ApplicationHistoryDAO();
             
             // Listに応募履歴一覧の結果を返す
-            List<ApplicationHistory> historyList = dao.searchAll(companyAccountId);
+            List<ApplicationHistory> historyList = dao.searchAll(jobId);
             
             request.setAttribute("historyList", historyList);
             

@@ -11,6 +11,7 @@ public class ApplicationHistory implements java.io.Serializable{
 	private LocalDateTime application_at;
 	private Job job;
     private JobSeekerAccount jobSeekerAccount;
+    private Profile profiles;
 	
 	
 	//応募履歴ID
@@ -74,6 +75,15 @@ public class ApplicationHistory implements java.io.Serializable{
     
     public void setJobSeekerAccount(JobSeekerAccount jobSeekerAccount) { 
     	this.jobSeekerAccount = jobSeekerAccount; 
+    }
+    
+    //プロフィール情報
+    public Profile getProfiles() {
+		return profiles; 
+	}
+	
+    public void setProfiles(Profile profiles) {
+    	this.profiles = profiles; 
     }
 	
 }
