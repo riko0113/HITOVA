@@ -22,17 +22,19 @@
 <label>作品名 (50字以内)</label>
 
 <input type="text" id="workName" name="workName"
-       maxlength="50" placeholder="作品名を入力してください">
+       maxlength="50" placeholder="作品名を入力してください"
+       value="${workName}">
 
 <p id="workNameError" class="error">${workNameError}</p>
 
         <span class="setumei">説明文 (300字以内)</span>
-        <textarea id="description" name="description"
-                  maxlength="300" placeholder="説明文を入力してください"></textarea>
+		<textarea id="description" name="description"
+        		  maxlength="300" placeholder="説明文を入力してください">${description}</textarea>
 <p id="descriptionError" class="error">${descriptionError}</p>
 
         <span>ファイル添付 (100MBまで)</span>
         <input type="file" name="workFile">
+        <p class="error">${fileError}</p>
 
     </div>
 
@@ -50,26 +52,6 @@
 
 </form>
 
-<script>
-
-const workName = document.getElementById("workName");
-const description = document.getElementById("description");
-
-workName.addEventListener("input", function() {
-    document.getElementById("workNameError").textContent =
-        workName.value.length > 50
-        ? "作品名は50文字以内で入力してください。"
-        : "";
-});
-
-description.addEventListener("input", function() {
-    document.getElementById("descriptionError").textContent =
-        description.value.length > 300
-        ? "説明文は300文字以内で入力してください。"
-        : "";
-});
-
-</script>
 
 </body>
 </html>
