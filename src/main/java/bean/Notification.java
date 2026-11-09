@@ -6,7 +6,7 @@ public class Notification implements java.io.Serializable{
 
 	private Long notification_id;
 	private String message;
-	private Long receiver_type_id;
+	private Integer receiver_type_id;
 	private String receiver_type_name;
 	private LocalDateTime send_at;
 	private Long receiver_account_id;
@@ -31,11 +31,11 @@ public class Notification implements java.io.Serializable{
     }
 	
 	//宛先種別ID
-	public Long getReceiver_type_id() {
+	public Integer getReceiver_type_id() {
         return receiver_type_id;
     }
 	
-	public void setReceiver_type_id(Long receiver_type_id) {
+	public void setReceiver_type_id(Integer receiver_type_id) {
         this.receiver_type_id = receiver_type_id;
     }
 	
