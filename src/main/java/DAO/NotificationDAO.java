@@ -4,18 +4,34 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import bean.Notification;
 import bean.NotificationReceiver;
 
-// 共通DAOを継承
-public class NotificationDAO extends DAO {
+public class NotificationDAO {
+
+    // DBに接続する
+    private Connection getConnection()
+            throws NamingException, SQLException {
+
+        InitialContext context = new InitialContext();
+
+        DataSource ds = (DataSource) context.lookup(
+                "java:comp/env/jdbc/hitova");
+
+        return ds.getConnection();
+    }
 
     // 通知を登録する
     public int insert(Notification notification)
-            throws Exception {
+            throws NamingException, SQLException {
 
         String sql = "INSERT INTO notifications "
                 + "(receiver_type_id, message, receiver_account_id) "
@@ -39,7 +55,7 @@ public class NotificationDAO extends DAO {
 
     // 企業一覧を取得する
     public List<NotificationReceiver> findAllCompanies()
-            throws Exception {
+            throws NamingException, SQLException {
 
         List<NotificationReceiver> list = new ArrayList<>();
 
@@ -52,7 +68,6 @@ public class NotificationDAO extends DAO {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-
                 NotificationReceiver receiver =
                         new NotificationReceiver();
 
@@ -71,7 +86,8 @@ public class NotificationDAO extends DAO {
 
     // 組合IDから企業一覧を取得する
     public List<NotificationReceiver> findCompaniesByUnionId(
-            Integer unionId) throws Exception {
+            Integer unionId)
+            throws NamingException, SQLException {
 
         List<NotificationReceiver> list = new ArrayList<>();
 
@@ -86,9 +102,7 @@ public class NotificationDAO extends DAO {
             ps.setInt(1, unionId);
 
             try (ResultSet rs = ps.executeQuery()) {
-
                 while (rs.next()) {
-
                     NotificationReceiver receiver =
                             new NotificationReceiver();
 
@@ -108,7 +122,7 @@ public class NotificationDAO extends DAO {
 
     // 宛先種別IDを取得する
     public Integer findReceiverTypeId(String receiverName)
-            throws Exception {
+            throws NamingException, SQLException {
 
         String sql = "SELECT receiver_type_id "
                 + "FROM receiver_type "
@@ -120,7 +134,6 @@ public class NotificationDAO extends DAO {
             ps.setString(1, receiverName);
 
             try (ResultSet rs = ps.executeQuery()) {
-
                 if (rs.next()) {
                     return rs.getInt("receiver_type_id");
                 }
@@ -132,7 +145,7 @@ public class NotificationDAO extends DAO {
 
     // 求職者一覧を取得する
     public List<NotificationReceiver> findAllJobSeekers()
-            throws Exception {
+            throws NamingException, SQLException {
 
         List<NotificationReceiver> list = new ArrayList<>();
 
@@ -145,7 +158,6 @@ public class NotificationDAO extends DAO {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-
                 NotificationReceiver receiver =
                         new NotificationReceiver();
 
