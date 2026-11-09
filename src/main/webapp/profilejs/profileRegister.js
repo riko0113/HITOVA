@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 setupAreaSelect(desiredPrefecture, desiredMunicipality, data);
             }
         })
-        .catch(function(error) {
-            console.error("JSON読み込みエラー:", error);
+        .catch(function() {
         });
 });

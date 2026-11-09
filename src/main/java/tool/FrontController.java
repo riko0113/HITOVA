@@ -1,7 +1,6 @@
 package tool;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,8 +16,6 @@ public class FrontController extends HttpServlet {
         HttpServletRequest request,
         HttpServletResponse response
     ) throws ServletException, IOException {
-
-        PrintWriter out = response.getWriter();
 
         try {
            
@@ -39,7 +36,7 @@ public class FrontController extends HttpServlet {
                 .forward(request, response);
 
         } catch (Exception e) {
-            e.printStackTrace(out);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -1,1 +1,4 @@
 /build/
+
+# Firebase project-specific runtime settings
+/src/main/webapp/WEB-INF/firebase.properties
