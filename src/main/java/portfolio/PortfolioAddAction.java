@@ -1,4 +1,3 @@
-
 package portfolio;
 
 import java.io.IOException;
@@ -13,7 +12,7 @@ import jakarta.servlet.http.Part;
 @WebServlet("/portfolio/portfolioAdd")
 @jakarta.servlet.annotation.MultipartConfig
 
-public class PortfolioAddServlet extends HttpServlet {
+public class PortfolioAddAction extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
