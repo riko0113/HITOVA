@@ -7,7 +7,7 @@ public class Profile implements java.io.Serializable{
 	private Long profile_id;
 	private int desired_employment_type_id;
 	private String desired_employment_type_name;
-	private Long desired_job_type_id;
+	private Integer desired_job_type_id;
 	private String desired_job_type_name;
 	private Long candidate_account_id;
 	private String last_name;
@@ -51,11 +51,11 @@ public class Profile implements java.io.Serializable{
 	}
 	
 	//希望職種ID
-	public Long getDesired_job_type_id() {
+	public int getDesired_job_type_id() {
         return desired_job_type_id;
     }
 	
-	public void setDesired_job_type_id(Long desired_job_type_id) {
+	public void setDesired_job_type_id(int desired_job_type_id) {
         this.desired_job_type_id = desired_job_type_id;
     }
 	
