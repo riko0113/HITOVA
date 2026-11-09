@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: #333333;
+    line-height: 1.5;
+    margin: 20px;
+    background-color: #ffffff;
+}
+
+/* ヘッダーエリア（見出しと通報ボタンを左右に配置） */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #333333;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.header-container h2 {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* 見出し（h3）のスタイル */
+h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    border-bottom: none; /* h3の下線を消す設定 */
+}
+
+/* リストの設定 */
+ul {
+    margin: 0 0 10px 20px;
+    padding: 0;
+    list-style-type: disc;
+}
+
+ul ul {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+li {
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+/* ポートフォリオ等の外枠調整 */
+div[style*="margin-top"] {
+    margin-bottom: 10px;
+}
+
+/* ボタンの共通スタイル */
+.btn-view {
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: #ffffff;
+    color: #333333;
+    border: 1px solid #333333;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 2px;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.btn-view:hover {
+    background-color: #f5f5f5;
+}
+
+/* 通報ボタン専用のスタイルの打ち消し */
+.btn-report {
+    margin-top: 0;
+}
