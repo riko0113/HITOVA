@@ -7,7 +7,15 @@ public class Skill implements java.io.Serializable{
 	private String skill_name;
 	private String skill_content;
 	
+	private Long skill_detail_id;
 	
+	public Long getSkill_detail_id() {
+	    return skill_detail_id;
+	}
+	
+	public void setSkill_detail_id(Long skill_detail_id) {
+	    this.skill_detail_id = skill_detail_id;
+	}	
 	
 	//スキルID
 	public Long getSkill_id() {

@@ -7,146 +7,87 @@
 <title>資格一覧 - HITOVA</title>
 <style>
     body { font-family: sans-serif; text-align: center; margin-top: 30px; }
-    .container { max-width: 600px; margin: 0 auto; text-align: left; }
     .header-area { display: flex; justify-content: space-between; padding: 0 50px; margin-bottom: 40px; }
-    h3 { margin-bottom: 30px; text-align: center; font-size: 1.2em;}
+    .container { max-width: 700px; margin: 0 auto; text-align: left; border: 1px solid #ccc; padding: 30px; box-sizing: border-box; }
+    h2 { margin-bottom: 30px; text-align: center; font-size: 1.2em; }
     
-    .list-wrapper { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-    .list-item { display: flex; align-items: center; gap: 15px; }
+    .list-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    .col-name { width: 40%; padding: 5px; border: 1px solid #ccc; background: #fff; box-sizing: border-box; }
+    .col-date { width: 30%; padding: 5px; border: 1px solid #ccc; background: #fff; box-sizing: border-box; text-align: center; }
+    .col-action { width: 25%; text-align: right; font-size: 0.9em; }
     
-    .item-input { 
-        padding: 5px 10px; 
-        border: 1px solid #ddd; 
-        height: 35px; 
-        box-sizing: border-box; 
-        background-color: #fff;
-        color: #333;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-    }
-    .name-input { width: 160px; }
-    .date-input { width: 120px; justify-content: center;}
-    
-    /* 削除ボタン・テキスト */
-    .action-area { width: 180px; text-align: left; font-size: 14px;}
-    .delete-link { color: #5196d4; text-decoration: underline; cursor: pointer; }
-    .restore-text { color: #666; display: none; }
-    .restore-link { color: #5196d4; text-decoration: underline; cursor: pointer; margin-left: 5px; }
-    
-    /* 取り消し線のスタイル */
-    .deleted-row { position: relative; }
-    .deleted-row::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: -10px;
-        right: -10px;
-        height: 1.5px;
-        background-color: #333;
-    }
+    .deleted .col-name, .deleted .col-date { text-decoration: line-through; color: #888; background: #f9f9f9; }
+    .deleted .action-link { color: #0066cc; cursor: pointer; text-decoration: underline; }
+
+    .btn-group { display: flex; justify-content: center; gap: 50px; margin-top: 40px; }
+    .btn { padding: 10px 0; width: 150px; text-align: center; cursor: pointer; border: 1px solid #ccc; background-color: #fff; color: #0066cc; text-decoration: none; box-sizing: border-box; font-size: 1em; }
+    .btn-save { background-color: #4CAF50; color: white; border: none; }
     
     .empty-msg { text-align: center; color: #666; margin-bottom: 20px; }
-
-    /* 保存・キャンセルボタン */
-    .btn-group { display: flex; justify-content: center; gap: 50px; margin-top: 50px;}
-    .btn { padding: 10px 0; width: 140px; text-align: center; cursor: pointer; border: 1px solid #999; background-color: #fff; color: #5196d4; text-decoration: none; font-size: 14px; box-sizing: border-box;}
-    .btn-save { background-color: #4CAF50; color: white; border: none; }
+    .error-msg { color: #d9534f; text-align: center; margin-bottom: 20px; font-weight: bold; }
 </style>
 </head>
 <body>
-
     <header class="header-area">
         <div><span style="color: #4CAF50; font-weight: bold; font-size: 24px;">HITOVA</span></div>
-        <div style="font-size: 0.9em; color: #666;">
-            マイページ ログアウト
-        </div>
+        <div style="font-size: 0.9em; color: #666;">マイページ ログアウト</div>
     </header>
 
 <div class="container">
-    <h3>資格一覧</h3>
+    <h2>資格一覧</h2>
 
-    <c:choose>
-        <c:when test="${empty qualificationList}">
-            <!-- 資格が0件の場合の表示 -->
-            <div class="empty-msg" style="margin-top: 60px;">登録されている資格はありません。</div>
-            <div style="text-align: center; margin-top: 40px;">
-                <a href="${pageContext.request.contextPath}/qualificationServlet/QualificationRegister.action" style="padding: 10px 40px; background-color: #4CAF50; color: white; text-decoration: none; border: none; font-size: 14px;">新規資格登録へ</a>
-            </div>
-        </c:when>
-        
-        <c:otherwise>
-            <!-- 資格がある場合の表示（フォームと削除ロジック） -->
-            <form action="${pageContext.request.contextPath}/qualificationServlet/QualificationDeleteExecute.action" method="post">
-                <div class="list-wrapper">
-                    <c:forEach var="q" items="${qualificationList}">
-                        <div class="list-item" id="row-${q.qualification_id}">
-                            <div class="data-wrapper" style="display: flex; gap: 10px;">
-                                <div class="item-input name-input">${q.qualification_name}</div>
-                                <div class="item-input date-input">${q.qualification_date}</div>
-                            </div>
-                            <div class="action-area">
-                                <a class="delete-link" id="del-btn-${q.qualification_id}" onclick="markAsDeleted(${q.qualification_id})">削除</a>
-                                <span class="restore-text" id="restore-txt-${q.qualification_id}">
-                                    削除しました。<a class="restore-link" onclick="restoreRow(${q.qualification_id})">元に戻す</a>
-                                </span>
-                            </div>
+    <!-- エラーメッセージ表示エリア -->
+    <c:if test="${not empty errorMessage}">
+        <div class="error-msg">${errorMessage}</div>
+    </c:if>
+
+    <form action="${pageContext.request.contextPath}/qualificationServlet/QualificationUpdate.action" method="post">
+        <c:choose>
+            <c:when test="${empty qualificationList}">
+                <div class="empty-msg">登録されている資格はありません。</div>
+            </c:when>
+            <c:otherwise>
+                <c:forEach var="q" items="${qualificationList}">
+                    <div class="list-item" id="row-${q.qualification_id}">
+                        <div class="col-name">${q.qualification_name}</div>
+                        <div class="col-date">${q.qualification_date}</div>
+                        <div class="col-action" id="action-${q.qualification_id}">
+                            <a href="javascript:void(0);" onclick="markDeleted(${q.qualification_id})" style="color: #0066cc; text-decoration: none;">削除</a>
+                            <input type="hidden" name="delete_ids" id="del-input-${q.qualification_id}" value="">
                         </div>
-                    </c:forEach>
-                </div>
+                    </div>
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
 
-                <!-- 新規追加へのリンク（リストのすぐ下） -->
-                <div style="text-align: right; width: 100%; max-width: 480px; margin: 15px auto 0;">
-                    <a href="${pageContext.request.contextPath}/qualificationServlet/QualificationRegister.action" style="color: #5196d4; text-decoration: underline; font-size: 14px;">+ 新規資格を追加</a>
-                </div>
+        <div style="text-align: right; margin-top: 20px;">
+            <a href="${pageContext.request.contextPath}/qualificationServlet/QualificationRegister.action" style="color: #0066cc; text-decoration: none; font-size: 0.9em;">新規資格登録へ</a>
+        </div>
 
-                <div id="deleted-ids-container"></div>
-
-                <div class="btn-group">
-                    <a href="${pageContext.request.contextPath}/qualificationServlet/Qualification.action" class="btn">キャンセル</a>
-                    <button type="submit" class="btn btn-save">保存</button>
-                </div>
-            </form>
-        </c:otherwise>
-    </c:choose>
+        <div class="btn-group">
+            <a href="${pageContext.request.contextPath}/qualificationServlet/Qualification.action" class="btn">キャンセル</a>
+            <button type="submit" class="btn btn-save">保存</button>
+        </div>
+    </form>
 </div>
 
 <script>
-    function markAsDeleted(id) {
+    function markDeleted(id) {
         const row = document.getElementById('row-' + id);
-        const dataWrapper = row.querySelector('.data-wrapper');
-        const delBtn = document.getElementById('del-btn-' + id);
-        const restoreTxt = document.getElementById('restore-txt-' + id);
-        const hiddenContainer = document.getElementById('deleted-ids-container');
+        const actionArea = document.getElementById('action-' + id);
 
-        dataWrapper.classList.add('deleted-row');
-        delBtn.style.display = 'none';
-        restoreTxt.style.display = 'inline';
-
-        if (!document.getElementById('hidden-del-' + id)) {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'delete_ids';
-            input.value = id;
-            input.id = 'hidden-del-' + id;
-            hiddenContainer.appendChild(input);
-        }
+        row.classList.add('deleted');
+        actionArea.innerHTML = '削除しました。 <span class="action-link" onclick="restore(' + id + ')">元に戻す</span>' +
+                               '<input type="hidden" name="delete_ids" id="del-input-' + id + '" value="' + id + '">';
     }
 
-    function restoreRow(id) {
+    function restore(id) {
         const row = document.getElementById('row-' + id);
-        const dataWrapper = row.querySelector('.data-wrapper');
-        const delBtn = document.getElementById('del-btn-' + id);
-        const restoreTxt = document.getElementById('restore-txt-' + id);
-        const hiddenInput = document.getElementById('hidden-del-' + id);
+        const actionArea = document.getElementById('action-' + id);
 
-        dataWrapper.classList.remove('deleted-row');
-        restoreTxt.style.display = 'none';
-        delBtn.style.display = 'inline';
-
-        if (hiddenInput) {
-            hiddenInput.remove();
-        }
+        row.classList.remove('deleted');
+        actionArea.innerHTML = '<a href="javascript:void(0);" onclick="markDeleted(' + id + ')" style="color: #0066cc; text-decoration: none;">削除</a>' +
+                               '<input type="hidden" name="delete_ids" id="del-input-' + id + '" value="">';
     }
 </script>
 </body>
