@@ -1,10 +1,7 @@
-
 package portfolio;
 
 import java.io.IOException;
 
-import DAO.portfolioDAO;
-import bean.PortfolioAdd;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,7 +12,7 @@ import jakarta.servlet.http.Part;
 @WebServlet("/portfolio/portfolioAdd")
 @jakarta.servlet.annotation.MultipartConfig
 
-public class PortfolioAddServlet extends HttpServlet {
+public class PortfolioAddAction extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,10 +22,7 @@ public class PortfolioAddServlet extends HttpServlet {
         // JSPから入力内容を受け取る
         String workName = request.getParameter("workName");
         String description = request.getParameter("description");
-        
-        request.setAttribute("workName", workName);
-        request.setAttribute("description", description);
-       // JSPからファイルを受け取る
+     // JSPからファイルを受け取る
         Part workFile = request.getPart("workFile");
      // 作品名のチェック
         if (workName == null || workName.trim().isEmpty()) {
@@ -38,15 +32,13 @@ public class PortfolioAddServlet extends HttpServlet {
         if (description == null || description.trim().isEmpty()) {
             request.setAttribute("descriptionError", "説明文を入力してください。");
         }
-      
      // ファイル容量のチェック
         if (workFile != null && workFile.getSize() > 100 * 1024 * 1024) {
             request.setAttribute("fileError", "ファイルは100MB以内で選択してください。");
         }
         // エラーがある場合
         if (request.getAttribute("workNameError") != null
-                || request.getAttribute("descriptionError") != null
-                || request.getAttribute("fileError") != null) {
+                || request.getAttribute("descriptionError") != null) {
 
             request.getRequestDispatcher(
                 "/portfolio/jsp/portfolioAdd.jsp"
@@ -55,22 +47,9 @@ public class PortfolioAddServlet extends HttpServlet {
             return;
         }
 
-       // データベース
-       // Beanに作品情報をセット
-        PortfolioAdd portfolio = new PortfolioAdd();
-        portfolio.setWorkName(workName);
-        portfolio.setDescription(description);
-        
-     // DAOを呼び出す
-        portfolioDAO dao = new portfolioDAO();
+        // ここにデータベースへの登録処理を書く
 
-        try {
-            dao.insert(portfolio);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-       // 登録完了画面へ移動
+        // 登録完了画面へ移動
         response.sendRedirect(
             request.getContextPath() + "/portfolio/jsp/portfoliodone.jsp"
         );
