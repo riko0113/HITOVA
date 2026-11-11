@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+    id 'war' // Webアプリケーショントプロジェクトの場合（Servletを使うため）
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Servlet API
+    compileOnly 'jakarta.platform:jakarta.jakartaee-api:9.1.0' 
+
+    // AWS SDK v2 (S3用)
+    implementation platform('software.amazon.awssdk:bom:2.20.0')
+    implementation 'software.amazon.awssdk:s3'
+}
