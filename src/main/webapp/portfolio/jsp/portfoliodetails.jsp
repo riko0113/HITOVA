@@ -1,14 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-
-<title>作品詳細</title>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ include file="../head.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/portfolio/css/portfoliodetails.css">
-</head>
-<body>
+
 
 <div class="title-area">
 <h1>作品詳細</h1>
@@ -16,24 +11,32 @@
 
 <div class="form-box">
 
+    <!-- 作品名 -->
     <label>作品名</label><br>
-    <span class="setumei">HITOVA</span><br>
+    <span class="setumei"><c:out value="${portfolio.work_name}" /></span><br>
 
+    <!-- 説明文 -->
     <label>説明文</label><br>
-    <span class="setumei">JavaとJSP。</span><br>
+    <span class="setumei"><c:out value="${portfolio.description}" /></span><br>
 
+    <!-- ファイルURL / ファイル名 -->
     <label>ファイル</label><br>
-    <span class="setumei">sample.pdf</span><br>
+    <span class="setumei"><img src="<c:out value="${portfolio.file_url}" />" alt="作品画像" style="max-width: 300px; height: auto;" /></span><br>
 
     <div class="button-area">
-        <a href="${pageContext.request.contextPath}/portfolio/jsp/portfolioedit.jsp"
+        <!-- 編集画面へ-->
+        <a href="${pageContext.request.contextPath}/portfolio/portfolioedit.jsp?portfolio_id=${portfolio.portfolio_id}"
            class="hensyu">編集</a>
 
-        <a href="${pageContext.request.contextPath}/portfolio/jsp/portfoliodelete.jsp"
+        <!-- 削除画面へ-->
+        <a href="${pageContext.request.contextPath}/portfolio/portfoliodelete.jsp?portfolio_id=${portfolio.portfolio_id}"
            class="sakuzyo">削除</a>
+           
+        <!-- 一覧画面へ-->
+        <a href="${pageContext.request.contextPath}/portfolio/Portfolio.action"
+           class="sakuzyo">戻る</a>
     </div>
 
 </div>
 
-</body>
-</html>
+<%@ include file="../footer.jsp" %>
