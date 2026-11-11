@@ -1,0 +1,45 @@
+    .auth-panel {
+        zoom: 80%;
+        width: 580px;
+        margin: 24px auto;
+        padding: 12px 0;
+        background-color: white;
+        border: 1px solid rgb(200, 200, 200);
+    }
+
+    .auth-panel h1 {
+        margin: 24px 40px;
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .auth-panel p {
+        margin: 20px 40px;
+        font-size: 16px;
+    }
+
+    .auth-panel form {
+        text-align: center;
+    }
+
+    .auth-panel button {
+        width: 240px;
+        height: 46px;
+        margin: 12px 0;
+        font-size: 16px;
+        background-color: rgb(100, 100, 100);
+        color: white;
+        border: none;
+    }
+
+    .auth-panel button:hover {
+        background-color: rgb(80, 80, 80);
+    }
+
+    .auth-panel a {
+        color: rgb(80, 80, 80);
+    }
+
+    .auth-panel .auth-error {
+        color: rgb(180, 40, 40);
+    }
