@@ -11,11 +11,11 @@ import java.util.Base64;
 
 /** この認証確認画面だけで使用する、表示とセッションの補助処理です。 */
 final class AuthWeb {
-    static final String FINGERPRINT = "authCheck.fingerprint";
-    static final String PENDING = "authCheck.pending";
-    static final String PROOF = "authCheck.proof";
-    static final String FLASH = "authCheck.flash";
-    static final long SESSION_MILLIS = 30L * 60L * 1000L;
+    static final String fingerprint_key = "authCheck.fingerprint";
+    static final String pending_key = "authCheck.pending";
+    static final String proof_key = "authCheck.proof";
+    static final String flash_key = "authCheck.flash";
+    static final long session_millis = 30L * 60L * 1000L;
 
     private AuthWeb() { }
 
@@ -35,19 +35,19 @@ final class AuthWeb {
             if (timeout <= 0 || timeout > 1800) {
                 session.setMaxInactiveInterval(1800);
             }
-            if (!fingerprint.equals(session.getAttribute(FINGERPRINT))) {
+            if (!fingerprint.equals(session.getAttribute(fingerprint_key))) {
                 clear(session);
-                session.setAttribute(FINGERPRINT, fingerprint);
+                session.setAttribute(fingerprint_key, fingerprint);
             }
         }
         return session;
     }
 
     static void clear(HttpSession session) {
-        session.removeAttribute(PENDING);
-        session.removeAttribute(PROOF);
-        session.removeAttribute(FLASH);
-        session.removeAttribute(FINGERPRINT);
+        session.removeAttribute(pending_key);
+        session.removeAttribute(proof_key);
+        session.removeAttribute(flash_key);
+        session.removeAttribute(fingerprint_key);
     }
 
     /** 複数値・過大入力は受け付けません。パスワードの空白は変更しません。 */
@@ -80,8 +80,8 @@ final class AuthWeb {
                 && email.matches("[^\\s@<>]+@[^\\s@<>]+\\.[^\\s@<>]+");
     }
 
-    static boolean expired(long startedAt, long now) {
-        return now < startedAt || now - startedAt >= SESSION_MILLIS;
+    static boolean expired(long started_at, long now) {
+        return now < started_at || now - started_at >= session_millis;
     }
 
     static void redirect(HttpServletRequest request, HttpServletResponse response, String path)

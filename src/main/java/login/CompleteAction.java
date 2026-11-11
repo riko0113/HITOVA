@@ -22,8 +22,8 @@ public class CompleteAction extends Action {
             if (!auth.available(request, response, session)) {
                 return null;
             }
-            Object value = session.getAttribute(AuthWeb.PROOF);
-            if (!(value instanceof AuthSupport.Proof) || AuthWeb.expired(((AuthSupport.Proof) value).startedAt, auth.now())) {
+            Object value = session.getAttribute(AuthWeb.proof_key);
+            if (!(value instanceof AuthSupport.Proof) || AuthWeb.expired(((AuthSupport.Proof) value).started_at, auth.now())) {
                 auth.expired(request, response, session);
                 return null;
             }
@@ -41,7 +41,7 @@ public class CompleteAction extends Action {
                 request.setAttribute("authEmail", fresh.getEmail());
                 return "/login-logaut/complete.jsp";
             } catch (FirebaseException exception) {
-                session.removeAttribute(AuthWeb.PROOF);
+                session.removeAttribute(AuthWeb.proof_key);
                 AuthSupport.flash(session, AuthWeb.errorMessage(exception), "");
                 AuthWeb.redirect(request, response, "/login/Error.action");
             }

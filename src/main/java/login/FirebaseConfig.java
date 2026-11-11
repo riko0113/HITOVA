@@ -12,17 +12,17 @@ import java.util.Properties;
 
 /** API キーをソースに書かず、実行環境から読み込むための設定です。 */
 public final class FirebaseConfig {
-    private final String apiKey;
-    private final String projectId;
+    private final String api_key;
+    private final String project_id;
 
-    public FirebaseConfig(String apiKey, String projectId) throws FirebaseException {
-        this.apiKey = apiKey == null ? "" : apiKey.trim();
-        this.projectId = projectId == null ? "" : projectId.trim();
-        if (this.apiKey.isEmpty() || this.apiKey.length() > 1024
-                || containsWhitespace(this.apiKey)) {
+    public FirebaseConfig(String api_key, String project_id) throws FirebaseException {
+        this.api_key = api_key == null ? "" : api_key.trim();
+        this.project_id = project_id == null ? "" : project_id.trim();
+        if (this.api_key.isEmpty() || this.api_key.length() > 1024
+                || containsWhitespace(this.api_key)) {
             throw configurationError();
         }
-        if (this.projectId.length() > 128 || containsWhitespace(this.projectId)) {
+        if (this.project_id.length() > 128 || containsWhitespace(this.project_id)) {
             throw configurationError();
         }
     }
@@ -33,9 +33,9 @@ public final class FirebaseConfig {
      * fallbackProperties の順で設定ファイルを選びます。指定済み外部ファイルが読めない
      * 場合は停止し、別の設定へ自動で切り替えません。渡されたストリームは閉じます。
      */
-    public static FirebaseConfig load(InputStream fallbackProperties) throws FirebaseException {
+    public static FirebaseConfig load(InputStream fallback_properties) throws FirebaseException {
         Properties values = new Properties();
-        try (InputStream fallback = fallbackProperties) {
+        try (InputStream fallback = fallback_properties) {
             String path = nonBlank(System.getenv("HITOVA_FIREBASE_CONFIG"));
             if (path == null) {
                 path = nonBlank(System.getProperty("hitova.firebase.config"));
@@ -47,20 +47,20 @@ public final class FirebaseConfig {
             } else if (fallback != null) {
                 loadProperties(values, new InputStreamReader(fallback, StandardCharsets.UTF_8));
             }
-            String environmentKey = System.getenv("FIREBASE_API_KEY");
-            String apiKey = environmentKey != null
-                    ? environmentKey : values.getProperty("firebase.apiKey", "");
-            return new FirebaseConfig(apiKey, values.getProperty("firebase.projectId", ""));
+            String environment_key = System.getenv("FIREBASE_API_KEY");
+            String api_key = environment_key != null
+                    ? environment_key : values.getProperty("firebase.apiKey", "");
+            return new FirebaseConfig(api_key, values.getProperty("firebase.projectId", ""));
         } catch (IOException | RuntimeException exception) {
             // ファイル名や例外原因には接続情報が含まれ得るため、画面には出しません。
             throw configurationError();
         }
     }
 
-    public String getApiKey() { return apiKey; }
+    public String getApiKey() { return api_key; }
 
     /** 設定を区別するための任意の識別子です。認証済み UID の代わりには使いません。 */
-    public String getProjectId() { return projectId; }
+    public String getProjectId() { return project_id; }
 
     private static void loadProperties(Properties values, Reader source) throws IOException {
         // Windows のエディターで付いた UTF-8 BOM も、キー名の一部にしません。

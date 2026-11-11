@@ -19,7 +19,7 @@ public class LogoutAction extends Action {
             }
             // セッションからログイン情報を消す
             AuthWeb.clear(session);
-            session.setAttribute(AuthWeb.FINGERPRINT, auth.configFingerprint);
+            session.setAttribute(AuthWeb.fingerprint_key, auth.config_fingerprint);
             request.changeSessionId();
             AuthWeb.redirect(request, response, "/login/Log.action");
             return null;

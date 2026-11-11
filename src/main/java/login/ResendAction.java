@@ -23,8 +23,8 @@ public class ResendAction extends Action {
                 auth.expired(request, response, session);
                 return null;
             }
-            long elapsed = auth.now() - pending.lastMailAttempt;
-            if (pending.lastMailAttempt >= 0 && (elapsed < 0 || elapsed < AuthSupport.RESEND_MILLIS)) {
+            long elapsed = auth.now() - pending.last_mail_attempt;
+            if (pending.last_mail_attempt >= 0 && (elapsed < 0 || elapsed < AuthSupport.resend_millis)) {
                 AuthSupport.flash(session, "確認メールの再送は、前回の操作から60秒以上あけてください。",
                         "");
                 AuthWeb.redirect(request, response, "/login/Error.action");

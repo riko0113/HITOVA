@@ -23,11 +23,11 @@ import java.nio.charset.StandardCharsets;
 
 /** ログイン・新規登録に必要な情報をFirebaseから取得します。 */
 public final class LoginDAO {
-    private static final String ACCOUNTS = "https://identitytoolkit.googleapis.com/v1/accounts:";
-    private static final String TOKEN = "https://securetoken.googleapis.com/v1/token";
-    private static final int MAX_RESPONSE_BYTES = 65536;
-    private static final String SESSION_MESSAGE = "認証の有効期限が切れました。もう一度ログインしてください。";
-    private final String encodedApiKey;
+    private static final String accounts_url = "https://identitytoolkit.googleapis.com/v1/accounts:";
+    private static final String token_url = "https://securetoken.googleapis.com/v1/token";
+    private static final int max_response_bytes = 65536;
+    private static final String session_message = "認証の有効期限が切れました。もう一度ログインしてください。";
+    private final String encoded_api_key;
     private final Transport transport;
 
     public LoginDAO(FirebaseConfig config) {
@@ -39,7 +39,7 @@ public final class LoginDAO {
         if (config == null || transport == null) {
             throw new IllegalArgumentException("Firebase の設定と通信処理が必要です。");
         }
-        this.encodedApiKey = encode(config.getApiKey());
+        this.encoded_api_key = encode(config.getApiKey());
         this.transport = transport;
     }
 
@@ -67,15 +67,15 @@ public final class LoginDAO {
         JsonObject result = account(operation, payload);
         // Firebaseから返ったユーザーIDと認証情報を取り出す
         String uid = requiredString(result, "localId", 128);
-        String idToken = requiredString(result, "idToken", 16384);
-        String refreshToken = requiredString(result, "refreshToken", 16384);
-        return lookup(idToken, refreshToken, uid);
+        String id_token = requiredString(result, "idToken", 16384);
+        String refresh_token = requiredString(result, "refreshToken", 16384);
+        return lookup(id_token, refresh_token, uid);
     }
 
     public FirebaseUser refresh(FirebaseUser user) throws FirebaseException {
         requireUser(user);
         String body = "grant_type=refresh_token&refresh_token=" + encode(user.getRefreshToken());
-        JsonObject result = post(TOKEN, "application/x-www-form-urlencoded", body);
+        JsonObject result = post(token_url, "application/x-www-form-urlencoded", body);
         String uid = requiredString(result, "user_id", 128);
         if (!user.getUid().equals(uid)) {
             throw sessionError();
@@ -99,47 +99,47 @@ public final class LoginDAO {
     }
 
     /** UID とメール確認状態は必ず Firebase の応答から決めます。 */
-    private FirebaseUser lookup(String idToken, String refreshToken, String expectedUid)
+    private FirebaseUser lookup(String id_token, String refresh_token, String expected_uid)
             throws FirebaseException {
         JsonObject payload = new JsonObject();
-        payload.addProperty("idToken", idToken);
+        payload.addProperty("idToken", id_token);
         JsonObject result = account("lookup", payload);
-        JsonElement usersValue = result.get("users");
-        if (usersValue == null || !usersValue.isJsonArray()) {
+        JsonElement users_value = result.get("users");
+        if (users_value == null || !users_value.isJsonArray()) {
             throw responseError();
         }
-        JsonArray users = usersValue.getAsJsonArray();
+        JsonArray users = users_value.getAsJsonArray();
         if (users.size() != 1 || !users.get(0).isJsonObject()) {
             throw responseError();
         }
         JsonObject user = users.get(0).getAsJsonObject();
         String uid = requiredString(user, "localId", 128);
-        if (!uid.equals(expectedUid)) {
+        if (!uid.equals(expected_uid)) {
             throw sessionError();
         }
         if (optionalBoolean(user, "disabled")) {
             throw new FirebaseException("USER_DISABLED", "このアカウントでは認証できません。管理者に確認してください。");
         }
         String email = requiredString(user, "email", 254);
-        boolean emailVerified = optionalBoolean(user, "emailVerified");
+        boolean email_verified = optionalBoolean(user, "emailVerified");
         // 取得した値をBeanにまとめて返す
-        return new FirebaseUser(uid, email, emailVerified, idToken, refreshToken);
+        return new FirebaseUser(uid, email, email_verified, id_token, refresh_token);
     }
 
     private JsonObject account(String operation, JsonObject payload) throws FirebaseException {
-        return post(ACCOUNTS + operation, "application/json", payload.toString());
+        return post(accounts_url + operation, "application/json", payload.toString());
     }
 
-    private JsonObject post(String endpoint, String contentType, String body) throws FirebaseException {
+    private JsonObject post(String endpoint, String content_type, String body) throws FirebaseException {
         Response response;
         try {
-            response = transport.post(URI.create(endpoint + "?key=" + encodedApiKey), contentType, body);
+            response = transport.post(URI.create(endpoint + "?key=" + encoded_api_key), content_type, body);
         } catch (IOException | RuntimeException exception) {
             // URL には API キーが含まれるため、元の例外・応答本文は表示も記録もしません。
             throw new FirebaseException("CONNECTION_ERROR",
                     "認証サービスに接続できません。しばらくしてからお試しください。");
         }
-        if (response == null || response.body == null || response.body.length() > MAX_RESPONSE_BYTES) {
+        if (response == null || response.body == null || response.body.length() > max_response_bytes) {
             throw responseError();
         }
         JsonObject json = parseObject(response.body);
@@ -161,14 +161,14 @@ public final class LoginDAO {
         }
     }
 
-    private static String requiredString(JsonObject object, String name, int maxLength)
+    private static String requiredString(JsonObject object, String name, int max_length)
             throws FirebaseException {
         JsonElement value = object.get(name);
         if (value == null || !value.isJsonPrimitive() || !value.getAsJsonPrimitive().isString()) {
             throw responseError();
         }
         String text = value.getAsString();
-        if (text.trim().isEmpty() || text.length() > maxLength || hasControl(text)) {
+        if (text.trim().isEmpty() || text.length() > max_length || hasControl(text)) {
             throw responseError();
         }
         return text;
@@ -296,7 +296,7 @@ public final class LoginDAO {
     }
 
     private static FirebaseException sessionError() {
-        return new FirebaseException("SESSION_EXPIRED", SESSION_MESSAGE);
+        return new FirebaseException("SESSION_EXPIRED", session_message);
     }
 
     private static String encode(String value) {
@@ -308,7 +308,7 @@ public final class LoginDAO {
     }
 
     interface Transport {
-        Response post(URI uri, String contentType, String body) throws IOException;
+        Response post(URI uri, String content_type, String body) throws IOException;
     }
 
     static final class Response {
@@ -323,7 +323,7 @@ public final class LoginDAO {
 
     private static final class HttpsTransport implements Transport {
         @Override
-        public Response post(URI uri, String contentType, String body) throws IOException {
+        public Response post(URI uri, String content_type, String body) throws IOException {
             // URI はこのクラス内の公式 HTTPS エンドポイントからだけ組み立てます。
             HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
             try {
@@ -332,7 +332,7 @@ public final class LoginDAO {
                 connection.setInstanceFollowRedirects(false);
                 connection.setUseCaches(false);
                 connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", contentType + "; charset=UTF-8");
+                connection.setRequestProperty("Content-Type", content_type + "; charset=UTF-8");
                 connection.setRequestProperty("X-Firebase-Locale", "ja");
                 connection.setDoOutput(true);
                 byte[] request = body.getBytes(StandardCharsets.UTF_8);
@@ -356,7 +356,7 @@ public final class LoginDAO {
                 byte[] buffer = new byte[4096];
                 int length;
                 while ((length = input.read(buffer)) != -1) {
-                    if (output.size() + length > MAX_RESPONSE_BYTES) {
+                    if (output.size() + length > max_response_bytes) {
                         throw new IOException("Response size limit");
                     }
                     output.write(buffer, 0, length);

@@ -12,15 +12,15 @@ import java.util.function.LongSupplier;
 
 /** 認証の接続設定と、複数のActionで使うセッション処理です。 */
 final class AuthSupport {
-    static final String ATTRIBUTE = "login.authSupport";
-    static final int MAX_REQUEST_BYTES = 8192;
-    static final long RESEND_MILLIS = 60L * 1000L;
-    static final String CONFIG_MESSAGE =
+    static final String support_key = "login.authSupport";
+    static final int max_request_bytes = 8192;
+    static final long resend_millis = 60L * 1000L;
+    static final String config_message =
             "現在、認証サービスを利用できません。しばらくしてからもう一度お試しください。";
-    static final String EXPIRED_MESSAGE =
+    static final String expired_message =
             "認証の有効期限が切れました。もう一度ログインしてください。";
     final LoginDAO dao;
-    final String configFingerprint;
+    final String config_fingerprint;
     private final LongSupplier clock;
 
     private AuthSupport(ServletContext context) {
@@ -35,7 +35,7 @@ final class AuthSupport {
             // 接続できない場合の表示は各Actionで行います。
         }
         dao = client;
-        configFingerprint = fingerprint;
+        config_fingerprint = fingerprint;
         clock = System::currentTimeMillis;
     }
 
@@ -44,17 +44,17 @@ final class AuthSupport {
             throw new IllegalArgumentException("認証の設定が必要です。");
         }
         this.dao = dao;
-        this.configFingerprint = AuthWeb.fingerprint(config);
+        this.config_fingerprint = AuthWeb.fingerprint(config);
         this.clock = clock;
     }
 
     static AuthSupport get(HttpServletRequest request) {
         ServletContext context = request.getServletContext();
         synchronized (context) {
-            AuthSupport auth = (AuthSupport) context.getAttribute(ATTRIBUTE);
+            AuthSupport auth = (AuthSupport) context.getAttribute(support_key);
             if (auth == null) {
                 auth = new AuthSupport(context);
-                context.setAttribute(ATTRIBUTE, auth);
+                context.setAttribute(support_key, auth);
             }
             return auth;
         }
@@ -63,7 +63,7 @@ final class AuthSupport {
     HttpSession session(HttpServletRequest request, HttpServletResponse response) throws IOException {
         AuthWeb.noStore(response);
         request.setCharacterEncoding("UTF-8");
-        return AuthWeb.session(request, configFingerprint, true);
+        return AuthWeb.session(request, config_fingerprint, true);
     }
 
     boolean getPage(HttpServletRequest request, HttpServletResponse response) {
@@ -76,31 +76,31 @@ final class AuthSupport {
     }
 
     boolean post(HttpServletRequest request, HttpServletResponse response,
-            HttpSession session, boolean needsFirebase) throws IOException {
+            HttpSession session, boolean needs_firebase) throws IOException {
         if (!"POST".equals(request.getMethod())) {
             response.setHeader("Allow", "POST");
             response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
             return false;
         }
-        if (request.getContentLengthLong() > MAX_REQUEST_BYTES) {
+        if (request.getContentLengthLong() > max_request_bytes) {
             flash(session, "入力内容が大きすぎます。", "");
             AuthWeb.redirect(request, response, "/login/Error.action");
             return false;
         }
-        String contentType = request.getContentType();
-        if (contentType == null || !"application/x-www-form-urlencoded".equals(
-                contentType.split(";", 2)[0].trim().toLowerCase(java.util.Locale.ROOT))) {
+        String content_type = request.getContentType();
+        if (content_type == null || !"application/x-www-form-urlencoded".equals(
+                content_type.split(";", 2)[0].trim().toLowerCase(java.util.Locale.ROOT))) {
             flash(session, "正しい形式で送信できませんでした。入力画面からやり直してください。", "");
             AuthWeb.redirect(request, response, "/login/Error.action");
             return false;
         }
-        return !needsFirebase || available(request, response, session);
+        return !needs_firebase || available(request, response, session);
     }
 
     boolean available(HttpServletRequest request, HttpServletResponse response,
             HttpSession session) throws IOException {
         if (dao == null) {
-            flash(session, CONFIG_MESSAGE, "");
+            flash(session, config_message, "");
             AuthWeb.redirect(request, response, "/login/Error.action");
             return false;
         }
@@ -109,21 +109,21 @@ final class AuthSupport {
 
     Pending beginPending(HttpServletRequest request, HttpSession session,
             FirebaseUser user) {
-        Object oldValue = session.getAttribute(AuthWeb.PENDING);
-        long priorAttempt = -1L;
-        if (oldValue instanceof Pending && ((Pending) oldValue).user.getUid().equals(user.getUid())) {
-            priorAttempt = ((Pending) oldValue).lastMailAttempt;
+        Object old_value = session.getAttribute(AuthWeb.pending_key);
+        long prior_attempt = -1L;
+        if (old_value instanceof Pending && ((Pending) old_value).user.getUid().equals(user.getUid())) {
+            prior_attempt = ((Pending) old_value).last_mail_attempt;
         }
-        session.removeAttribute(AuthWeb.PROOF);
-        session.removeAttribute(AuthWeb.FLASH);
-        Pending pending = new Pending(user, now(), priorAttempt);
-        session.setAttribute(AuthWeb.PENDING, pending);
+        session.removeAttribute(AuthWeb.proof_key);
+        session.removeAttribute(AuthWeb.flash_key);
+        Pending pending = new Pending(user, now(), prior_attempt);
+        session.setAttribute(AuthWeb.pending_key, pending);
         request.changeSessionId();
         return pending;
     }
 
     boolean sendMail(HttpSession session, Pending pending) {
-        pending.lastMailAttempt = now();
+        pending.last_mail_attempt = now();
         try {
             boolean sent = dao.sendVerification(pending.user);
             String message = sent
@@ -143,16 +143,16 @@ final class AuthSupport {
         if (!pending.user.isEmailVerified()) {
             throw new IllegalStateException("Verified Firebase account is required");
         }
-        session.removeAttribute(AuthWeb.PENDING);
-        session.removeAttribute(AuthWeb.FLASH);
-        session.setAttribute(AuthWeb.PROOF, new Proof(pending.user, pending.startedAt));
+        session.removeAttribute(AuthWeb.pending_key);
+        session.removeAttribute(AuthWeb.flash_key);
+        session.setAttribute(AuthWeb.proof_key, new Proof(pending.user, pending.started_at));
         request.changeSessionId();
     }
 
     Pending pending(HttpSession session) {
-        Object value = session.getAttribute(AuthWeb.PENDING);
-        if (!(value instanceof Pending) || AuthWeb.expired(((Pending) value).startedAt, now())) {
-            session.removeAttribute(AuthWeb.PENDING);
+        Object value = session.getAttribute(AuthWeb.pending_key);
+        if (!(value instanceof Pending) || AuthWeb.expired(((Pending) value).started_at, now())) {
+            session.removeAttribute(AuthWeb.pending_key);
             return null;
         }
         return (Pending) value;
@@ -160,9 +160,9 @@ final class AuthSupport {
 
     void expired(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws IOException {
-        session.removeAttribute(AuthWeb.PENDING);
-        session.removeAttribute(AuthWeb.PROOF);
-        flash(session, EXPIRED_MESSAGE, "");
+        session.removeAttribute(AuthWeb.pending_key);
+        session.removeAttribute(AuthWeb.proof_key);
+        flash(session, expired_message, "");
         AuthWeb.redirect(request, response, "/login/Error.action");
     }
 
@@ -173,36 +173,36 @@ final class AuthSupport {
     long now() { return clock.getAsLong(); }
 
     static void flash(HttpSession session, String error, String message) {
-        session.setAttribute(AuthWeb.FLASH, new Flash(error, message));
+        session.setAttribute(AuthWeb.flash_key, new Flash(error, message));
     }
 
     static Flash takeFlash(HttpSession session) {
-        Object value = session.getAttribute(AuthWeb.FLASH);
-        session.removeAttribute(AuthWeb.FLASH);
+        Object value = session.getAttribute(AuthWeb.flash_key);
+        session.removeAttribute(AuthWeb.flash_key);
         return value instanceof Flash ? (Flash) value : new Flash("", "");
     }
 
     static final class Pending implements Serializable {
         static final long serialVersionUID = 1L;
         FirebaseUser user;
-        final long startedAt;
-        long lastMailAttempt;
+        final long started_at;
+        long last_mail_attempt;
 
-        Pending(FirebaseUser user, long startedAt, long lastMailAttempt) {
+        Pending(FirebaseUser user, long started_at, long last_mail_attempt) {
             this.user = user;
-            this.startedAt = startedAt;
-            this.lastMailAttempt = lastMailAttempt;
+            this.started_at = started_at;
+            this.last_mail_attempt = last_mail_attempt;
         }
     }
 
     static final class Proof implements Serializable {
         static final long serialVersionUID = 1L;
         FirebaseUser user;
-        final long startedAt;
+        final long started_at;
 
-        Proof(FirebaseUser user, long startedAt) {
+        Proof(FirebaseUser user, long started_at) {
             this.user = user;
-            this.startedAt = startedAt;
+            this.started_at = started_at;
         }
     }
 
