@@ -3,7 +3,7 @@ package achievementServlet;
 import java.time.LocalDate;
 
 import DAO.AchievementDAO;
-import bean.Achivement;
+import bean.Achievement;
 import bean.JobSeekerAccount;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,15 +35,15 @@ public class ChallengeApplyExecuteAction extends Action {
                 taskId = Long.parseLong(taskIdStr);
             }
 
-            Achivement achivement = new Achivement();
-            achivement.setTask_id(taskId);
-            achivement.setCandidate_account_id(candidateId);
-            achivement.setAchivement_date(LocalDate.now());
-            achivement.setPassorfail_id(3L); // 3: 審査中
-            achivement.setEvaluation("一次受付完了（自動審査対象）");
+            Achievement achievement = new Achievement();
+            achievement.setTask_id(taskId);
+            achievement.setCandidate_account_id(candidateId);
+            achievement.setAchievement_date(LocalDate.now());
+            achievement.setPassorfail_id(3L); // 3: 審査中
+            achievement.setEvaluation("一次受付完了（自動審査対象）");
 
             AchievementDAO dao = new AchievementDAO();
-            int count = dao.insert(achivement);
+            int count = dao.insert(achievement);
 
             if (count > 0) {
                 request.setAttribute("challengeName", challengeName);
