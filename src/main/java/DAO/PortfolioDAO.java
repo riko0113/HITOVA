@@ -41,6 +41,37 @@ public class PortfolioDAO extends DAO{
         return rowCount;
     }
     
+	// 作品を更新する処理
+    public int update(Long portfolioId, Long userId, String workName, String description, String fileUrl) throws Exception {
+        
+        // SQL文の定義（WHERE句でportfolio_idとcandidate_account_idを指定し、他人のデータを書き換えられないようにする）
+        String sql = "UPDATE portfolios SET work_name = ?, description = ?, file_url = ? WHERE portfolio_id = ? AND candidate_account_id = ?";
+        
+        int rowCount = 0;
+
+        // try-with-resources構文を用いて、ConnectionやPreparedStatementを確実にクローズする
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+            
+            // プレースホルダーに値をセット
+            st.setString(1, workName);
+            st.setString(2, description);
+            st.setString(3, fileUrl);
+            st.setLong(4, portfolioId);
+            st.setLong(5, userId);
+            
+            // UPDATE文を実行し、影響を受けた行数を取得
+            rowCount = st.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e; // 呼び出し元（Actionクラス）のtry-catchで捕捉できるように再スロー
+        }
+        
+        return rowCount;
+    }
+	
+    //一覧を取得する処理
     public List<Portfolio> searchList(Long userId) throws Exception {
         List<Portfolio> list = new ArrayList<>();
         
@@ -75,6 +106,7 @@ public class PortfolioDAO extends DAO{
         return list;
     }
     
+    //作品詳細を取得する処理
     public Portfolio searchDetail(Long portfolioId) throws Exception {
         Portfolio portfolio = null;
         
@@ -105,5 +137,27 @@ public class PortfolioDAO extends DAO{
             }
         }
         return portfolio;
+    }
+    
+    // 作品を削除する処理
+    public int delete(Long portfolioId, Long userId) throws Exception {
+        String sql = "DELETE FROM portfolios WHERE portfolio_id = ? AND candidate_account_id = ?";
+        int rowCount = 0;
+
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+        	
+        	// プレースホルダーに値をセット
+            st.setLong(1, portfolioId);
+            st.setLong(2, userId);
+            
+            // DELETE文を実行し、影響を受けた行数を取得
+            rowCount = st.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return rowCount;
     }
 }

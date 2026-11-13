@@ -35,7 +35,7 @@ public class PortfolioDetailAction extends Action {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMessage", "画面の表示中にエラーが発生しました。しばらく経ってから再度お試しください。");
-            return ""; // 適宜エラー用JSPのパスに調整してください
+            return "/error.jsp"; 
         }
     }
 }

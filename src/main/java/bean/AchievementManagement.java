@@ -2,7 +2,7 @@ package bean;
 
 import java.time.LocalDate;
 
-public class AchivementManagement implements java.io.Serializable{
+public class AchievementManagement implements java.io.Serializable{
 
 	private Long task_id;
 	private String achievement;

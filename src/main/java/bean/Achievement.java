@@ -2,24 +2,24 @@ package bean;
 
 import java.time.LocalDate;
 
-public class Achivement implements java.io.Serializable{
+public class Achievement implements java.io.Serializable{
 
-	private Long achivement_id;
+	private Long achievement_id;
 	private Long task_id;
 	private Long passorfail_id;
 	private String passorfail_name;
 	private String evaluation;
-	private LocalDate achivement_date;
+	private LocalDate achievement_date;
 	private Long candidate_account_id;
 	
 	
 	//実績提出ID
-	public Long getAchivement_id() {
-        return achivement_id;
+	public Long getAchievement_id() {
+        return achievement_id;
     }
 	
-	public void setAchivement_id(Long achivement_id) {
-        this.achivement_id = achivement_id;
+	public void setAchievement_id(Long achivement_id) {
+        this.achievement_id = achivement_id;
     }
 	
 	//実績管理ID
@@ -59,12 +59,12 @@ public class Achivement implements java.io.Serializable{
     }
 	
 	//取得日
-	public LocalDate getAchivement_date() {
-        return achivement_date;
+	public LocalDate getAchievement_date() {
+        return achievement_date;
     }
 	
-	public void setAchivement_date(LocalDate achivement_date) {
-        this.achivement_date = achivement_date;
+	public void setAchievement_date(LocalDate achivement_date) {
+        this.achievement_date = achivement_date;
     }
 	
 	

@@ -34,8 +34,9 @@ public class PortfolioAddAction extends Action {
             Long userId = (Long) session.getAttribute("candidate_account_id");
             
             if (userId == null) {
-                request.setAttribute("errorMessage", "ログインしてください。");
-                return ""; 
+            	// ログイン画面へリダイレクトする処理
+            	response.sendRedirect(request.getContextPath() + "");
+                return "null"; 
             }
 
             // JSPから入力内容を受け取る
@@ -69,6 +70,7 @@ public class PortfolioAddAction extends Action {
             String fileUrl = null; // データベースに保存したり画面に渡すためのURL
             
             if (workFile != null && workFile.getSize() > 0) {
+            	//getSubmittedFileName() → そのPartオブジェクトが持っているアップロードされたファイルのファイル名を取得するメソッド
                 String submittedFileName = workFile.getSubmittedFileName();
                 
                 // ファイル名が重複しないようUUIDを付与
@@ -79,20 +81,29 @@ public class PortfolioAddAction extends Action {
                 }
                 String s3FileName = UUID.randomUUID().toString() + extension;
 
-                // AWS S3クライアントを生成してアップロード
+                // S3へアップロード
                 try (S3Client s3Client = S3Client.builder()
+                        // アップロード先のAWSリージョン（地域、例: 東京リージョンなど）を指定してビルダーを準備
                         .region(REGION)
+                        // サーバーの認証情報（環境変数やIAMロールなど）をデフォルトのプロバイダから自動取得して設定
                         .credentialsProvider(DefaultCredentialsProvider.create())
-                        .build();
+                        .build(); // 3. S3Clientのインスタンスを生成
+                     // アップロード対象のファイルから、データを読み込むための入力ストリーム（InputStream）を取得
                      InputStream fileContent = workFile.getInputStream()) {
 
+                    // S3にファイルを保存（PutObject）するためのリクエスト情報を組み立てるビルダーを生成
                     PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                            // 保存先のS3バケット名を指定
                             .bucket(BUCKET_NAME)
+                            // S3内でのファイルの保存名（キー名、ここではUUIDを使った一意なファイル名）を指定
                             .key(s3FileName)
+                            // ファイルのコンテンツタイプ（MIMEタイプ、例: image/jpeg や application/pdf など）を設定
                             .contentType(workFile.getContentType())
-                            .build();
+                            .build(); // 9. リクエストオブジェクトを完成させる
 
-                    // ストリームからS3へ直接アップロード
+                    // 実際にS3クライアントを使ってファイルをアップロードする
+                    // 第1引数: アップロード設定（バケット名やファイル名など）
+                    // 第2引数: 送信データ本体（InputStreamの中身と、ファイルのサイズを指定してメモリ効率よく送信）
                     s3Client.putObject(putObjectRequest,
                             RequestBody.fromInputStream(fileContent, workFile.getSize()));
                 }
@@ -111,7 +122,7 @@ public class PortfolioAddAction extends Action {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMessage", "登録処理中にエラーが発生しました。しばらく経ってから再度お試しください。");
-            return "/portfolio/jsp/portfolioAdd.jsp";
+            return "/error.jsp";
         }
     }
 }

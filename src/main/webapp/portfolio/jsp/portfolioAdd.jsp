@@ -7,26 +7,32 @@
     <h1>作品追加</h1>
 </div>
 
-<form action="${pageContext.request.contextPath}/portfolio/portfolioAdd.action" method="post">
+<form action="${pageContext.request.contextPath}/portfolio/portfolioAdd.action" method="post" enctype="multipart/form-data">
 
     <div class="form-box">
         
         <!-- 作品名 -->
         <label>作品名 (50字以内)</label>
+        <!-- 入力値を保持する -->
         <input type="text" id="workName" name="work_name"
-               maxlength="50" placeholder="作品名を入力してください">
-        <p id="workNameError" class="error"></p>
+               maxlength="50" placeholder="作品名を入力してください"
+               value="${not empty param.work_name ? param.work_name : workName}">
+        <!-- サーブレットから渡されたエラーメッセージを表示 -->
+        <p id="workNameError" class="error">${workNameError}</p>
 
         <!-- 説明文 -->
         <span class="setumei">説明文 (300字以内)</span>
+        <!-- 入力値を保持する -->
         <textarea id="description" name="description"
-                  maxlength="300" placeholder="説明文を入力してください"></textarea>
-        <p id="descriptionError" class="error"></p>
+                  maxlength="300" placeholder="説明文を入力してください">${not empty param.description ? param.description : description}</textarea>
+        <!-- サーブレットから渡されたエラーメッセージを表示 -->
+        <p id="descriptionError" class="error">${descriptionError}</p>
 
         <!-- ファイル添付 -->
         <span>ファイル添付 (100MBまで)</span>
         <input type="file" name="work_file">
-        <p id="fileError" class="error"></p>
+        <!-- サーブレットから渡されたエラーメッセージを表示 -->
+        <p id="fileError" class="error">${fileError}</p>
 
     </div>
 
