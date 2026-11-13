@@ -33,10 +33,13 @@ public class FrontController extends HttpServlet {
 
            
             String url = action.execute(request, response);
-
             
-            request.getRequestDispatcher(url)
-                .forward(request, response);
+            
+            if (url != null) {
+                request.getRequestDispatcher(url)
+                    .forward(request, response);
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace(out);
