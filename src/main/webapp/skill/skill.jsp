@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<c:if test="${skillList == null}">
+    <jsp:forward page="/skillServlet/SkillUpdate.action" />
+</c:if>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +18,9 @@
     .col-name { width: 70%; padding: 5px; border: 1px solid #ccc; background: #fff; box-sizing: border-box; }
     .col-action { width: 25%; text-align: right; font-size: 0.9em; }
     
+    /* 削除時のグレーアウト設定 */
     .deleted .col-name { text-decoration: line-through; color: #888; background: #f9f9f9; }
+    .deleted .col-content { text-decoration: line-through; color: #888; background-color: #f9f9f9 !important; }
     .deleted .action-link { color: #0066cc; cursor: pointer; text-decoration: underline; }
 
     .btn-group { display: flex; justify-content: center; gap: 50px; margin-top: 40px; }
@@ -46,13 +51,26 @@
             </c:when>
             <c:otherwise>
                 <c:forEach var="s" items="${skillList}">
-                    <div class="list-item" id="row-${s.skill_id}">
-                        <div class="col-name">${s.skill_name}</div>
-                        <div class="col-action" id="action-${s.skill_id}">
+                    
+                    <!-- 削除ボタンが上にくるように align-items: flex-start を追加 -->
+                    <div class="list-item" id="row-${s.skill_id}" style="align-items: flex-start;">
+                        
+                        <!-- 左側：タイトルと詳細をまとめるコンテナ -->
+                        <div style="width: 70%;">
+                            <!-- タイトル -->
+                            <div class="col-name" style="width: 100%; margin-bottom: 8px;">${s.skill_name}</div>
+                            
+                            <!-- 詳細 -->
+                            <textarea class="col-content" readonly style="width: 100%; padding: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 0.9em; height: 60px; resize: vertical; background-color: #fff;">${s.skill_content}</textarea>
+                        </div>
+
+                        <!-- 右側：削除アクション -->
+                        <div class="col-action" id="action-${s.skill_id}" style="padding-top: 5px;">
                             <a href="javascript:void(0);" onclick="markDeleted(${s.skill_id})" style="color: #0066cc; text-decoration: none;">削除</a>
                             <input type="hidden" name="delete_ids" id="del-input-${s.skill_id}" value="">
                         </div>
                     </div>
+                    
                 </c:forEach>
             </c:otherwise>
         </c:choose>
