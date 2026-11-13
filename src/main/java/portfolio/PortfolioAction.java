@@ -11,7 +11,6 @@ import tool.Action;
 
 public class PortfolioAction extends Action {
     // executeメソッド：FrontControllerから呼ばれるメイン処理
-    @Override
     public String execute(
         HttpServletRequest request, HttpServletResponse response
     ) {
@@ -22,9 +21,9 @@ public class PortfolioAction extends Action {
             
             //未ログインの場合のチェック
             if (userId == null) {
-                // ログイン画面へフォワードする処理
-                request.setAttribute("errorMessage", "ログインしてください。");
-                return "";
+                // ログイン画面へリダイレクトする処理
+            	response.sendRedirect(request.getContextPath() + "");
+                return "null";
             }
             
             // ポートフォリオDAOのインスタンス生成
@@ -45,7 +44,7 @@ public class PortfolioAction extends Action {
             request.setAttribute("errorMessage", "画面の表示中にエラーが発生しました。しばらく経ってから再度お試しください。");
             
             // エラー時の遷移先を返す（必要に応じてエラー用JSP等を指定）
-            return ""; 
+            return "/error.jsp"; 
         }
     }
 }

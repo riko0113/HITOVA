@@ -21,7 +21,7 @@
                     </div>
                     <div class="user-info">
                         <h3><c:out value="${history.jobSeekerAccount.nick_name}" /></h3>
-                        <p>生年月日：<c:out value="${history.jobSeekerAccount.nick_name}" />
+                        <p>生年月日：<span class="birth-date" data-profile='<c:out value="${history.profile}" />'></span></p>
                         <p>応募日時：<c:out value="${history.application_at}" /></p>
                         
                         <p>
@@ -52,5 +52,6 @@
             <p>データが存在しません。</p>
         </c:if>
     </div>
-    
+
+<script src="../applicantCss/applicant_lists.js"></script> 
 <%@ include file="../footer.jsp" %>

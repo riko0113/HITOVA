@@ -25,7 +25,7 @@
 
     <div class="button-area">
         <!-- 編集画面へ-->
-        <a href="${pageContext.request.contextPath}/portfolio/portfolioedit.jsp?portfolio_id=${portfolio.portfolio_id}"
+        <a href="${pageContext.request.contextPath}/portfolio/PortfolioDisplay.action?portfolio_id=${portfolio.portfolio_id}"
            class="hensyu">編集</a>
 
         <!-- 削除画面へ-->

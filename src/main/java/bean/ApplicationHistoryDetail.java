@@ -8,7 +8,7 @@ public class ApplicationHistoryDetail implements Serializable {
     private ApplicationHistory applicationHistory;
     private List<Skill> skills;
     private List<QualificationDetail> qualifications; 
-    private List<AchivementManagement> achievements; 
+    private List<AchievementManagement> achievements; 
     private List<Portfolio> portfolios;
 
     // 求職者アカウント情報
@@ -27,9 +27,9 @@ public class ApplicationHistoryDetail implements Serializable {
     public List<QualificationDetail> getQualifications() { return qualifications; }
     public void setQualifications(List<QualificationDetail> qualifications) { this.qualifications = qualifications; }
     
-    //資格一覧情報
-    public List<AchivementManagement> getAchievements() { return achievements; }
-    public void setAchievements(List<AchivementManagement> achievements) { this.achievements = achievements; }
+    //実績一覧情報
+    public List<AchievementManagement> getAchievements() { return achievements; }
+    public void setAchievements(List<AchievementManagement> achievements) { this.achievements = achievements; }
     
     //ポートフォリオ情報
     public List<Portfolio> getPortfolios() { return portfolios; }
