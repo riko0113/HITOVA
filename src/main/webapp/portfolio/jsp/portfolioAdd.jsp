@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="../head.jsp" %>
+<%@ include file="../../head.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/portfolio/css/portfolioAdd.css">
 
 <div class="tuika">
@@ -48,4 +48,4 @@
 
 </form>
 <script src="${pageContext.request.contextPath}/portfolio/css/portfolioAdd.js" defer></script>
-<%@ include file="../footer.jsp" %>
+<%@ include file="../../footer.jsp" %>
