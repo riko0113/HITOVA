@@ -1,39 +1,52 @@
+
 package Notification;
 
-import java.util.List;
-
-import DAO.NotificationDAO;
-import bean.NotificationReceiver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
 // 通知送信画面を表示するAction
 public class NotificationDisplayAction extends Action {
-
-    // DAOを使う準備
-    private NotificationDAO notificationDAO =
-            new NotificationDAO();
 
     @Override
     public String execute(
             HttpServletRequest request,
             HttpServletResponse response)
             throws Exception {
+        // セッションを取得
+        HttpSession session = request.getSession(false);
 
-        // 企業一覧を取得
-        List<NotificationReceiver> companyList =
-                notificationDAO.findAllCompanies();
+        // ログインしていない場合
+        if (session == null) {
+            request.setAttribute("errorMessage", "ログインしてください。");
+            return "/Notification/jsp/tuuti.jsp";
+        }
 
-        // 求職者一覧を取得
-        List<NotificationReceiver> userList =
-                notificationDAO.findAllJobSeekers();
+        // アカウントIDを取得
+        Long accountId = (Long) session.getAttribute("accountId");
 
-        // 取得した一覧をJSPに渡す
-        request.setAttribute("companyList", companyList);
-        request.setAttribute("userList", userList);
+        if (accountId == null) {
+            request.setAttribute("errorMessage", "ログインしてください。");
+            return "/Notification/jsp/tuuti.jsp";
+        }
 
-        // 表示するJSPを返す
+        // アカウントの種類を取得
+        String accountType = (String) session.getAttribute("accountType");
+
+        // 管理者・組合管理者以外を拒否
+        if (!"ADMIN".equals(accountType)
+                && !"UNION_ADMIN".equals(accountType)) {
+
+            request.setAttribute(
+                "errorMessage",
+                "通知を送信する権限がありません。"
+            );
+
+            return "/Notification/jsp/tuuti.jsp";
+        }
+        // 通知送信画面を表示
         return "/Notification/jsp/tuutiSend.jsp";
     }
+    
 }
