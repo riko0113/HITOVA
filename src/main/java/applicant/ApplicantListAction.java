@@ -25,6 +25,8 @@ public class ApplicantListAction extends Action {
                 } catch (NumberFormatException e) {
                     // パラメータが数値に変換できない場合のエラー処理
                     e.printStackTrace();
+                    request.setAttribute("errorMessage", "無効なIDが指定されました。");
+        	        return "/applicant/error.jsp";
                 }
             }
             
@@ -46,7 +48,7 @@ public class ApplicantListAction extends Action {
             request.setAttribute("errorMessage", "データの取得中にエラーが発生しました。しばらく経ってから再度お試しください。");
             
             //エラー用の専用画面、または元の安全な画面へフォワードする
-            return ""; 
+            return "/error.jsp"; 
         }
     }
 }

@@ -1,48 +1,68 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>スキル登録</title>
+<title>スキル登録 - HITOVA</title>
 <style>
-    body { font-family: sans-serif; margin-top: 50px; }
-    .container { max-width: 600px; margin: 0 auto; text-align: left; border: 1px solid #ccc; padding: 30px; }
-    h2 { margin-bottom: 5px; }
-    .note { font-size: 0.85em; color: #333; margin-bottom: 20px; line-height: 1.5; }
-    .form-group { margin-bottom: 15px; }
-    input[type="text"], textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #333; }
+    body { font-family: sans-serif; margin-top: 30px; text-align: center; }
+    .header-area { display: flex; justify-content: space-between; padding: 0 50px; margin-bottom: 40px; }
+    .container { max-width: 600px; margin: 0 auto; text-align: left; }
+    .page-title { margin-bottom: 20px; }
+    .page-title h2 { margin: 0 0 5px 0; font-size: 1.2em; }
+    .page-title p { margin: 0; font-size: 0.8em; color: #666; line-height: 1.4; }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 0.9em; }
+    input[type="text"], textarea { width: 100%; padding: 10px; border: 1px solid #333; box-sizing: border-box; font-size: 1em; }
     textarea { height: 100px; resize: vertical; }
-    .add-more { display: block; text-align: right; margin-bottom: 30px; color: #0066cc; text-decoration: none; font-size: 0.9em; }
-    .btn-group { display: flex; justify-content: space-between; }
-    .btn { padding: 10px 0; width: 45%; text-align: center; cursor: pointer; text-decoration: none; box-sizing: border-box; font-size: 1em; }
-    .btn-cancel { border: 1px solid #999; background-color: #fff; color: #0066cc; }
-    .btn-submit { border: none; background-color: #4CAF50; color: white; }
+    
+    .add-link { text-align: right; margin-bottom: 40px; }
+    .add-link a { color: #0066cc; text-decoration: underline; font-size: 0.9em; }
+    
+    .btn-group { display: flex; justify-content: center; gap: 50px; }
+    .btn { padding: 10px 0; width: 150px; text-align: center; cursor: pointer; border: 1px solid #ccc; background-color: #fff; color: #0066cc; text-decoration: none; display: inline-block; }
+    .btn-submit { background-color: #4CAF50; color: white; border: none; }
+    .error-msg { color: #d9534f; margin-bottom: 20px; font-weight: bold; }
 </style>
 </head>
 <body>
-<div class="container">
-    <h2>スキル登録</h2>
-    <div class="note">持っているスキルを自由に登録できます<br>例）趣味、海外留学、言語習得、アルバイト・サークル活動等アピールポイント</div>
-    <form action="${pageContext.request.contextPath}/skillServlet/SkillRegisterExecute.action" method="post">
-        
-        <!-- ログイン機能実装までのダミー求職者ID -->
-        <input type="hidden" name="candidate_account_id" value="1">
+    <header class="header-area">
+        <div><span style="color: #4CAF50; font-weight: bold; font-size: 24px;">HITOVA</span></div>
+        <div style="font-size: 0.9em; color: #666;">マイページ ログアウト</div>
+    </header>
 
-        <div class="form-group">
-            <!-- nameをskill_nameに変更 -->
-            <input type="text" name="skill_name" placeholder="例）趣味のイラスト投稿でインプレッション〇万達成" required>
+    <div class="container">
+        <div class="page-title">
+            <h2>スキル登録</h2>
+            <p>持っているスキルを自由に登録できます<br>例）趣味、海外留学、言語習得、アルバイト・サークル活動等アピールポイント</p>
         </div>
-        <div class="form-group">
-            <label style="font-size: 0.9em; display: block; margin-bottom: 5px;">詳細</label>
-            <!-- nameをskill_contentに変更 -->
-            <textarea name="skill_content"></textarea>
-        </div>
-        <a href="#" class="add-more">さらに追加</a>
-        <div class="btn-group">
-            <a href="${pageContext.request.contextPath}/skillServlet/Skill.action" class="btn btn-cancel">キャンセル</a>
-            <button type="submit" class="btn btn-submit">登録</button>
-        </div>
-    </form>
-</div>
+        
+        <c:if test="${not empty errorMessage}">
+            <div class="error-msg">${errorMessage}</div>
+        </c:if>
+
+        <form action="${pageContext.request.contextPath}/skillServlet/SkillRegisterExecute.action" method="post">
+            
+            <div class="form-group">
+                <input type="text" name="skill_name" placeholder="例）趣味のイラスト投稿でインプレッション〇万達成" required>
+            </div>
+
+            <div class="form-group">
+                <label>詳細</label>
+                <textarea name="skill_content" required></textarea>
+            </div>
+
+            <div class="add-link">
+                <a href="#">さらに追加</a>
+            </div>
+
+            <div class="btn-group">
+                <a href="${pageContext.request.contextPath}/skillServlet/Skill.action" class="btn">キャンセル</a>
+                <button type="submit" class="btn btn-submit">登録</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

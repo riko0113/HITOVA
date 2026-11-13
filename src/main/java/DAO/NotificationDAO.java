@@ -4,34 +4,18 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 
 import bean.Notification;
 import bean.NotificationReceiver;
 
-public class NotificationDAO {
-
-    // DBに接続する
-    private Connection getConnection()
-            throws NamingException, SQLException {
-
-        InitialContext context = new InitialContext();
-
-        DataSource ds = (DataSource) context.lookup(
-                "java:comp/env/jdbc/hitova");
-
-        return ds.getConnection();
-    }
+// 共通DAOを継承
+public class NotificationDAO extends DAO {
 
     // 通知を登録する
     public int insert(Notification notification)
-            throws NamingException, SQLException {
+            throws Exception {
 
         String sql = "INSERT INTO notifications "
                 + "(receiver_type_id, message, receiver_account_id) "
@@ -55,7 +39,7 @@ public class NotificationDAO {
 
     // 企業一覧を取得する
     public List<NotificationReceiver> findAllCompanies()
-            throws NamingException, SQLException {
+            throws Exception {
 
         List<NotificationReceiver> list = new ArrayList<>();
 
@@ -86,8 +70,7 @@ public class NotificationDAO {
 
     // 組合IDから企業一覧を取得する
     public List<NotificationReceiver> findCompaniesByUnionId(
-            Integer unionId)
-            throws NamingException, SQLException {
+            Integer unionId) throws Exception {
 
         List<NotificationReceiver> list = new ArrayList<>();
 
@@ -122,7 +105,7 @@ public class NotificationDAO {
 
     // 宛先種別IDを取得する
     public Integer findReceiverTypeId(String receiverName)
-            throws NamingException, SQLException {
+            throws Exception {
 
         String sql = "SELECT receiver_type_id "
                 + "FROM receiver_type "
@@ -145,7 +128,7 @@ public class NotificationDAO {
 
     // 求職者一覧を取得する
     public List<NotificationReceiver> findAllJobSeekers()
-            throws NamingException, SQLException {
+            throws Exception {
 
         List<NotificationReceiver> list = new ArrayList<>();
 
@@ -173,4 +156,51 @@ public class NotificationDAO {
 
         return list;
     }
+ // アカウント種別に応じた通知一覧を取得する
+    public List<Notification> findNotifications(String receiverName)
+            throws Exception {
+
+        List<Notification> list = new ArrayList<>();
+
+        String sql = "SELECT n.notification_id, n.message, "
+                + "n.send_at, n.receiver_type_id, rt.receiver_name "
+                + "FROM notifications n "
+                + "JOIN receiver_type rt "
+                + "ON n.receiver_type_id = rt.receiver_type_id "
+                + "WHERE rt.receiver_name IN (?, '全体') "
+                + "AND n.receiver_account_id IS NULL "
+                + "ORDER BY n.send_at DESC";
+
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, receiverName);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+
+                    Notification notification = new Notification();
+
+                    notification.setNotification_id(
+                            rs.getLong("notification_id"));
+
+                    notification.setMessage(
+                            rs.getString("message"));
+
+                    notification.setSend_at(
+                            rs.getTimestamp("send_at").toLocalDateTime());
+
+                    notification.setReceiver_type_id(
+                            rs.getInt("receiver_type_id"));
+
+                    notification.setReceiver_type_name(
+                            rs.getString("receiver_name"));
+
+                    list.add(notification);
+                }
+            }
+        }
+        return list;
+    }
+    
 }

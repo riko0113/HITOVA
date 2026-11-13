@@ -3,49 +3,58 @@ package qualificationServlet;
 import java.time.LocalDate;
 
 import DAO.QualificationDAO;
+import bean.JobSeekerAccount;
 import bean.Qualification;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
 public class QualificationRegisterExecuteAction extends Action {
-
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
-        // 1. JSPからname属性でデータを受け取る
-        String candidateIdStr = request.getParameter("candidate_account_id");
-        String smallCategoryStr = request.getParameter("qualification_small"); // 資格詳細IDとして使用
-        String yearStr = request.getParameter("qualification_year");
-        String monthStr = request.getParameter("qualification_month");
-        String dayStr = request.getParameter("qualification_day");
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            HttpSession session = request.getSession();
+            JobSeekerAccount candidate = (JobSeekerAccount) session.getAttribute("candidate");
 
-        // 入力チェック（どれかが空ならエラー画面へ）
-        if (candidateIdStr == null || smallCategoryStr == null || 
-            yearStr == null || monthStr == null || dayStr == null || yearStr.isEmpty()) {
-            return "/qualification/qualificationRegisterError.jsp"; 
-        }
+            Long candidateId = null;
+            if (candidate != null) {
+                candidateId = candidate.getCandidate_id();
+            }
 
-        // 2. 年・月・日を数値に変換し、LocalDateを作成する
-        int year = Integer.parseInt(yearStr);
-        int month = Integer.parseInt(monthStr);
-        int day = Integer.parseInt(dayStr);
-        LocalDate qualificationDate = LocalDate.of(year, month, day);
+            // TODO: ログイン機能完成まではダミーIDを使用
+            if (candidateId == null) {
+                candidateId = 1L;
+            }
 
-        // 3. Beanにセット
-        Qualification q = new Qualification();
-        q.setCandidate_account_id(Long.parseLong(candidateIdStr));
-        q.setQualification_detail_id(Long.parseLong(smallCategoryStr));
-        q.setQualification_date(qualificationDate);
+            // JSPから送られてくるname属性(qualification_small と qualification_date)を取得
+            String qualificationDetailIdStr = request.getParameter("qualification_small");
+            String dateStr = request.getParameter("qualification_date");
 
-        // 4. DAOでデータベースにINSERT
-        QualificationDAO dao = new QualificationDAO();
-        int result = dao.insert(q);
+            Long qualificationDetailId = Long.parseLong(qualificationDetailIdStr);
+            // カレンダーから送られる "YYYY-MM-DD" をそのまま日付型（LocalDate）に変換
+            LocalDate qualificationDate = LocalDate.parse(dateStr);
 
-        // 5. 結果に応じて画面遷移
-        if (result > 0) {
-            return "/qualification/qualificationRegisterComplete.jsp";
-        } else {
+            // 登録データのセット
+            Qualification qualification = new Qualification();
+            qualification.setCandidate_account_id(candidateId);
+            qualification.setQualification_detail_id(qualificationDetailId);
+            qualification.setQualification_date(qualificationDate);
+
+            QualificationDAO dao = new QualificationDAO();
+            int count = dao.insert(qualification);
+
+            if (count > 0) {
+                // 成功したら完了画面へ
+                return "/qualification/qualificationRegisterComplete.jsp"; // ←完了画面の名前に合わせて修正
+            } else {
+                request.setAttribute("errorMessage", "登録処理に失敗しました。");
+                return "/qualification/qualificationRegister.jsp";
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "資格の登録中にエラーが発生しました。入力内容を確認してください。");
             return "/qualification/qualificationRegisterError.jsp";
         }
     }

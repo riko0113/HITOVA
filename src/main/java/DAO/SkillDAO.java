@@ -1,7 +1,6 @@
 package DAO;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -9,22 +8,18 @@ import java.util.List;
 
 import bean.Skill;
 
-public class SkillDAO {
-    private final String URL = "jdbc:postgresql://localhost:5432/hitova";
-    private final String USER = "postgres";
-    private final String PASS = "post";
+public class SkillDAO extends DAO {
 
-    // 登録処理
+    // スキル登録処理
     public int insert(Skill skill) throws Exception {
         int count = 0;
+        // 自由記述のテキストを保存する
         String sql = "INSERT INTO skills (candidate_id, skill_name, skill_content) VALUES (?, ?, ?)";
 
-        Class.forName("org.postgresql.Driver");
-
-        try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+        try (Connection con = getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
-            st.setLong(1, skill.getCandidate_account_id()); 
+            st.setLong(1, skill.getCandidate_account_id());
             st.setString(2, skill.getSkill_name());
             st.setString(3, skill.getSkill_content());
 
@@ -33,22 +28,21 @@ public class SkillDAO {
         return count;
     }
 
-    // 一覧取得処理
+    // 求職者IDを指定してスキル一覧を取得する処理
     public List<Skill> findByCandidateId(Long candidateId) throws Exception {
         List<Skill> list = new ArrayList<>();
-        
+
+        // 外部テーブルとのJOIN不要。直接skillsテーブルから取得
         String sql = "SELECT skill_id, candidate_id, skill_name, skill_content " +
                      "FROM skills " +
                      "WHERE candidate_id = ? " +
                      "ORDER BY skill_id DESC";
 
-        Class.forName("org.postgresql.Driver");
-
-        try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+        try (Connection con = getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
-            
+
             st.setLong(1, candidateId);
-            
+
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
                     Skill s = new Skill();
@@ -63,17 +57,17 @@ public class SkillDAO {
         return list;
     }
 
-    // 削除処理
-    public int delete(Long skillId) throws Exception {
+    // スキル削除処理
+    public int delete(Long skillId, Long candidateId) throws Exception {
         int count = 0;
-        String sql = "DELETE FROM skills WHERE skill_id = ?";
+        String sql = "DELETE FROM skills WHERE skill_id = ? AND candidate_id = ?";
 
-        Class.forName("org.postgresql.Driver");
-
-        try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+        try (Connection con = getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
             st.setLong(1, skillId);
+            st.setLong(2, candidateId);
+
             count = st.executeUpdate();
         }
         return count;

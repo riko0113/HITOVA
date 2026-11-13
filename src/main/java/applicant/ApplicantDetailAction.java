@@ -1,7 +1,5 @@
 package applicant;
 
-import java.util.List;
-
 import DAO.ApplicationHistoryDAO;
 import bean.ApplicationHistoryDetail;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +23,8 @@ public class ApplicantDetailAction extends Action {
         	    } catch (NumberFormatException e) {
         	        // パラメータが数値に変換できない場合のエラー処理
         	        e.printStackTrace();
+        	        request.setAttribute("errorMessage", "無効なIDが指定されました。");
+        	        return "/applicant/error.jsp"; 
         	    }
         	}
             
@@ -38,6 +38,8 @@ public class ApplicantDetailAction extends Action {
         	    } catch (NumberFormatException e) {
         	        // パラメータが数値に変換できない場合のエラー処理
         	        e.printStackTrace();
+        	        request.setAttribute("errorMessage", "無効なIDが指定されました。");
+        	        return "/applicant/error.jsp"; 
         	    }
         	}
         	
@@ -45,9 +47,9 @@ public class ApplicantDetailAction extends Action {
             ApplicationHistoryDAO dao = new ApplicationHistoryDAO();
             
             // Listに応募者詳細の結果を返す
-            List<ApplicationHistoryDetail> detailList = dao.searchDetail(applicationHistoryId);
+            ApplicationHistoryDetail detail = dao.searchDetail(applicationHistoryId);
             
-            request.setAttribute("detailList", detailList);
+            request.setAttribute("detail", detail);
             request.setAttribute("jobId", jobId);
             
             return "/applicant/applicant_detail.jsp"; 
@@ -60,7 +62,7 @@ public class ApplicantDetailAction extends Action {
             request.setAttribute("errorMessage", "データの取得中にエラーが発生しました。しばらく経ってから再度お試しください。");
             
             //エラー用の専用画面、または元の安全な画面へフォワードする
-            return ""; 
+            return "/error.jsp"; 
         }
     }
 }
