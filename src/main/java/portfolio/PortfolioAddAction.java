@@ -31,7 +31,7 @@ public class PortfolioAddAction extends Action {
 
             // セッションからユーザーIDを取得して未ログインチェック
             HttpSession session = request.getSession();
-            Long userId = (Long) session.getAttribute("candidate_account_id");
+            Long userId = (Long) session.getAttribute("candidate_id");
             
             if (userId == null) {
             	// ログイン画面へリダイレクトする処理

@@ -17,7 +17,7 @@ public class PortfolioAction extends Action {
         try {
         	HttpSession session = request.getSession();
         	
-        	Long userId = (Long) session.getAttribute("candidate_account_id");
+        	Long userId = (Long) session.getAttribute("candidate_id");
             
             //未ログインの場合のチェック
             if (userId == null) {
