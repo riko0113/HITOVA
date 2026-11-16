@@ -16,7 +16,7 @@ public class PortfolioDeleteAction extends Action {
             HttpSession session = request.getSession();
             
             // ログインチェック
-            Long userId = (Long) session.getAttribute("candidate_account_id");
+            Long userId = (Long) session.getAttribute("candidate_id");
             if (userId == null) {
                 // 未ログインの場合の処理
                 response.sendRedirect(request.getContextPath() + "");

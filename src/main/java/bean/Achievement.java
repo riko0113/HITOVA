@@ -18,8 +18,8 @@ public class Achievement implements java.io.Serializable{
         return achievement_id;
     }
 	
-	public void setAchievement_id(Long achivement_id) {
-        this.achievement_id = achivement_id;
+	public void setAchievement_id(Long achievement_id) {
+        this.achievement_id = achievement_id;
     }
 	
 	//実績管理ID
@@ -63,8 +63,8 @@ public class Achievement implements java.io.Serializable{
         return achievement_date;
     }
 	
-	public void setAchievement_date(LocalDate achivement_date) {
-        this.achievement_date = achivement_date;
+	public void setAchievement_date(LocalDate achievement_date) {
+        this.achievement_date = achievement_date;
     }
 	
 	
