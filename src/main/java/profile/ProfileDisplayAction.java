@@ -2,6 +2,7 @@
 package profile;
 
 import DAO.ProfileDisplayDAO;
+import DAO.ProfileRegisterDAO;
 import bean.Profile;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,8 +11,10 @@ import tool.Action;
 
 public class ProfileDisplayAction extends Action {
 
+	
     @Override
     public String execute(
+    		
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
@@ -28,11 +31,20 @@ public class ProfileDisplayAction extends Action {
         // プロフィール情報を取得する
         ProfileDisplayDAO dao = new ProfileDisplayDAO();
 
-        Profile profile =
-                dao.search(candidateAccountId);
+        Profile profile = dao.search(candidateAccountId);
 
         // プロフィールが未登録の場合
         if (profile == null) {
+
+            // 希望職種一覧を取得する
+            ProfileRegisterDAO registerDAO =
+                    new ProfileRegisterDAO();
+
+            request.setAttribute(
+                    "occupationList",
+                    registerDAO.getOccupationList()
+            );
+
             return "/profile/profileRegister.jsp";
         }
 

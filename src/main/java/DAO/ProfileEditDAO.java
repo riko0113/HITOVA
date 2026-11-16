@@ -12,6 +12,11 @@ public class ProfileEditDAO extends DAO {
     // プロフィール情報を更新する
     public int update(Profile profile) throws Exception {
 
+        // 希望職種の選択確認
+        if (profile.getDesired_job_type_id() == null) {
+            throw new IllegalArgumentException("希望職種を選択してください。");
+        }
+
         String sql =
             "UPDATE profiles SET " +
             "last_name = ?, " +

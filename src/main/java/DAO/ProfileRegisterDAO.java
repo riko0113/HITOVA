@@ -1,5 +1,131 @@
+
 package DAO;
 
-public class ProfileRegisterDAO {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import bean.Profile;
+
+// プロフィール登録DAO
+public class ProfileRegisterDAO extends DAO {
+
+    // プロフィール情報を登録する
+    public int insert(Profile profile) throws Exception {
+    	
+
+        // 希望職種が選択されているか確認
+        if (profile.getDesired_job_type_id() == null) {
+            throw new IllegalArgumentException("希望職種を選択してください。");
+        }
+
+        String sql =
+            "INSERT INTO profiles (" +
+            "last_name, " +
+            "first_name, " +
+            "last_name_kana, " +
+            "first_name_kana, " +
+            "birth_day, " +
+            "gender, " +
+            "current_postal_code, " +
+            "current_address, " +
+            "desired_employment_type_id, " +
+            "desired_work_location, " +
+            "desired_job_type_id, " +
+            "highest_education, " +
+            "work_history, " +
+            "candidate_account_id" +
+            ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (
+            Connection con = getConnection();
+            PreparedStatement st = con.prepareStatement(sql)
+        ) {
+
+            // 氏名
+            st.setString(1, profile.getLast_name());
+            st.setString(2, profile.getFirst_name());
+
+            // 氏名カナ
+            st.setString(3, profile.getLast_name_kana());
+            st.setString(4, profile.getFirst_name_kana());
+
+            // 生年月日
+            st.setDate(
+                5,
+                java.sql.Date.valueOf(
+                    profile.getBirth_date().toLocalDate()
+                )
+            );
+
+            // 性別
+            st.setBoolean(6, profile.getgender());
+
+            // 住所
+            st.setString(7, profile.getCurrent_postal_code());
+            st.setString(8, profile.getCurrent_address());
+
+            // 希望条件
+            st.setInt(9, profile.getDesired_employment_type_id());
+            st.setString(10, profile.getDesired_work_location());
+            st.setInt(11, profile.getDesired_job_type_id());
+
+            // 学歴・職歴
+            st.setString(12, profile.getHighest_education());
+            st.setString(13, profile.getWork_history());
+
+            // 求職者アカウントID
+            st.setLong(14, profile.getCandidate_account_id());
+
+            // 登録実行
+            return st.executeUpdate();
+        }
+    }
+
+    // 希望職種一覧を取得する
+    public List<Map<String, Object>> getOccupationList() throws Exception {
+
+        List<Map<String, Object>> occupationList = new ArrayList<>();
+
+        String sql =
+            "SELECT occupation_id, occupation_name " +
+            "FROM occupations " +
+            "ORDER BY occupation_id";
+
+        try (
+            Connection con = getConnection();
+            PreparedStatement st = con.prepareStatement(sql);
+            ResultSet rs = st.executeQuery()
+        ) {
+
+            while (rs.next()) {
+
+                Map<String, Object> occupation = new HashMap<>();
+
+                occupation.put(
+                    "occupation_id",
+                    rs.getInt("occupation_id")
+                );
+
+                occupation.put(
+                    "occupation_name",
+                    rs.getString("occupation_name")
+                );
+
+                occupationList.add(occupation);
+            }
+            
+            // デバッグ用
+            System.out.println("Occupation DAO called");
+            
+            System.out.println("取得した職種数：" + occupationList.size());
+            System.out.println("取得した職種一覧：" + occupationList);
+        }
+
+        return occupationList;
+    }
 }
