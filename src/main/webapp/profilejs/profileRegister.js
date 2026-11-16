@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 
     // JSONファイルのURL
-    const jsonUrl = "/HITOVA/js/area.json";
+    const jsonUrl = "/HITOVA/profilejs/area.json";
 
     // 現住所のセレクトボックス
     const currentPrefecture = document.getElementById("current_prefecture");

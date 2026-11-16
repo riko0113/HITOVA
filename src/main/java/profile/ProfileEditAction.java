@@ -1,9 +1,11 @@
+
 package profile;
 
 import java.time.LocalDate;
 
 import DAO.ProfileDisplayDAO;
 import DAO.ProfileEditDAO;
+import DAO.ProfileRegisterDAO;
 import bean.Profile;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,12 +33,19 @@ public class ProfileEditAction extends Action {
             return "/login/login.jsp";
         }
 
+        ProfileRegisterDAO registerDAO = new ProfileRegisterDAO();
+
         // GET：プロフィール編集画面を表示
         if ("GET".equalsIgnoreCase(request.getMethod())) {
 
             ProfileDisplayDAO displayDAO = new ProfileDisplayDAO();
-
             Profile profile = displayDAO.search(candidateAccountId);
+
+            // 希望職種一覧を取得
+            request.setAttribute(
+                    "occupationList",
+                    registerDAO.getOccupationList()
+            );
 
             // プロフィール未登録の場合
             if (profile == null) {
@@ -50,6 +59,11 @@ public class ProfileEditAction extends Action {
 
         // POST：プロフィールを更新
         if ("POST".equalsIgnoreCase(request.getMethod())) {
+
+            ProfileDisplayDAO displayDAO = new ProfileDisplayDAO();
+
+            Profile existingProfile =
+                    displayDAO.search(candidateAccountId);
 
             Profile profile = new Profile();
 
@@ -67,7 +81,8 @@ public class ProfileEditAction extends Action {
 
             if (birthDate != null && !birthDate.isEmpty()) {
                 profile.setBirth_date(
-                        LocalDate.parse(birthDate).atStartOfDay());
+                        LocalDate.parse(birthDate).atStartOfDay()
+                );
             }
 
             // 性別
@@ -79,56 +94,112 @@ public class ProfileEditAction extends Action {
 
             // 現住所
             profile.setCurrent_postal_code(
-                    request.getParameter("current_postal_code"));
+                    request.getParameter("current_postal_code")
+            );
 
             profile.setCurrent_address(
-                    request.getParameter("current_address"));
+                    request.getParameter("current_address")
+            );
 
-            // 希望条件
+            // 希望雇用形態
             String employmentType =
                     request.getParameter("desired_employment_type_id");
 
             if (employmentType != null && !employmentType.isEmpty()) {
                 profile.setDesired_employment_type_id(
-                        Integer.parseInt(employmentType));
+                        Integer.parseInt(employmentType)
+                );
             }
 
+            // 希望勤務地
             profile.setDesired_work_location(
-                    request.getParameter("desired_work_location"));
+                    request.getParameter("desired_work_location")
+            );
 
+            // 希望職種ID
             String jobType =
                     request.getParameter("desired_job_type_id");
 
             if (jobType != null && !jobType.isEmpty()) {
                 profile.setDesired_job_type_id(
-                        Integer.valueOf(jobType));
+                        Integer.valueOf(jobType)
+                );
             }
 
             // 学歴
             profile.setHighest_education(
-                    request.getParameter("highest_education"));
+                    request.getParameter("highest_education")
+            );
 
             // 職歴
             profile.setWork_history(
-                    request.getParameter("work_history"));
+                    request.getParameter("work_history")
+            );
+
+            // 入力内容の確認
+            if (profile.getBirth_date() == null
+                    || gender == null
+                    || gender.isEmpty()
+                    || employmentType == null
+                    || employmentType.isEmpty()
+                    || profile.getDesired_job_type_id() == null) {
+
+                request.setAttribute("profile", profile);
+
+                request.setAttribute(
+                        "occupationList",
+                        registerDAO.getOccupationList()
+                );
+
+                request.setAttribute(
+                        "errorMessage",
+                        "必須項目を入力してください。"
+                );
+
+                if (existingProfile == null) {
+                    return "/profile/profileRegister.jsp";
+                }
+
+                return "/profile/profileEdit.jsp";
+            }
+
+            // プロフィールが未登録の場合
+            if (existingProfile == null) {
+
+                request.setAttribute(
+                        "occupationList",
+                        registerDAO.getOccupationList()
+                );
+
+                request.setAttribute("profile", profile);
+
+                return "/profile/profileRegister.jsp";
+            }
 
             // プロフィール更新
             ProfileEditDAO editDAO = new ProfileEditDAO();
 
-            // DAOの戻り値はint型
             int result = editDAO.update(profile);
 
             // 更新対象が0件の場合
             if (result == 0) {
+
                 request.setAttribute("profile", profile);
-                request.setAttribute("errorMessage", "プロフィールを更新できませんでした。");
+
+                request.setAttribute(
+                        "occupationList",
+                        registerDAO.getOccupationList()
+                );
+
+                request.setAttribute(
+                        "errorMessage",
+                        "プロフィールを更新できませんでした。"
+                );
 
                 return "/profile/profileEdit.jsp";
             }
 
             // 更新後のプロフィールを再取得
-            ProfileDisplayDAO displayDAO = new ProfileDisplayDAO();
-
             Profile updatedProfile =
                     displayDAO.search(candidateAccountId);
 
