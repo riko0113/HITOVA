@@ -296,4 +296,14 @@ public class Job implements java.io.Serializable{
 	public void setUpdated_at(LocalDateTime updated_at) {
         this.updated_at = updated_at;
     }
+	private String company_name;
+
+	// Getter  Setter
+	public String getCompany_name() {
+	    return company_name;
+	}
+
+	public void setCompany_name(String company_name) {
+	    this.company_name = company_name;
+	}
 }
