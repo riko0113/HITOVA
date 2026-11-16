@@ -34,7 +34,6 @@ public class PortfolioDAO extends DAO{
             rowCount = st.executeUpdate();
             
         } catch (SQLException e) {
-            e.printStackTrace();
             throw e; // 呼び出し元（Actionクラス）のtry-catchで捕捉できるように再スロー
         }
         
@@ -64,7 +63,6 @@ public class PortfolioDAO extends DAO{
             rowCount = st.executeUpdate();
             
         } catch (SQLException e) {
-            e.printStackTrace();
             throw e; // 呼び出し元（Actionクラス）のtry-catchで捕捉できるように再スロー
         }
         
@@ -155,7 +153,6 @@ public class PortfolioDAO extends DAO{
             rowCount = st.executeUpdate();
             
         } catch (SQLException e) {
-            e.printStackTrace();
             throw e;
         }
         return rowCount;

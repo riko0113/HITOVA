@@ -32,7 +32,7 @@ public class PortfolioEditAction extends Action {
 
             // ログインチェック
             HttpSession session = request.getSession();
-            Long userId = (Long) session.getAttribute("candidate_account_id");
+            Long userId = (Long) session.getAttribute("candidate_id");
             
             if (userId == null) {
                 response.sendRedirect(request.getContextPath() + ""); // ログイン画面へ
