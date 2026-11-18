@@ -46,13 +46,13 @@
             <a href="${pageContext.request.contextPath}/unionAdmin/companyList.jsp" class="admin-sidebar-link" name="company-list">企業一覧</a>
         </li>
         <li class="admin-sidebar-item">
-            <a href="${pageContext.request.contextPath}/unionAdmin/companyApproval.jsp" class="admin-sidebar-link" name="company-registration-approval">企業登録・承認</a>
+            <a href="${pageContext.request.contextPath}/unionAdmin/companyApproval.jsp" class="admin-sidebar-link" name="company-registration-approval">企業承認</a>
         </li>
         <li class="admin-sidebar-item">
             <a href="${pageContext.request.contextPath}/unionAdmin/performanceList.jsp" class="admin-sidebar-link" name="performance-list">実績一覧</a>
         </li>
         <li class="admin-sidebar-item">
-            <a href="${pageContext.request.contextPath}/unionAdmin/userAddition.jsp" class="admin-sidebar-link" name="user-addition">ユーザー追加</a>
+            <a href="${pageContext.request.contextPath}/unionAdmin/unionAdminCreate.jsp" class="admin-sidebar-link" name="user-create">ユーザー追加</a>
         </li>
         <li class="admin-sidebar-item">
             <a href="${pageContext.request.contextPath}/unionAdmin/companyNotificationSend.jsp" class="admin-sidebar-link" name="company-notification-send">企業通知送信</a>
