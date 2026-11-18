@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>求人登録</title>
-</head>
+
 <style>
 /* 各入力フォームの下に余白をつける */
 .form,
@@ -17,25 +17,26 @@
 .form8 {
     margin-bottom: 15px;
 }
-.form{
-display: flex;
-flex-direction: column;
-gap: 5px;
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .form label {
-font-weight: bold;
+    font-weight: bold;
 }
 
-.form input{
-width: 97%;
-padding: 17px;
+.form input {
+    width: 97%;
+    padding: 17px;
 }
 
-.form2{
-display: flex;
-flex-direction: column;
-gap: 5px;
+.form2 {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .form-row {
@@ -62,7 +63,7 @@ gap: 5px;
 }
 
 .form5 textarea, .form6 textarea {
-    width:  100%;
+    width: 100%;
     padding: 17px;
     box-sizing: border-box;
 }
@@ -84,6 +85,7 @@ gap: 5px;
     padding: 17px;
     box-sizing: border-box;
 }
+
 select {
     color: gray;
 }
@@ -92,8 +94,8 @@ select:valid {
     color: black;
 }
 
-.form7 textarea{
-    width:  100%;
+.form7 textarea {
+    width: 100%;
     padding: 17px;
     box-sizing: border-box;
 }
@@ -172,9 +174,9 @@ select:valid {
     display: none;
 }
 
-.hutosi{
-font-weight: bold;  /* 太字 */
-font-size: 20px;    /* 文字サイズ */
+.hutosi {
+    font-weight: bold;
+    font-size: 20px;
 }
 
 .submit-area button {
@@ -215,6 +217,7 @@ font-size: 20px;    /* 文字サイズ */
     width: 25px;
     font-weight: bold;
 }
+
 /* 入力欄 */
 .process-row input {
     flex: 1;
@@ -234,12 +237,29 @@ font-size: 20px;    /* 文字サイズ */
 
 /* 追加ボタン */
 #add-process {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-left: auto;
-    padding: 5px 15px;
-    font-size: 16px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background-color: #81d4fa;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* マウスを乗せたとき */
+#add-process:hover {
+    background-color: #4fc3f7;
 }
 </style>
+</head>
+
 <body>
 
 <div class="hutosi">求人登録</div>
@@ -247,18 +267,17 @@ font-size: 20px;    /* 文字サイズ */
 <h1>新規求人情報入力</h1>
 
 <div class="form">
-<label >自動入力(登録情報)
-</label>
-<input type="text">
+    <label>自動入力(登録情報)</label>
+    <input type="text">
 </div>
 
 <b>基本情報</b>
 
 <!-- タイトル表示 -->
-  <div class="form5">
+<div class="form5">
     <label>求人タイトル</label><br>
-      <textarea></textarea>
-  </div>
+    <textarea></textarea>
+</div>
 
 <!-- カテゴリ -->
 <div class="form-row">
@@ -269,7 +288,8 @@ font-size: 20px;    /* 文字サイズ */
             <option value="" disabled selected hidden>カテゴリ</option>
         </select>
     </div>
-<!-- 雇用形態 -->
+
+    <!-- 雇用形態 -->
     <div class="form4">
         <label>雇用形態</label>
         <select name="employmentType" required>
@@ -280,10 +300,10 @@ font-size: 20px;    /* 文字サイズ */
 </div>
 
 <!--仕事内容入力フォーム-->
-  <div class="form5">
+<div class="form5">
     <label>仕事内容</label><br>
-      <textarea></textarea>
-  </div>
+    <textarea></textarea>
+</div>
 
 <div class="form6">
     <div class="form6-header">
@@ -306,36 +326,36 @@ font-size: 20px;    /* 文字サイズ */
 </div>
 
 <!--募集人数入力フォーム-->
-  <div class="form7">
+<div class="form7">
     <label>募集人数</label><br>
-      <textarea></textarea>
-  </div>
-  
-  <div class="hutosi">勤務条件・待遇</div>
-  
-  <!--勤務地入力フォーム-->
-  <div class="form7">
+    <textarea></textarea>
+</div>
+
+<div class="hutosi">勤務条件・待遇</div>
+
+<!--勤務地入力フォーム-->
+<div class="form7">
     <label>勤務地(住所)</label><br>
-      <textarea></textarea>
-  </div>
-  
-  <!-- 最寄り駅・アクセス -->
+    <textarea></textarea>
+</div>
+
+<!-- 最寄り駅・アクセス -->
 <div class="form-row">
-  <div class="form3">
-    <label>最寄り駅・アクセス</label>
-      <input type="text">
-  </div>
-  
-<!-- 入力フォーム -->
-<div class="form4">
-    <label>給与・手当</label>
-    <div class="salary-row">
-        <select name="large">
-            <option value="" disabled selected hidden>時給</option>
-        </select>
-        <input type="text">円
+    <div class="form3">
+        <label>最寄り駅・アクセス</label>
+        <input type="text">
     </div>
-  </div>
+
+    <!-- 入力フォーム -->
+    <div class="form4">
+        <label>給与・手当</label>
+        <div class="salary-row">
+            <select name="large">
+                <option value="" disabled selected hidden>時給</option>
+            </select>
+            <input type="text">円
+        </div>
+    </div>
 </div>
 
 <!-- 交通費 -->
@@ -346,7 +366,8 @@ font-size: 20px;    /* 文字サイズ */
             <option value="" disabled selected hidden>交通費</option>
         </select>
     </div>
-<!-- 雇用形態 -->
+
+    <!-- 受動喫煙対策 -->
     <div class="form4">
         <label>受動喫煙対策</label>
         <select name="smoke" required>
@@ -354,19 +375,20 @@ font-size: 20px;    /* 文字サイズ */
         </select>
     </div>
 </div>
+
 <!--勤務時間・シフト入力フォーム-->
-  <div class="form5">
+<div class="form5">
     <label>勤務時間・シフト</label><br>
-      <textarea></textarea>
-  </div>
+    <textarea></textarea>
+</div>
 
 <!--休日・休暇入力フォーム-->
-  <div class="form5">
+<div class="form5">
     <label>休日・休暇</label><br>
-      <textarea></textarea>
-  </div>
- 
- <!-- 加入保険チェックボックス -->
+    <textarea></textarea>
+</div>
+
+<!-- 加入保険チェックボックス -->
 <div class="form8">
     <label>加入保険</label>
     <div class="insurance-options">
@@ -390,11 +412,11 @@ font-size: 20px;    /* 文字サイズ */
 </div>
 
 <!--福利厚生・その他入力フォーム-->
-  <div class="form5">
+<div class="form5">
     <label>福利厚生・その他</label><br>
-      <textarea></textarea>
-  </div>
-  
+    <textarea></textarea>
+</div>
+
 <div class="hutosi">アピール要素・選考の流れ</div>
 
 <!-- 求人画像アップロード -->
@@ -407,38 +429,39 @@ font-size: 20px;    /* 文字サイズ */
 </div>
 
 <!--職場の特徴・PR入力フォーム-->
-  <div class="form5">
+<div class="form5">
     <label>職場の特徴・PR</label><br>
-      <textarea></textarea>
-  </div>
-  
+    <textarea></textarea>
+</div>
+
 <!-- 選考プロセス入力フォーム -->
 <div class="form10">
     <label>選考プロセス</label>
-   <div id="process-list">
 
-    <div class="process-row">
-        <span>1.</span>
-        <input type="text">
-
-        <button type="button" class="delete-process">×</button>
+    <div id="process-list">
+        <div class="process-row">
+            <span>1.</span>
+            <input type="text">
+            <button type="button" class="delete-process">×</button>
+        </div>
     </div>
 
-</div>
-    <button type="button" id="add-process">追加</button>
+    <button type="button" id="add-process">+</button>
 </div>
 
-  <!--面接場所入力フォーム-->
-  <div class="form5">
+<!--面接場所入力フォーム-->
+<div class="form5">
     <label>面接場所</label><br>
-      <textarea></textarea>
-  </div>
-  
-  <!-- 登録ボタン -->
+    <textarea></textarea>
+</div>
+
+<!-- 登録ボタン -->
 <div class="submit-area">
     <button type="submit">求人を登録・公開する</button>
 </div>
+
 <script>
+
 //選考プロセスの入力欄を管理する場所
 const processList = document.getElementById("process-list");
 
@@ -494,6 +517,8 @@ processList.addEventListener("click", function(event) {
         updateProcessNumbers();
     }
 });
+
 </script>
+
 </body>
 </html>

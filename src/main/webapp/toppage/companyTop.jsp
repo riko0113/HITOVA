@@ -269,7 +269,6 @@
 
                     <form action="${pageContext.request.contextPath}/company/scoutSearch.action" method="post" class="scout-search-form">
                         <div class="search-box-wrapper">
-                            <span style="font-size: 14px; margin-right: 8px; color: #555;">🔍</span>
                             <input type="text" name="searchBar" class="search-input" placeholder="スキルやタグで求職者を検索">
                         </div>
                         <button type="submit" name="search" class="btn-search">検索</button>
