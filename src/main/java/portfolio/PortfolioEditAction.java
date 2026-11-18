@@ -16,6 +16,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import tool.Action;
+import login.AuthWeb;
 
 public class PortfolioEditAction extends Action {
 
@@ -32,10 +33,10 @@ public class PortfolioEditAction extends Action {
 
             // ログインチェック
             HttpSession session = request.getSession();
-            Long userId = (Long) session.getAttribute("candidate_id");
+            Long userId = (Long) session.getAttribute(AuthWeb.candidate_key);
             
             if (userId == null) {
-                response.sendRedirect(request.getContextPath() + ""); // ログイン画面へ
+                response.sendRedirect(request.getContextPath() + "/login/login.jsp"); // ログイン画面へ
                 return null; 
             }
             
