@@ -24,7 +24,7 @@ public class JobListAction extends Action {
             if (userId == null) {
                 // ログイン画面へリダイレクトする処理
             	response.sendRedirect(request.getContextPath() + "");
-                return "null";
+                return "";
             }
             
             // 求人DAOのインスタンス生成
@@ -35,7 +35,7 @@ public class JobListAction extends Action {
             
             request.setAttribute("jobList", jobList);
             
-            return ""; 
+            return "/jobregister/jobregisterlist.jsp"; 
             
         } catch (Exception e) {
             //サーバー側のログにエラーの詳細を出力する
