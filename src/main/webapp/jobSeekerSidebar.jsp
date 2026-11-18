@@ -42,7 +42,7 @@
             <a href="${pageContext.request.contextPath}/achievement/achievementList.jsp" class="jobseeker-sidebar-link">実績・チャレンジ認定</a>
         </li>
         <li class="jobseeker-sidebar-item">
-            <a href="${pageContext.request.contextPath}/applicant/applicationList.jsp" class="jobseeker-sidebar-link">応募管理</a>
+            <a href="${pageContext.request.contextPath}/jobsearchServlet/ApplicationHistoryList.action" class="jobseeker-sidebar-link">応募管理</a>
         </li>
         <li class="jobseeker-sidebar-item">
             <a href="${pageContext.request.contextPath}/chat/chatList.jsp" class="jobseeker-sidebar-link">メッセージ</a>
