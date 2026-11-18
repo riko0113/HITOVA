@@ -266,6 +266,13 @@ h1 {
         box-sizing: border-box;
     }
 }
+
+/* 下線を入れるクラス */
+.job-info p.with-border {
+    border-bottom: 2px solid #d0d7de; /* 線の太さと色 */
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
 </style>
 </head>
 
@@ -306,7 +313,9 @@ h1 {
             <div class="job-info">
                 <h2><c:out value="${job.title}" /></h2>
                 <p>勤務地：<c:out value="${job.location}" /></p>
-                <p>給与：<c:out value="${job.salary_type_name}" /> <c:out value="${job.salary}" /></p>
+                <p class="with-border">給与：<c:out value="${job.salary_type_name}" /> <c:out value="${job.salary}" /></p>
+                <p>応募：<c:out value="${job.applicant_count}" />名</p>
+                <p>更新日：<c:out value="${job.updated_at}" /></p>
             </div>
 
             <div class="button-area">

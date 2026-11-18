@@ -47,12 +47,15 @@ public class JobDAO extends DAO {
                      "j.interview_location, " +
                      "j.publication_status, " +
                      "j.created_at, " +
-                     "j.updated_at " +
+                     "j.updated_at, " +
+                     "COUNT(a.application_id) AS applicant_count " +
                      "FROM jobs j " +
                      "LEFT JOIN occupations jt ON j.job_type_id = jt.occupations_id " +
                      "LEFT JOIN employments_type et ON j.employment_type_id = et.employment_type_id " +
                      "LEFT JOIN salaries_type st ON j.salary_type_id = st.salary_type_id " +
-                     "WHERE j.company_account_id = ?";
+                     "LEFT JOIN applications_history a ON j.job_id = a.job_id " +
+                     "WHERE j.company_account_id = ? " +
+                     "GROUP BY j.job_id, jt.job_type_name, et.employment_type_name, st.salary_type_name";
 
         // try-with-resources構文でコネクションとステートメントを自動クローズ
         try (Connection con = getConnection();
@@ -97,6 +100,8 @@ public class JobDAO extends DAO {
                     job.setInterview_location(rs.getString("interview_location"));
                     
                     job.setPublication_status(rs.getObject("publication_status") != null ? rs.getBoolean("publication_status") : null);
+                    
+                    job.setApplicant_count(rs.getInt("applicant_count"));
                     
                     // 日時データの変換 (Timestamp -> LocalDateTime)
                     Timestamp createdAt = rs.getTimestamp("created_at");
