@@ -33,6 +33,7 @@ public class Job implements java.io.Serializable{
 	private Boolean publication_status;
 	private LocalDateTime created_at;
 	private LocalDateTime updated_at;
+	private int applicant_count;
 	
 	
 	//求人ID
@@ -296,14 +297,13 @@ public class Job implements java.io.Serializable{
 	public void setUpdated_at(LocalDateTime updated_at) {
         this.updated_at = updated_at;
     }
-	private String company_name;
-
-	// Getter  Setter
-	public String getCompany_name() {
-	    return company_name;
+	
+	//応募人数
+	public int getApplicant_count() {
+        return applicant_count;
 	}
-
-	public void setCompany_name(String company_name) {
-	    this.company_name = company_name;
-	}
+		
+	public void setApplicant_count(int applicant_count) {
+	    this.applicant_count = applicant_count;
+    }
 }
