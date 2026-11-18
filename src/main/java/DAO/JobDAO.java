@@ -273,4 +273,44 @@ public class JobDAO extends DAO {
         
         return sb.toString();
     }
+    
+    // 特定のマスタ情報（職種・雇用形態・給与区分）のリストを取得するメソッド
+    public List<Job> getInfo(Long companyAccountId) throws Exception {
+        List<Job> list = new ArrayList<>();
+        
+        
+        // 必要なカラムだけを選択して重複を除外（必要に応じて DISTINCT を付与）
+        String sql = "SELECT DISTINCT " +
+                     "j.job_type_id, " +
+                     "jt.job_type_name, " +
+                     "j.employment_type_id, " +
+                     "et.employment_type_name, " +
+                     "j.salary_type_id, " +
+                     "st.salary_type_name " +
+                     "FROM jobs j " +
+                     "LEFT JOIN occupations jt ON j.job_type_id = jt.occupations_id " +
+                     "LEFT JOIN employments_type et ON j.employment_type_id = et.employment_type_id " +
+                     "LEFT JOIN salaries_type st ON j.salary_type_id = st.salary_type_id";
+
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            
+            while (rs.next()) {
+                Job job = new Job();
+                
+                // 取得したい項目のみ Bean にセット
+                job.setJob_type_id(rs.getLong("job_type_id"));
+                job.setJob_type_name(rs.getString("job_type_name"));
+                job.setEmployment_type_id(rs.getInt("employment_type_id"));
+                job.setEmployment_type_name(rs.getString("employment_type_name"));
+                job.setSalary_type_id(rs.getInt("salary_type_id"));
+                job.setSalary_type_name(rs.getString("salary_type_name"));
+
+                list.add(job);
+            }
+        }
+        return list;
+    }
+    
 }
