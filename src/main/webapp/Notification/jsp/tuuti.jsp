@@ -1,83 +1,119 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<title>通知</title>
+<%@ include file="../../head.jsp" %>
+<%@ include file="../../jobSeekerHeader.jsp" %>
 
 <style>
-h1 {
-    text-align: center;
-}
+    .main-layout {
+        display: flex;
+        align-items: stretch;
+        min-height: calc(100vh - 60px);
+    }
 
-.notification-container {
-    width: 800px;
-    margin: 30px auto;
-}
+    .main-content {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-.notification-item {
-    padding: 20px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: white;
-}
+    .tuuti {
+        width: 100%;
+        text-align: center;
+    }
 
-.notification-item h3 {
-    margin: 0 0 10px;
-}
+    .notification-container {
+        width: 800px;
+        max-width: 95%;
+        margin: 30px auto;
+    }
 
-.notification-item p {
-    margin: 0 0 10px;
-    white-space: pre-wrap;
-}
+    .notification-item {
+        padding: 20px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: white;
+    }
 
-.notification-item span {
-    font-size: 13px;
-    color: #777;
-}
-p {
-text-align: center;
-}
+    .notification-item h3 {
+        margin: 0 0 10px;
+        text-align: left;
+    }
+
+    .notification-item p {
+        margin: 0 0 10px;
+        white-space: pre-wrap;
+        text-align: left;
+    }
+
+    .notification-item span {
+        font-size: 13px;
+        color: #777;
+    }
+
+    .no-notification {
+        text-align: center;
+    }
 </style>
-</head>
 
-<body>
+<div class="main-layout">
 
-<h1>通知</h1>
+    <%@ include file="../../jobSeekerSidebar.jsp" %>
 
-<div class="notification-container">
+    <div class="main-content">
 
-    <!-- 通知が0件の場合 -->
-    <c:if test="${empty notificationList}">
-        <p>現在、通知はありません。</p>
-    </c:if>
+        <div class="tuuti">
+            <h1>通知</h1>
+        </div>
 
-    <!-- 通知を繰り返し表示 -->
-    <c:forEach var="notification" items="${notificationList}">
+        <div class="notification-container">
 
-        <div class="notification-item">
+            <!-- 通知が0件の場合 -->
+            <c:if test="${empty notificationList}">
+                <p class="no-notification">
+                    現在、通知はありません。
+                </p>
+            </c:if>
 
-            <h3>${notification.receiver_type_name}のお知らせ</h3>
+            <!-- 通知を繰り返し表示 -->
+            <c:forEach var="notification" items="${notificationList}">
 
-            <p><c:out value="${notification.message}" /></p>
+                <div class="notification-item">
 
-            <span>
-                <fmt:parseDate value="${notification.send_at}"
-                    pattern="yyyy-MM-dd'T'HH:mm"
-                    var="sendDate" />
-                <fmt:formatDate value="${sendDate}"
-                    pattern="yyyy/MM/dd HH:mm" />
-            </span>
+                    <h3>
+                        ${notification.receiver_type_name}のお知らせ
+                    </h3>
+
+                    <p>
+                        <c:out value="${notification.message}" />
+                    </p>
+
+                    <span>
+
+                        <fmt:parseDate
+                            value="${notification.send_at}"
+                            pattern="yyyy-MM-dd'T'HH:mm"
+                            var="sendDate" />
+
+                        <fmt:formatDate
+                            value="${sendDate}"
+                            pattern="yyyy/MM/dd HH:mm" />
+
+                    </span>
+
+                </div>
+
+            </c:forEach>
 
         </div>
 
-    </c:forEach>
+    </div>
 
 </div>
 
