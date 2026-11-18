@@ -3,8 +3,14 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %> 
 
 <%@ include file="../../head.jsp" %>
+<%@ include file="../../jobSeekerHeader.jsp" %>
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/portfolio/css/portfolio.css">
 
+<div class="main-layout">
+<%@ include file="../../jobSeekerSidebar.jsp" %>
+
+	<div class="main-content">
     <h2>作品一覧</h2>
 
     <div class="add-area">
@@ -31,5 +37,8 @@
             </c:forEach>
         </c:otherwise>
     </c:choose>
+    
+    </div>
+</div>
 
 <%@ include file="../../footer.jsp" %>

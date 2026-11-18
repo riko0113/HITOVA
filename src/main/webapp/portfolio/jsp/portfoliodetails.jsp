@@ -2,8 +2,13 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ include file="../../head.jsp" %>
+<%@ include file="../../jobSeekerHeader.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/portfolio/css/portfoliodetails.css">
 
+<div class="main-layout">
+<%@ include file="../../jobSeekerSidebar.jsp" %>
+
+<div class="main-content">
 
 <div class="title-area">
 <h1>作品詳細</h1>
@@ -39,4 +44,6 @@
 
 </div>
 
+</div>
+</div>
 <%@ include file="../../footer.jsp" %>
