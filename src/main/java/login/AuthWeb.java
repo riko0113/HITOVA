@@ -16,6 +16,7 @@ final class AuthWeb {
     // ログイン済みの求職者IDを保存する名前。他の画面でも使う。
     static final String candidate_key = "candidate_account_id";
     static final String mail_sent_key = "login.mailSent";
+    static final String nickname_key = "nickname"; 
     // メール確認待ちを始めてからの有効時間（30分）。
     static final long session_millis = 30L * 60L * 1000L;
 
@@ -40,6 +41,7 @@ final class AuthWeb {
         session.removeAttribute(pending_key);
         session.removeAttribute(candidate_key);
         session.removeAttribute(mail_sent_key);
+        session.removeAttribute(nickname_key);
         session.removeAttribute(fingerprint_key);
     }
 
