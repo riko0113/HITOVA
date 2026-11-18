@@ -1,7 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../../head.jsp" %>
+<%@ include file="../../jobSeekerHeader.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/portfolio/css/portfolioAdd.css">
+
+<div class="main-layout">
+<%@ include file="../../jobSeekerSidebar.jsp" %>
+
+<div class="main-content">
 
 <div class="tuika">
     <h1>作品編集</h1>
@@ -59,5 +65,8 @@
     </div>
 
 </form>
+
+</div>
+</div>
 <script src="${pageContext.request.contextPath}/portfolio/css/portfolioAdd.js" defer></script>
 <%@ include file="../../footer.jsp" %>

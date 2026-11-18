@@ -9,7 +9,7 @@ public class ChatMessage implements java.io.Serializable{
 	private LocalDateTime send_at;
 	private String send_content;
 	private Boolean sender_type;
-	
+	private ChatRoom chatRoom;
 	
 	//チャットメッセージID
 	public Long getMessage_id() {
@@ -54,6 +54,15 @@ public class ChatMessage implements java.io.Serializable{
 	
 	public void setSender_type(Boolean sender_type) {
         this.sender_type = sender_type;
+    }
+	
+	//チャットルーム情報
+	public ChatRoom getChatRoom() {
+        return chatRoom;
+    }
+	
+	public void setChatRoom(ChatRoom chatRoom) {
+        this.chatRoom = chatRoom;
     }
 	
 }

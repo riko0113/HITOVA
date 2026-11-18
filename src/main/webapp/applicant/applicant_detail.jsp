@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../head.jsp" %>
+<%@ include file="../companyHeader.jsp" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
@@ -10,6 +11,10 @@
 <c:set var="app" value="${detail.applicationHistory}" />
 <c:set var="account" value="${app.jobSeekerAccount}" />
 
+<div class="main-layout">
+<%@ include file="../companySidebar.jsp" %>
+
+<div class="main-content">
 <div class="header-container">
     <h2>求職者詳細</h2>
     <a href="" target="_blank" class="btn-view btn-report">通報</a>
@@ -118,6 +123,7 @@
 
 <!-- 非表示のデータ格納要素（app.profile から直接JSONを渡す） -->
 <div id="profileDataContainer" data-profile="${fn:escapeXml(app.profile)}" style="display: none;"></div>
-
+</div>
+</div>
 <script src="../applicantCss/applicant_detail.js"></script>
 <%@ include file="../footer.jsp" %>

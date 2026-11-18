@@ -1,11 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../head.jsp" %>
+<%@ include file="../companyHeader.jsp" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <link href="../applicantCss/applicant_list.css" rel="stylesheet">
 
-<h2>応募者一覧</h2>
+<div class="main-layout">
+<%@ include file="../companySidebar.jsp" %>
+
+<div class="main-content">
+	<h2>応募者一覧</h2>
 
     <div class="user-list-container">
         <!-- サーブレットから受け取る -->
@@ -52,6 +57,7 @@
             <p>データが存在しません。</p>
         </c:if>
     </div>
-
+</div>
+</div>
 <script src="../applicantCss/applicant_lists.js"></script> 
 <%@ include file="../footer.jsp" %>

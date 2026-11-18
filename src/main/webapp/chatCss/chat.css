@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+/* 右側のエリア全体をさらに横並び（一覧 ＋ チャット本体）にする */
+.chat-container-wrapper {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 56px);
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+/* 左側の会話相手リスト */
+.chat-room-list {
+    width: 280px;
+    min-width: 280px;
+    border-right: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    overflow-y: auto;
+}
+
+.chat-room-item {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.15s;
+}
+
+.chat-room-item:hover {
+    background-color: #edf2f7;
+}
+
+.chat-room-item.active {
+    background-color: #e2e8f0; /* 選択中の相手 */
+    font-weight: bold;
+}
+
+/* 右側のチャット本体ペイン */
+.chat-main-pane {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+    background-color: #ffffff;
+}
+
+/* メッセージが表示されるスクロール領域 */
+.chat-messages-area {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f4f6f8;
+}
+
+/* 下部入力エリア（テキスト＋送信ボタン） */
+.chat-input-area {
+    display: flex;
+    gap: 10px;
+    padding: 15px 20px;
+    border-top: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    align-items: center;
+}
+
+.chat-input-area input[type="text"],
+.chat-input-area textarea {
+    flex: 1;
+}
