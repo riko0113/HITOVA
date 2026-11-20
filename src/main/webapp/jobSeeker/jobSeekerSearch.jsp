@@ -1,9 +1,17 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+if (request.getAttribute("employmentTypeList") == null) {
+    response.sendRedirect(
+        request.getContextPath() + "/jobSeeker/JobSeekerSearch.action"
+    );
+    return;
+}
+%>
+
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
-<!-- CSS -->
 <link rel="stylesheet" href="jobSeekerSearch.css">
 
 <!-- ヘッダー -->
@@ -18,106 +26,79 @@
 
         <h3>検索条件</h3>
 
-        <form action="${pageContext.request.contextPath}/jobSeeker/JobSeekerSearch.action"
-              method="post">
+        <form action="${pageContext.request.contextPath}/jobSeeker/JobSeekerSearch.action" method="post">
 
             <!-- 希望雇用形態 -->
             <div class="search-row">
-
                 <label for="employment_type">希望雇用形態</label>
-                <p>取得データ：${employmentTypeList}</p>
-
                 <select name="employment_type" id="employment_type">
                     <option value="">選択してください</option>
-
                     <c:forEach var="item" items="${employmentTypeList}">
-                        <option value="${item.id}"
-                            <c:if test="${search.employmentType == item.id}">selected</c:if>>
-                            ${item.name}
+                        <option value="${item['id']}"
+                            <c:if test="${search.employmentType == item['id']}">selected</c:if>>
+                            <c:out value="${item['name']}"/>
                         </option>
                     </c:forEach>
                 </select>
-
             </div>
-
 
             <!-- 希望職種 -->
             <div class="search-row">
-
                 <label for="job_type">希望職種</label>
-
                 <select name="job_type" id="job_type">
                     <option value="">選択してください</option>
-
                     <c:forEach var="item" items="${jobTypeList}">
-                        <option value="${item.id}"
-                            <c:if test="${search.jobType == item.id}">selected</c:if>>
-                            ${item.name}
+                        <option value="${item['id']}"
+                            <c:if test="${search.jobType == item['id']}">selected</c:if>>
+                            <c:out value="${item['name']}"/>
                         </option>
                     </c:forEach>
                 </select>
-
             </div>
-
 
             <!-- 業種 -->
             <div class="search-row">
-
                 <label for="industry">業種</label>
-
                 <select name="industry" id="industry">
                     <option value="">選択してください</option>
-
                     <c:forEach var="item" items="${industryList}">
-                        <option value="${item.id}"
-                            <c:if test="${search.industry == item.id}">selected</c:if>>
-                            ${item.name}
+                        <option value="${item['id']}"
+                            <c:if test="${search.industry == item['id']}">selected</c:if>>
+                            <c:out value="${item['name']}"/>
                         </option>
                     </c:forEach>
                 </select>
-
             </div>
-
 
             <!-- 保有資格種類 -->
             <div class="search-group">
 
                 <div class="search-row">
-
                     <label for="qualification_type">保有資格種類</label>
-
                     <select name="qualification_type" id="qualification_type">
                         <option value="">選択してください</option>
-
                         <c:forEach var="item" items="${qualificationTypeList}">
-                            <option value="${item.id}"
-                                <c:if test="${search.qualificationType == item.id}">selected</c:if>>
-                                ${item.name}
+                            <option value="${item['id']}"
+                                <c:if test="${search.qualificationType == item['id']}">selected</c:if>>
+                                <c:out value="${item['name']}"/>
                             </option>
                         </c:forEach>
                     </select>
-
                 </div>
-
 
                 <!-- 資格 -->
                 <div class="search-sub-row">
-
                     <label for="qualification">資格</label>
-
                     <select name="qualification" id="qualification">
                         <option value="">選択してください</option>
-
                         <c:forEach var="item" items="${qualificationList}">
-                            <option value="${item.id}"
-                                <c:if test="${search.qualification == item.id}">selected</c:if>>
-                                ${item.name}
+                            <option value="${item['id']}"
+                                <c:if test="${search.qualification == item['id']}">selected</c:if>>
+                                <c:out value="${item['name']}"/>
                             </option>
                         </c:forEach>
                     </select>
-
                 </div>
-
 
                 <!-- 資格名を追加 -->
                 <div class="add-qualification-area">
@@ -143,53 +124,40 @@
                                placeholder="資格名を入力してください">
 
                     </div>
-
                 </div>
-
             </div>
-
 
             <!-- 実績種類 -->
             <div class="search-group">
 
                 <div class="search-row">
-
                     <label for="achievement_type">実績種類</label>
-
                     <select name="achievement_type" id="achievement_type">
                         <option value="">選択してください</option>
-
                         <c:forEach var="item" items="${achievementTypeList}">
-                            <option value="${item.id}"
-                                <c:if test="${search.achievementType == item.id}">selected</c:if>>
-                                ${item.name}
+                            <option value="${item['id']}"
+                                <c:if test="${search.achievementType == item['id']}">selected</c:if>>
+                                <c:out value="${item['name']}"/>
                             </option>
                         </c:forEach>
                     </select>
-
                 </div>
-
 
                 <!-- 実績 -->
                 <div class="search-sub-row">
-
                     <label for="achievement">実績</label>
-
                     <select name="achievement" id="achievement">
                         <option value="">選択してください</option>
-
                         <c:forEach var="item" items="${achievementList}">
-                            <option value="${item.id}"
-                                <c:if test="${search.achievement == item.id}">selected</c:if>>
-                                ${item.name}
+                            <option value="${item['id']}"
+                                <c:if test="${search.achievement == item['id']}">selected</c:if>>
+                                <c:out value="${item['name']}"/>
                             </option>
                         </c:forEach>
                     </select>
-
                 </div>
 
             </div>
-
 
             <!-- エラーメッセージ -->
             <c:if test="${not empty errorMessage}">
@@ -198,7 +166,6 @@
                 </p>
             </c:if>
 
-
             <!-- 検索・クリアボタン -->
             <div class="search-button-area">
 
@@ -206,16 +173,16 @@
                     検索
                 </button>
 
-                <button type="reset" class="clear-button">
-                    クリア
-                </button>
+               	<button type="button" class="clear-button"
+ 						onclick="location.href='${pageContext.request.contextPath}/jobSeeker/JobSeekerSearch.action'">
+    				クリア
+				</button>
 
             </div>
 
         </form>
 
     </section>
-
 
     <!-- 検索結果 -->
     <section class="search-result">
@@ -239,7 +206,6 @@
                             <span>👤</span>
                         </div>
 
-
                         <!-- 求職者情報 -->
                         <div class="candidate-info">
 
@@ -253,21 +219,17 @@
 
                             <p>
                                 本人確認：
-
                                 <c:choose>
                                     <c:when test="${candidate.identityVerification}">
                                         済
                                     </c:when>
-
                                     <c:otherwise>
                                         未確認
                                     </c:otherwise>
                                 </c:choose>
-
                             </p>
 
                         </div>
-
 
                         <!-- 詳細を見るボタン -->
                         <div class="candidate-detail">
@@ -284,7 +246,6 @@
 
             </c:when>
 
-
             <c:otherwise>
 
                 <p class="no-result">
@@ -296,7 +257,6 @@
         </c:choose>
 
     </section>
-
 
     <!-- 戻るボタン -->
     <div class="back-button-area">
@@ -311,26 +271,27 @@
 
 </div>
 
-
 <!-- ＋さらに追加の処理 -->
 <script>
-
     const addButton = document.getElementById("addQualificationButton");
-
     const qualificationArea = document.getElementById("customQualificationArea");
 
     addButton.addEventListener("click", function() {
-
         if (qualificationArea.style.display === "none") {
-
             qualificationArea.style.display = "block";
-
         } else {
-
             qualificationArea.style.display = "none";
-
         }
-
     });
 
+    const clearButton = document.getElementById("clearButton");
+
+    clearButton.addEventListener("click", function () {
+        document.querySelectorAll(".search-condition select").forEach(function (select) {
+            select.selectedIndex = -1;
+        });
+
+        document.getElementById("custom_qualification").value = "";
+        document.getElementById("customQualificationArea").hidden = true;
+    });
 </script>

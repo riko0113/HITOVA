@@ -1,4 +1,3 @@
-
 package jobSeeker;
 
 import java.util.Collections;
@@ -58,7 +57,7 @@ public class JobSeekerSearchAction extends Action {
 
             // 初回表示（GET）
             if ("GET".equalsIgnoreCase(request.getMethod())) {
-                request.setAttribute("search", condition);
+                request.setAttribute("search", new JobSeekerSearch());
                 request.setAttribute("candidateList", Collections.emptyList());
                 request.setAttribute("resultCount", 0);
                 return "/jobSeeker/jobSeekerSearch.jsp";
@@ -90,12 +89,12 @@ public class JobSeekerSearchAction extends Action {
             System.out.println("選択された検索条件数：" + selectedCount);
 
             // 検索条件が3つ未満の場合
-            if (selectedCount < 3) {
-                request.setAttribute("errorMessage", "検索条件を3つ以上選択してください。");
-                request.setAttribute("candidateList", Collections.emptyList());
-                request.setAttribute("resultCount", 0);
-                return "/jobSeeker/jobSeekerSearch.jsp";
-            }
+//            if (selectedCount < 3) {
+//                request.setAttribute("errorMessage", "検索条件を3つ以上選択してください。");
+//                request.setAttribute("candidateList", Collections.emptyList());
+//                request.setAttribute("resultCount", 0);
+//                return "/jobSeeker/jobSeekerSearch.jsp";
+//            }
 
             // 検索結果件数を取得
             int resultCount = dao.count(condition);
