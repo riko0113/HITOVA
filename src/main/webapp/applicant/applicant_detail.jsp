@@ -23,7 +23,6 @@
 <!-- 基本情報 -->
 <h3>基本情報</h3>
 <ul>
-	<li>フリガナ：<span id="nameAreaKana"></span></li>
     <li>氏名：<span id="nameArea"></span> さん</li>
     <li>生年月日：<span id="birthDateArea"></span></li>
     <li>本人確認状況：
@@ -115,7 +114,7 @@
 
 <!-- メッセージ -->
 <h3>メッセージ</h3>
-<a href="${pageContext.request.contextPath}/chat/ConnectRoom.action?candidate_account_id="${detail.candidate_account_id}" target="_blank" class="btn-view">メッセージを送る</a>
+<a href="" target="_blank" class="btn-view">メッセージを送る</a>
 
 <form action="${pageContext.request.contextPath}/applicant/ApplicantList.action" method="post">
     <input type="submit" name="search" value="戻る">
