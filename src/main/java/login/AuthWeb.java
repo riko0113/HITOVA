@@ -17,6 +17,7 @@ public final class AuthWeb {
     public static final String candidate_key = "candidate_account_id";
     static final String mail_sent_key = "login.mailSent";
     public static final String nickname_key = "nickname"; 
+
     // メール確認待ちを始めてからの有効時間（30分）。
     static final long session_millis = 30L * 60L * 1000L;
 
