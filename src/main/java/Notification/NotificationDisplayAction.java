@@ -1,3 +1,4 @@
+
 package Notification;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,8 +12,8 @@ public class NotificationDisplayAction extends Action {
     @Override
     public String execute(
             HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
-
+            HttpServletResponse response)
+            throws Exception {
         // セッションを取得
         HttpSession session = request.getSession(false);
 
@@ -37,8 +38,8 @@ public class NotificationDisplayAction extends Action {
 
             return "/Notification/jsp/tuuti.jsp";
         }
-
         // 通知送信画面を表示
         return "/Notification/jsp/tuutiSend.jsp";
     }
+    
 }

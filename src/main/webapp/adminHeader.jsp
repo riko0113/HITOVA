@@ -18,14 +18,15 @@
         min-width: 900px;
         box-sizing: border-box;
     }
-    .hitova-logo a {
-        font-size: 32px;
-        font-weight: 900;
-        color: #55a359;
+    .hitova-logo-link {
+        display: inline-flex;
+        align-items: center;
         text-decoration: none;
-        letter-spacing: 1px;
-        font-family: sans-serif;
-        white-space: nowrap;
+    }
+    .hitova-logo-img {
+        height: 38px;
+        width: auto;
+        vertical-align: middle;
     }
     .hitova-nav {
         display: flex;
@@ -93,8 +94,10 @@
 </style>
 
 <header class="hitova-header">
-    <div class="hitova-logo">
-        <a href="${pageContext.request.contextPath}/admin/adminTop.jsp">HITOVA</a>
+    <div class="header-logo">
+        <a href="${pageContext.request.contextPath}/admin/adminTop.jsp" class="hitova-logo-link">
+            <img src="${pageContext.request.contextPath}/images/Image.png" alt="HITOVA" class="hitova-logo-img">
+        </a>
     </div>
 
     <nav class="hitova-nav">

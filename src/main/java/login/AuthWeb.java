@@ -9,14 +9,15 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 // フォームの入力取得やセッションを扱う共通処理。
-final class AuthWeb {
+public final class AuthWeb {
     static final String fingerprint_key = "authCheck.fingerprint";
     // メール確認待ちの情報をセッションに保存するときの名前。
     static final String pending_key = "authCheck.pending";
     // ログイン済みの求職者IDを保存する名前。他の画面でも使う。
-    static final String candidate_key = "candidate_account_id";
+    public static final String candidate_key = "candidate_account_id";
     static final String mail_sent_key = "login.mailSent";
-    static final String nickname_key = "nickname"; 
+    public static final String nickname_key = "nickname"; 
+
     // メール確認待ちを始めてからの有効時間（30分）。
     static final long session_millis = 30L * 60L * 1000L;
 
