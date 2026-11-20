@@ -122,7 +122,7 @@
 ${job.description}</div>
                                 <div class="action-row">
                                     <a href="${pageContext.request.contextPath}/jobsearchServlet/JobDetail.action?id=${job.job_id}" class="btn-outline-round">詳細</a>
-                                    <a href="${pageContext.request.contextPath}/jobsearchServlet/JobApplyConfirm.action?job_id=${job.job_id}" class="btn-outline-round">応募</a>
+                                    <a href="#" class="btn-outline-round" onclick="alert('応募画面へ遷移します'); return false;">応募</a>
                                 </div>
                             </div>
                         </c:forEach>

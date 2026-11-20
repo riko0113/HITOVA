@@ -1,41 +1,19 @@
 package job;
 
-import java.io.InputStream;
-import java.util.UUID;
-
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import DAO.JobDAO;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
 import tool.Action;
 
-@MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
-    maxFileSize = 1024 * 1024 * 10,       // 10MB (求人画像用として適切なサイズに調整)
-    maxRequestSize = 1024 * 1024 * 50     // 50MB
-)
 public class JobInsertAction extends Action {
-
-    // S3の設定（ご自身の環境に合わせてバケット名とリージョンを設定してください）
-    private static final String BUCKET_NAME = "あなたのS3バケット名";
-    private static final Region REGION = Region.AP_NORTHEAST_1; // 東京リージョン例
-
     // executeメソッド：FrontControllerから呼ばれるメイン処理
     public String execute(
         HttpServletRequest request, HttpServletResponse response
     ) {
     	
     	try {
-            // 文字エンコーディングの設定
-            request.setCharacterEncoding("UTF-8");
 
     		// セッションからユーザーIDを取得して未ログインチェック
             HttpSession session = request.getSession();
@@ -65,7 +43,7 @@ public class JobInsertAction extends Action {
             String smokingPrevention = request.getParameter("smoking_prevention");
             String[] insurance = request.getParameterValues("insurance");
             String benefits = request.getParameter("benefits");
-            Part imageFile = request.getPart("image_file");
+            String imageUrl = request.getParameter("image_url");
             String workplacePr = request.getParameter("workplace_pr");
             String selectionProcess = request.getParameter("selection_process");
             String interviewLocation = request.getParameter("interview_location");
@@ -154,13 +132,12 @@ public class JobInsertAction extends Action {
             }
 
             // 12. transportationFee (boolean, NOT NULL)
-            boolean transportationFee = false;
             if (transportationFeeStr == null || transportationFeeStr.trim().isEmpty()) {
                 request.setAttribute("transportationFeeError", "交通費支給の有無を選択してください。");
                 hasError = true;
-            } else {
-                transportationFee = Boolean.parseBoolean(transportationFeeStr);
-            }
+            } 
+            // エラーがなければ boolean にパースする
+            boolean transportationFee = Boolean.parseBoolean(transportationFeeStr);
 
             // 13. workingHours (varchar(50), NOT NULL)
             if (workingHours == null || workingHours.trim().isEmpty()) {
@@ -189,7 +166,7 @@ public class JobInsertAction extends Action {
                 hasError = true;
             }
 
-            // 16. insurance (jsonb, NOT NULL)
+            // 16. insurance (jsonb, NOT NULL) - チェックボックスで何も選択されていない場合をチェック
             if (insurance == null || insurance.length == 0) {
                 request.setAttribute("insuranceError", "加入保険を少なくとも1つ選択してください。");
                 hasError = true;
@@ -201,12 +178,9 @@ public class JobInsertAction extends Action {
                 hasError = true;
             }
 
-            // 18. imageUrl (text, NOT NULL) -> ファイルの存在チェックや容量チェック
-            if (imageFile == null || imageFile.getSize() == 0) {
-                request.setAttribute("imageUrlError", "画像ファイルを選択してください。");
-                hasError = true;
-            } else if (imageFile.getSize() > 10 * 1024 * 1024) { // 例: 10MB超えの場合
-                request.setAttribute("imageUrlError", "画像ファイルは10MB以内で選択してください。");
+            // 18. imageUrl (text, NOT NULL)
+            if (imageUrl == null || imageUrl.trim().isEmpty()) {
+                request.setAttribute("imageUrlError", "画像URLを入力してください。");
                 hasError = true;
             }
 
@@ -232,59 +206,22 @@ public class JobInsertAction extends Action {
             }
             
             // 22. publicationStatus (boolean, NOT NULL) のチェック
-            boolean publicationStatus = false;
             if (publicationStatusStr == null || publicationStatusStr.trim().isEmpty()) {
                 request.setAttribute("publicationStatusError", "公開ステータスを選択してください。");
                 hasError = true;
-            } else {
-                publicationStatus = Boolean.parseBoolean(publicationStatusStr);
             }
+            // エラーがなければ boolean にパースする
+            boolean publicationStatus = Boolean.parseBoolean(publicationStatusStr);
             
-            // エラーがあった場合、入力画面に戻す（※元のJSPパスに合わせて修正してください）
+            // エラーがあった場合
             if (hasError) {
-                return "/job/jsp/jobInsertForm.jsp"; 
-            }
-            
-            // --- S3へのファイルアップロード処理とURL生成 ---
-            String imageUrl = null;
-            
-            if (imageFile != null && imageFile.getSize() > 0) {
-                String submittedFileName = imageFile.getSubmittedFileName();
-                
-                // 拡張子を取得し、UUIDを付与して一意のファイル名にする
-                String extension = "";
-                int dotIndex = submittedFileName.lastIndexOf(".");
-                if (dotIndex >= 0) {
-                    extension = submittedFileName.substring(dotIndex);
-                }
-                String s3FileName = UUID.randomUUID().toString() + extension;
-
-                // S3へアップロード
-                try (S3Client s3Client = S3Client.builder()
-                        .region(REGION)
-                        .credentialsProvider(DefaultCredentialsProvider.create())
-                        .build();
-                     InputStream fileContent = imageFile.getInputStream()) {
-
-                    PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                            .bucket(BUCKET_NAME)
-                            .key(s3FileName)
-                            .contentType(imageFile.getContentType())
-                            .build();
-
-                    s3Client.putObject(putObjectRequest,
-                            RequestBody.fromInputStream(fileContent, imageFile.getSize()));
-                }
-
-                // アップロードしたファイルの公開URLを構築
-                imageUrl = String.format("https://%s.s3.%s.amazonaws.com/%s", 
-                        BUCKET_NAME, REGION.id(), s3FileName);
+                return ""; 
             }
             
             // 求人DAOのインスタンス生成
             JobDAO dao = new JobDAO();
             
-            // 求人を登録する（生成したimageUrlを渡す）
+            // 求人を登録する
             dao.insert(
             		userId, 
             	    jobTypeId, 
@@ -311,20 +248,18 @@ public class JobInsertAction extends Action {
             	    publicationStatus
             	    );
             
-            //求人登録一覧画面へ遷移
-            response.sendRedirect(request.getContextPath() + "/job/JobList.action");
-            
-            return "null"; 
+            return ""; 
             
         } catch (Exception e) {
             //サーバー側のログにエラーの詳細を出力する
             e.printStackTrace();
             
             //ユーザー向けのエラーメッセージをリクエストにセットする
-            request.setAttribute("errorMessage", "データの登録中にエラーが発生しました。しばらく経ってから再度お試しください。");
+            request.setAttribute("errorMessage", "データの取得中にエラーが発生しました。しばらく経ってから再度お試しください。");
             
-            //エラー用の専用画面へフォワードする
+            //エラー用の専用画面、または元の安全な画面へフォワードする
             return "/error.jsp"; 
         }
     }
+
 }

@@ -11,7 +11,6 @@
         padding: 0 36px;
         box-sizing: border-box;
     }
-    /* 追加: ロゴ画像用のスタイル */
     .hitova-logo-link {
         display: inline-flex;
         align-items: center;
@@ -68,7 +67,7 @@
 
 <header class="hitova-company-header">
     <div class="header-logo">
-        <a href="${pageContext.request.contextPath}/company/top.jsp" class="hitova-logo-link">
+        <a href="${pageContext.request.contextPath}/company/companyTop.jsp" class="hitova-logo-link">
             <img src="${pageContext.request.contextPath}/images/Image.png" alt="HITOVA" class="hitova-logo-img">
         </a>
     </div>

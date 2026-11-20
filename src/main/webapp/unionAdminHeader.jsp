@@ -18,7 +18,6 @@
         min-width: 900px;
         box-sizing: border-box;
     }
-    /* 追加: ロゴ画像用のスタイル */
     .hitova-logo-link {
         display: inline-flex;
         align-items: center;

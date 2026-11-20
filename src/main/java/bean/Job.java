@@ -36,7 +36,6 @@ public class Job implements java.io.Serializable{
 	private LocalDateTime updated_at;
 	private int applicant_count;
 	
-	
 	//求人ID
 	public Long getJob_id() {
         return job_id;
@@ -117,7 +116,6 @@ public class Job implements java.io.Serializable{
 	public void setSalary_type_name(String salary_type_name) {
         this.salary_type_name = salary_type_name;
     }
-	
 	
 	//求人タイトル
 	public String getTitle() {
@@ -307,7 +305,7 @@ public class Job implements java.io.Serializable{
 	public void setUpdated_at(LocalDateTime updated_at) {
         this.updated_at = updated_at;
     }
-	
+
 	//応募人数
 	public int getApplicant_count() {
         return applicant_count;

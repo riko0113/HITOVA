@@ -263,7 +263,7 @@
                                 <div class="job-desc">${job.description}</div>
                                 <div class="job-actions">
                                     <a href="${pageContext.request.contextPath}/jobsearchServlet/JobDetail.action?id=${job.job_id}" class="btn-detail">詳細</a>
-                                    <a href="${pageContext.request.contextPath}/jobsearchServlet/JobApplyConfirm.action?job_id=${job.job_id}" class="btn-apply">応募</a>
+                                    <a href="#" class="btn-apply">応募</a>
                                 </div>
                             </div>
                         </c:forEach>

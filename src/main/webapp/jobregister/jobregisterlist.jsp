@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <title>登録求人一覧</title>
-<%@ include file="../companyHeader.jsp" %>
 
 <style>
 body {
@@ -231,99 +229,80 @@ h1 {
         grid-template-columns: 1fr;
     }
 }
-
-/* 新規登録ボタンエリア */
-.register-button-area {
-    width: 950px;
-    margin: 0 auto 20px;
-    display: flex;
-    justify-content: flex-end; /* 右側に配置する場合。中央にしたい場合は center に変更 */
-}
-
-/* 新規登録ボタン */
-.register-button {
-    display: inline-block;
-    padding: 12px 25px;
-    background-color: #4caf50; /* 緑系の目立つ色 */
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 5px;
-    border: 1px solid #388e3c;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: 0.2s;
-}
-
-.register-button:hover {
-    background-color: #43a047;
-}
-
-/* レスポンシブ対応（画面幅が狭い場合、タイトルの幅に合わせて調整） */
-@media (max-width: 1000px) {
-    .register-button-area {
-        width: 100%;
-        padding: 0 20px;
-        box-sizing: border-box;
-    }
-}
-
-/* 下線を入れるクラス */
-.job-info p.with-border {
-    border-bottom: 2px solid #d0d7de; /* 線の太さと色 */
-    padding-bottom: 12px;
-    margin-bottom: 15px;
-}
 </style>
 </head>
 
 <body>
 
-<div class="main-layout">
-<%@ include file="../companySidebar.jsp" %>
- 
-<div class="main-content">
-
 <h1>登録求人一覧</h1>
-
-<!-- 新規求人登録ボタンエリア -->
-<div class="register-button-area">
-    <a href="${pageContext.request.contextPath}/job/JobInsert.action" class="register-button">
-        ＋ 新規求人登録
-    </a>
-</div>
 
 <div class="job-list" id="job-list">
 
-    <c:forEach var="job" items="${jobList}">
-        <!-- 求人カード -->
-        <div class="job-card" data-job-id="${job.job_id}">
-            <div class="status-area">
-                <label class="switch">
-                    <input type="checkbox" class="public-toggle" <c:if test="${job.publication_status}">checked</c:if>>
-                    <span class="slider"></span>
-                </label>
-                <span class="status-text <c:if test="${!job.publication_status}">hidden</c:if>">
-                    <c:choose>
-                        <c:when test="${job.publication_status}">公開中</c:when>
-                        <c:otherwise>非公開</c:otherwise>
-                    </c:choose>
-                </span>
-            </div>
-
-            <div class="job-info">
-                <h2><c:out value="${job.title}" /></h2>
-                <p>勤務地：<c:out value="${job.location}" /></p>
-                <p class="with-border">給与：<c:out value="${job.salary_type_name}" /> <c:out value="${job.salary}" /></p>
-                <p>応募：<c:out value="${job.applicant_count}" />名</p>
-                <p>更新日：<c:out value="${job.updated_at}" /></p>
-            </div>
-
-            <div class="button-area">
-                <button type="button" class="delete-button" title="削除">🗑</button>
-                <button type="button" class="edit-button" data-job-id="${job.job_id}">編集</button>
-            </div>
+    <!-- 求人1 -->
+    <div class="job-card">
+        <div class="status-area">
+            <label class="switch">
+                <input type="checkbox" class="public-toggle" checked>
+                <span class="slider"></span>
+            </label>
+            <span class="status-text">公開中</span>
         </div>
-    </c:forEach>
+
+        <div class="job-info">
+            <h2>一般事務スタッフ</h2>
+            <p>勤務地：大阪府大阪市</p>
+            <p>時給：1,200円</p>
+        </div>
+
+        <div class="button-area">
+            <button type="button" class="delete-button" title="削除">🗑</button>
+            <button type="button" class="edit-button">編集</button>
+        </div>
+    </div>
+
+    <!-- 求人2 -->
+    <div class="job-card">
+        <div class="status-area">
+            <label class="switch">
+                <input type="checkbox" class="public-toggle" checked>
+                <span class="slider"></span>
+            </label>
+            <span class="status-text">公開中</span>
+        </div>
+
+        <div class="job-info">
+            <h2>カフェスタッフ</h2>
+            <p>勤務地：大阪府堺市</p>
+            <p>時給：1,150円</p>
+        </div>
+
+        <div class="button-area">
+            <button type="button" class="delete-button" title="削除">🗑</button>
+            <button type="button" class="edit-button">編集</button>
+        </div>
+    </div>
+
+    <!-- 求人3 -->
+    <div class="job-card">
+        <div class="status-area">
+            <label class="switch">
+                <input type="checkbox" class="public-toggle" checked>
+                <span class="slider"></span>
+            </label>
+            <span class="status-text">公開中</span>
+        </div>
+
+        <div class="job-info">
+            <h2>販売スタッフ</h2>
+            <p>勤務地：兵庫県神戸市</p>
+            <p>時給：1,300円</p>
+        </div>
+
+        <div class="button-area">
+            <button type="button" class="delete-button" title="削除">🗑</button>
+            <button type="button" class="edit-button">編集</button>
+        </div>
+    </div>
 
 </div>
 
@@ -346,8 +325,132 @@ h1 {
     </div>
 </div>
 
-</div>
-</div>
+<script>
 
-<script src="../jobregisterJs/jobregisterlist.js"></script>
-<%@ include file="../footer.jsp" %>
+// 確認画面で操作する求人を保存
+let selectedCard = null;
+let selectedAction = "";
+
+// 確認画面を開く関数
+function openModal(card, action) {
+
+    selectedCard = card;
+    selectedAction = action;
+
+    const title = card.querySelector(".job-info h2").textContent;
+
+    document.getElementById("target-title").textContent =
+        "対象求人：" + title;
+
+    if (action === "hide") {
+
+        document.getElementById("modal-heading").textContent =
+            "非公開にしますか？";
+
+        document.getElementById("modal-message").textContent =
+            "非公開にすると応募者からの閲覧・応募ができなくなります。よろしいですか？";
+
+    } else {
+
+        document.getElementById("modal-heading").textContent =
+            "削除しますか？";
+
+        document.getElementById("modal-message").textContent =
+            "削除すると求人一覧から見られなくなります。よろしいですか？";
+    }
+
+    document.getElementById("confirm-modal").style.display = "flex";
+}
+
+// 公開・非公開の切り替え
+document.querySelectorAll(".public-toggle").forEach(function(toggle) {
+
+    toggle.addEventListener("change", function() {
+
+        const card = toggle.closest(".job-card");
+        const statusText = card.querySelector(".status-text");
+
+        if (!toggle.checked) {
+
+            // 非公開にする前に確認
+            toggle.checked = true;
+            openModal(card, "hide");
+
+        } else {
+
+            // 公開に戻す
+            statusText.textContent = "公開中";
+            statusText.classList.remove("hidden");
+        }
+    });
+});
+
+// 削除ボタン
+document.querySelectorAll(".delete-button").forEach(function(button) {
+
+    button.addEventListener("click", function() {
+
+        const card = button.closest(".job-card");
+        openModal(card, "delete");
+
+    });
+});
+
+// キャンセルボタン
+document.getElementById("cancel-button").addEventListener("click", function() {
+
+    document.getElementById("confirm-modal").style.display = "none";
+
+    selectedCard = null;
+    selectedAction = "";
+
+});
+
+// 確認ボタン
+document.getElementById("confirm-button").addEventListener("click", function() {
+
+    if (selectedCard === null) {
+        return;
+    }
+
+    if (selectedAction === "hide") {
+
+        // 非公開にする
+        const toggle = selectedCard.querySelector(".public-toggle");
+        const statusText = selectedCard.querySelector(".status-text");
+
+        toggle.checked = false;
+        statusText.textContent = "非公開";
+
+        // 非公開の文字を赤色にする
+        statusText.classList.add("hidden");
+
+    } else if (selectedAction === "delete") {
+
+        // 求人カードを削除
+        selectedCard.remove();
+
+    }
+
+    document.getElementById("confirm-modal").style.display = "none";
+
+    selectedCard = null;
+    selectedAction = "";
+
+});
+
+// 編集ボタン
+document.querySelectorAll(".edit-button").forEach(function(button) {
+
+    button.addEventListener("click", function() {
+
+        // 編集画面への遷移先は後で設定
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

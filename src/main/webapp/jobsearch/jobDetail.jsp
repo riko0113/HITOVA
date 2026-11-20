@@ -215,19 +215,6 @@
         .btn-back:hover {
             background-color: #f0f4f8;
         }
-        .btn-apply-bottom {
-            padding: 12px 36px;
-            background-color: #135e75;
-            color: #fff;
-            border: 1px solid #135e75;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: bold;
-            text-decoration: none;
-        }
-        .btn-apply-bottom:hover {
-            background-color: #0e485a;
-        }
     </style>
 </head>
 <body>
@@ -401,7 +388,7 @@
                 <!-- 下部ボタン -->
                 <div class="bottom-actions">
                     <a href="${pageContext.request.contextPath}/jobsearchServlet/JobSearch.action" class="btn-back">一覧へ戻る</a>
-                    <a href="${pageContext.request.contextPath}/jobsearchServlet/JobApplyConfirm.action?job_id=${job.job_id}" class="btn-apply-bottom">応募</a>
+                    <a href="#" class="btn-apply-main" onclick="alert('応募確認画面へ進みます'); return false;">この求人に応募する</a>
                 </div>
             </div>
         </main>

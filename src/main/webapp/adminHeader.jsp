@@ -18,7 +18,6 @@
         min-width: 900px;
         box-sizing: border-box;
     }
-    /* 追加: ロゴ画像用のスタイル */
     .hitova-logo-link {
         display: inline-flex;
         align-items: center;
@@ -96,7 +95,7 @@
 
 <header class="hitova-header">
     <div class="header-logo">
-        <a href="${pageContext.request.contextPath}/jobsearchServlet/JobSearch.action" class="hitova-logo-link">
+        <a href="${pageContext.request.contextPath}/admin/adminTop.jsp" class="hitova-logo-link">
             <img src="${pageContext.request.contextPath}/images/Image.png" alt="HITOVA" class="hitova-logo-img">
         </a>
     </div>
