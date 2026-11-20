@@ -115,7 +115,7 @@
 
 <!-- メッセージ -->
 <h3>メッセージ</h3>
-<a href="" target="_blank" class="btn-view">メッセージを送る</a>
+<a href="${pageContext.request.contextPath}/chat/ConnectRoom.action?candidate_account_id="${detail.candidate_account_id}" target="_blank" class="btn-view">メッセージを送る</a>
 
 <form action="${pageContext.request.contextPath}/applicant/ApplicantList.action" method="post">
     <input type="submit" name="search" value="戻る">
