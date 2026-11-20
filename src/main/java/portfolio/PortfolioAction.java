@@ -7,6 +7,7 @@ import bean.Portfolio;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import login.AuthWeb;
 import tool.Action;
 
 public class PortfolioAction extends Action {
@@ -17,12 +18,12 @@ public class PortfolioAction extends Action {
         try {
         	HttpSession session = request.getSession();
         	
-        	Long userId = (Long) session.getAttribute("candidate_id");
+        	Long userId = (Long) session.getAttribute(AuthWeb.candidate_key);
             
             //未ログインの場合のチェック
             if (userId == null) {
                 // ログイン画面へリダイレクトする処理
-            	response.sendRedirect(request.getContextPath() + "");
+            	response.sendRedirect(request.getContextPath() + "/login/login.jsp");
                 return "null";
             }
             

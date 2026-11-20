@@ -8,7 +8,8 @@ public class ChatRoom implements java.io.Serializable{
 	private Long candidate_account_id;
 	private Long company_account_id;
 	private LocalDateTime created_at;
-	
+	private String candidate_name;
+	private String company_name;
 	
 	
 	//チャットルームID
@@ -46,5 +47,23 @@ public class ChatRoom implements java.io.Serializable{
 	public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
     }
+	
+	//求職者名
+	public String getCandidate_name() {
+		return candidate_name;
+	}
+	
+	public void setCandidate_name(String candidate_name) {
+		this.candidate_name = candidate_name;
+	}
+	
+	//企業名
+	public String getCompany_name() {
+		return company_name;
+	}
+	
+	public void setCompany_name(String company_name) {
+		this.company_name = company_name;
+	}
 	
 }

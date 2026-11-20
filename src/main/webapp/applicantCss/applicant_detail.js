@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 // 各要素へ値をセット
                 document.getElementById("nameArea").innerText = (profile.last_name || "") + " " + (profile.first_name || "");
+                document.getElementById("nameAreaKana").innerText = (profile.last_name_kana || "") + " " + (profile.first_name_kana || "");
                 
                 // 生年月日のフォーマット整え（必要に応じて。例: "2002-05-15T00:00:00" から日付部分のみ抽出する場合）
                 var birthDate = profile.birth_date ? profile.birth_date.split("T")[0] : "";
