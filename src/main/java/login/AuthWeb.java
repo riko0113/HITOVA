@@ -22,6 +22,15 @@ public final class AuthWeb {
 
     private AuthWeb() { }
 
+    // フォーム送信後の画面をGETで開き、戻る操作で再送信を求められないようにする。
+    static String redirectAfterPost(HttpServletRequest request, HttpServletResponse response, String path) {
+        noStore(response);
+        response.setStatus(HttpServletResponse.SC_SEE_OTHER);
+        response.setHeader("Location", request.getContextPath() + path);
+        // 遷移先はブラウザが開くので、FrontControllerにはJSPを返さない。
+        return null;
+    }
+
     static void noStore(HttpServletResponse response) {
         response.setHeader("Cache-Control", "no-store");
     }

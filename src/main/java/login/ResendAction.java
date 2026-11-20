@@ -21,27 +21,27 @@ public class ResendAction extends Action {
             AuthSupport.Pending pending = auth.pending(session);
             if (pending == null) {
                 AuthSupport.clearLogin(session);
-                return "/login/error.jsp";
+                return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
             }
             if (auth.resendRemainingMillis(pending) > 0) {
-                return "/login/error.jsp";
+                return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
             }
             try {
                 FLoginDAO dao = auth.dao;
                 pending.user = dao.refresh(pending.user);
                 if (pending.user.isEmailVerified()) {
                     if (!auth.finish(request, session, pending)) {
-                        return "/login/error.jsp";
+                        return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
                     }
-                    return "/toppage/candidateTop.jsp";
+                    return AuthWeb.redirectAfterPost(request, response, "/login/Log.action");
                 }
                 if (!auth.sendMail(session, pending)) {
-                    return "/login/error.jsp";
+                    return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
                 }
-                return VerifyAction.showPage(request, session, auth, pending);
+                return AuthWeb.redirectAfterPost(request, response, "/login/Verify.action");
             } catch (FirebaseException exception) {
                 auth.verificationError(session, exception);
-                return "/login/error.jsp";
+                return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
             }
         }
     }
