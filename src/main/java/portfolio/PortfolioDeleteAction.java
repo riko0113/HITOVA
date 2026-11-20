@@ -5,6 +5,7 @@ import bean.Portfolio;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import login.AuthWeb;
 import tool.Action;
 
 public class PortfolioDeleteAction extends Action {
@@ -16,10 +17,10 @@ public class PortfolioDeleteAction extends Action {
             HttpSession session = request.getSession();
             
             // ログインチェック
-            Long userId = (Long) session.getAttribute("candidate_id");
+            Long userId = (Long) session.getAttribute(AuthWeb.candidate_key);
             if (userId == null) {
                 // 未ログインの場合の処理
-                response.sendRedirect(request.getContextPath() + "");
+                response.sendRedirect(request.getContextPath() + "/login/login.jsp");
                 return null; 
             }
             

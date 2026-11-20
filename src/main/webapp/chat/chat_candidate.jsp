@@ -25,7 +25,7 @@
                                 ルーム #<c:out value="${roomMsg.room_id}" />
                                 <c:if test="${not empty roomMsg.chatRoom}">
                                     <span class="room-sub">
-                                        (企業: <c:out value="${roomMsg.chatRoom.company_account_id}" />)
+                                        (企業: <c:out value="${roomMsg.chatRoom.company_name}" />)
                                     </span>
                                 </c:if>
                             </div>

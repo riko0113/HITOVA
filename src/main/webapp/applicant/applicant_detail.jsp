@@ -23,6 +23,7 @@
 <!-- 基本情報 -->
 <h3>基本情報</h3>
 <ul>
+	<li>フリガナ：<span id="nameAreaKana"></span></li>
     <li>氏名：<span id="nameArea"></span> さん</li>
     <li>生年月日：<span id="birthDateArea"></span></li>
     <li>本人確認状況：
