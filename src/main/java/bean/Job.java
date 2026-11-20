@@ -8,7 +8,6 @@ public class Job implements java.io.Serializable{
 	private Long job_type_id;
 	private String job_type_name;
 	private Long company_account_id;
-	private String company_name;
 	private int employment_type_id;
 	private String employment_type_name;
 	private int salary_type_id;
@@ -34,7 +33,7 @@ public class Job implements java.io.Serializable{
 	private Boolean publication_status;
 	private LocalDateTime created_at;
 	private LocalDateTime updated_at;
-	private int applicant_count;
+	
 	
 	//求人ID
 	public Long getJob_id() {
@@ -70,15 +69,6 @@ public class Job implements java.io.Serializable{
 	
 	public void setCompany_account_id(Long company_account_id) {
         this.company_account_id = company_account_id;
-    }
-
-	//企業名
-	public String getCompany_name() {
-        return company_name;
-    }
-
-	public void setCompany_name(String company_name) {
-        this.company_name = company_name;
     }
 	
 	//雇用形態ID
@@ -116,6 +106,7 @@ public class Job implements java.io.Serializable{
 	public void setSalary_type_name(String salary_type_name) {
         this.salary_type_name = salary_type_name;
     }
+	
 	
 	//求人タイトル
 	public String getTitle() {
@@ -305,13 +296,14 @@ public class Job implements java.io.Serializable{
 	public void setUpdated_at(LocalDateTime updated_at) {
         this.updated_at = updated_at;
     }
+	private String company_name;
 
-	//応募人数
-	public int getApplicant_count() {
-        return applicant_count;
+	// Getter  Setter
+	public String getCompany_name() {
+	    return company_name;
 	}
-		
-	public void setApplicant_count(int applicant_count) {
-	    this.applicant_count = applicant_count;
-    }
+
+	public void setCompany_name(String company_name) {
+	    this.company_name = company_name;
+	}
 }
