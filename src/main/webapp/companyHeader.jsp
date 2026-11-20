@@ -69,7 +69,7 @@
 <header class="hitova-company-header">
     <div class="header-logo">
         <a href="${pageContext.request.contextPath}/company/top.jsp" class="hitova-logo-link">
-            <img src="${pageContext.request.contextPath}/images/logo.jpe" alt="HITOVA" class="hitova-logo-img">
+            <img src="${pageContext.request.contextPath}/images/Image.png" alt="HITOVA" class="hitova-logo-img">
         </a>
     </div>
 

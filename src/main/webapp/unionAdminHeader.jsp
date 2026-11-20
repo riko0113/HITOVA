@@ -88,7 +88,7 @@
 <header class="hitova-header">
     <div class="header-logo">
         <a href="${pageContext.request.contextPath}/toppage/unionAdminTop.jsp" class="hitova-logo-link">
-            <img src="${pageContext.request.contextPath}/images/logo.jpe" alt="HITOVA" class="hitova-logo-img">
+            <img src="${pageContext.request.contextPath}/images/Image.png" alt="HITOVA" class="hitova-logo-img">
         </a>
     </div>
 
