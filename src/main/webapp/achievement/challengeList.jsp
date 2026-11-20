@@ -6,85 +6,94 @@
     <meta charset="UTF-8">
     <title>チャレンジ・認定一覧 - HITOVA</title>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            color: #222222;
+            background-color: #ffffff;
+        }
         .layout-wrapper {
             display: flex;
-            min-height: calc(100vh - 60px);
-            min-width: 900px;
+            min-height: calc(100vh - 64px);
+            min-width: 960px;
         }
         .main-content-area {
             flex: 1;
             min-width: 0;
-            padding: 40px;
-            background-color: #f5f5f5;
+            padding: 32px 40px;
+            background-color: #ffffff;
             box-sizing: border-box;
         }
         .challenge-container {
-            max-width: 750px;
+            max-width: 800px;
             margin: 0 auto;
         }
         .page-title {
-            text-align: center;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 25px;
-            letter-spacing: 1px;
+            color: #111111;
+            margin-bottom: 24px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #333333;
         }
         .column-header {
             display: flex;
             justify-content: space-between;
-            padding: 0 45px;
+            padding: 0 32px;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 14px;
             margin-bottom: 12px;
-            color: #333;
+            color: #333333;
         }
         .accordion-item {
             background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            overflow: hidden;
+            border: 1px solid #cccccc;
+            margin-bottom: 16px;
         }
         .accordion-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 22px 35px;
+            padding: 18px 32px;
             cursor: pointer;
             user-select: none;
-            background-color: #fff;
+            background-color: #ffffff;
+        }
+        .accordion-header:hover {
+            background-color: #f5f5f5;
         }
         .challenge-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
+            color: #111111;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
         .header-right {
             display: flex;
             align-items: center;
-            gap: 40px;
+            gap: 36px;
         }
         .challenge-price {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: bold;
-            min-width: 60px;
+            color: #111111;
+            min-width: 64px;
             text-align: right;
         }
         .toggle-icon {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
-            color: #333;
+            color: #333333;
             width: 20px;
             text-align: center;
             line-height: 1;
         }
         .accordion-content {
             display: none;
-            padding: 10px 35px 25px 35px;
-            border-top: 1px solid #f0f0f0;
+            padding: 16px 32px 24px 32px;
+            border-top: 1px solid #e0e0e0;
             background-color: #fafafa;
         }
         .accordion-content.open {
@@ -100,15 +109,15 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px 0;
-            border-bottom: 1px dashed #dcdcdc;
+            border-bottom: 1px dashed #cccccc;
             font-size: 14px;
-            color: #444;
+            color: #333333;
         }
         .task-item:last-child {
             border-bottom: none;
         }
         .btn-detail {
-            color: #0077b6;
+            color: #0044cc;
             text-decoration: underline;
             font-size: 13px;
             background: none;
@@ -117,18 +126,18 @@
             padding: 0;
         }
         .btn-detail:hover {
-            color: #005f92;
+            color: #002288;
         }
         .apply-row {
             text-align: right;
-            margin-top: 15px;
+            margin-top: 12px;
         }
         .btn-apply {
             background-color: #4CAF50;
-            color: white;
+            color: #ffffff;
             border: none;
             padding: 9px 24px;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
             font-size: 14px;
@@ -138,33 +147,30 @@
         }
         .btn-area {
             text-align: center;
-            margin-top: 35px;
+            margin-top: 32px;
         }
         .btn-back {
             display: inline-block;
             width: 140px;
-            padding: 10px 0;
-            border: 1px solid #0077b6;
-            background-color: #ffffff;
-            color: #0077b6;
+            padding: 9px 0;
+            border: 1px solid #888888;
+            background-color: #f5f5f5;
+            color: #222222;
             text-align: center;
             text-decoration: none;
             border-radius: 4px;
             font-size: 14px;
-            cursor: pointer;
         }
         .btn-back:hover {
-            background-color: #f0f7fb;
+            background-color: #e8e8e8;
         }
     </style>
 </head>
 <body>
 
-    <!-- webapp直下のヘッダー -->
     <%@ include file="/jobSeekerHeader.jsp" %>
 
     <div class="layout-wrapper">
-        <!-- webapp直下のサイドバー -->
         <%@ include file="/jobSeekerSidebar.jsp" %>
 
         <main class="main-content-area">
@@ -209,7 +215,7 @@
                     <div class="accordion-header" onclick="toggleAccordion(this)">
                         <span class="challenge-name">スタンダード認定</span>
                         <div class="header-right">
-                            <span class="challenge-price">¥1500</span>
+                            <span class="challenge-price">¥1,500</span>
                             <span class="toggle-icon">+</span>
                         </div>
                     </div>
@@ -234,9 +240,9 @@
                     </div>
                 </div>
 
-                <!-- 戻るボタン -->
                 <div class="btn-area">
-				<a href="${pageContext.request.contextPath}/toppage/candidateTop.jsp" class="btn-back">戻る</a>                </div>
+                    <a href="${pageContext.request.contextPath}/toppage/candidateTop.jsp" class="btn-back">戻る</a>
+                </div>
             </div>
         </main>
     </div>
@@ -252,7 +258,7 @@
                 icon.textContent = '+';
             } else {
                 content.classList.add('open');
-                icon.textContent = 'ー';
+                icon.textContent = '－';
             }
         }
     </script>

@@ -1,86 +1,113 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-        background-color: #f5f5f5;
-        color: #333;
+    html {
+        overflow-y: scroll !important;
+    }
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .hitova-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #ffffff;
-        border-bottom: 1px solid #000000;
-        padding: 0 40px;
-        height: 60px;
-        min-width: 900px;
-        box-sizing: border-box;
+        width: 100% !important;
+        height: 64px !important;
+        min-height: 64px !important;
+        max-height: 64px !important;
+        margin: 0 !important;
+        padding: 0 36px !important;
+        background-color: #ffffff !important;
+        border-bottom: 1px solid #cccccc !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        box-sizing: border-box !important;
+        line-height: normal !important;
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important;
+    }
+    .hitova-header * {
+        box-sizing: border-box !important;
+        line-height: normal !important;
+    }
+    .hitova-header .header-logo {
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
     }
     .hitova-logo-link {
-        display: inline-flex;
-        align-items: center;
-        text-decoration: none;
+        display: inline-flex !important;
+        align-items: center !important;
+        text-decoration: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .hitova-logo-img {
-        height: 38px;
-        width: auto;
-        vertical-align: middle;
+        height: 40px !important;
+        width: auto !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        vertical-align: middle !important;
     }
-    .hitova-nav {
-        display: flex;
-        align-items: center;
-        gap: 25px;
-        white-space: nowrap;
+    .hitova-header-nav {
+        display: flex !important;
+        align-items: center !important;
+        gap: 20px !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
-    .admin-search-form {
-        display: flex;
-        align-items: center;
-        margin-right: 15px;
+    .header-search-form {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
-    .admin-search-input {
-        width: 180px;
-        height: 30px;
-        padding: 0 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 13px;
+    .header-search-input {
+        height: 30px !important;
+        padding: 0 10px !important;
+        border: 1px solid #cccccc !important;
+        border-radius: 4px !important;
+        font-size: 13px !important;
     }
-    .icon-badge-container {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        cursor: pointer;
-        text-decoration: none;
-        color: #333;
-        font-size: 13px;
-        gap: 4px;
+    .header-search-btn {
+        height: 30px !important;
+        padding: 0 12px !important;
+        border: 1px solid #888888 !important;
+        background-color: #f5f5f5 !important;
+        color: #222222 !important;
+        border-radius: 4px !important;
+        font-size: 13px !important;
+        cursor: pointer !important;
     }
-    .notification-badge {
-        position: absolute;
-        top: -4px;
-        left: 12px;
-        background-color: #e53e3e;
-        color: #ffffff;
-        font-size: 10px;
-        font-weight: bold;
-        border-radius: 50%;
-        width: 14px;
-        height: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .header-search-btn:hover {
+        background-color: #e8e8e8 !important;
     }
-    .user-icon {
-        width: 22px;
-        height: 22px;
-        fill: #4a5568;
+    .hitova-header-link {
+        color: #0044cc !important;
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: normal !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important;
     }
-    .bell-icon {
-        width: 22px;
-        height: 22px;
-        fill: #ed8936;
+    .hitova-header-link:hover {
+        text-decoration: underline !important;
+    }
+    .header-icon-btn {
+        position: relative !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: #333333 !important;
+        text-decoration: none !important;
+        width: 28px !important;
+        height: 28px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .header-icon-btn:hover {
+        color: #000000 !important;
     }
 </style>
 
@@ -91,30 +118,24 @@
         </a>
     </div>
 
-    <nav class="hitova-nav">
-        <!-- 検索窓 -->
-        <form action="${pageContext.request.contextPath}/unionAdmin/search.action" method="post" class="admin-search-form">
-            <input type="text" name="keyword" class="admin-search-input" placeholder="求職者／企業 検索">
+    <nav class="hitova-header-nav">
+        <form action="${pageContext.request.contextPath}/unionAdminServlet/CompanyList.action" method="get" class="header-search-form">
+            <input type="text" name="keyword" class="header-search-input" placeholder="企業を検索">
+            <button type="submit" class="header-search-btn">検索</button>
         </form>
 
-        <!-- 組合管理者 -->
-        <a href="${pageContext.request.contextPath}/unionAdmin/profile.jsp" class="icon-badge-container">
-            <svg class="user-icon" viewBox="0 0 24 24">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-            組合管理者
-        </a>
-
-        <!-- 通知 -->
-        <a href="${pageContext.request.contextPath}/unionAdmin/noticeList.jsp" class="icon-badge-container">
-            <svg class="bell-icon" viewBox="0 0 24 24">
+        <a href="${pageContext.request.contextPath}/Notification/NotificationDisplay.action" class="header-icon-btn" title="通知">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
             </svg>
-            <span class="notification-badge">2</span>
-            通知
         </a>
 
-        <!-- ログアウト -->
-        <a href="${pageContext.request.contextPath}/logout.action" style="border: 1px solid #00a8e8; padding: 4px 12px; border-radius: 4px; color: #00a8e8; text-decoration: none; font-size: 15px;">LOGOUT</a>
+        <a href="${pageContext.request.contextPath}/unionAdmin/profile.jsp" class="header-icon-btn" title="プロフィール" style="color:#0044cc !important;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+        </a>
+
+        <a href="${pageContext.request.contextPath}/login/Logout.action" class="hitova-header-link">ログアウト</a>
     </nav>
 </header>

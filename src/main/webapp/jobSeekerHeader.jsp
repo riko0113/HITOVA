@@ -1,85 +1,119 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <style>
+    html {
+        overflow-y: scroll !important;
+    }
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
     .hitova-header {
-        width: 100%;
-        height: 64px;
-        background-color: #ffffff;
-        border-bottom: 1px solid #cbd5e1;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 36px;
-        box-sizing: border-box;
+        width: 100% !important;
+        height: 64px !important;
+        min-height: 64px !important;
+        max-height: 64px !important;
+        margin: 0 !important;
+        padding: 0 36px !important;
+        background-color: #ffffff !important;
+        border-bottom: 1px solid #cccccc !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        box-sizing: border-box !important;
+        line-height: normal !important;
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important;
+    }
+    .hitova-header * {
+        box-sizing: border-box !important;
+        line-height: normal !important;
+    }
+    .hitova-header .header-logo {
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
     }
     .hitova-logo-link {
-        display: inline-flex;
-        align-items: center;
-        text-decoration: none;
+        display: inline-flex !important;
+        align-items: center !important;
+        text-decoration: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .hitova-logo-img {
-        height: 40px;
-        width: auto;
-        vertical-align: middle;
+        height: 40px !important;
+        width: auto !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        vertical-align: middle !important;
     }
     .hitova-header-nav {
-        display: flex;
-        align-items: center;
-        gap: 26px;
+        display: flex !important;
+        align-items: center !important;
+        gap: 26px !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .hitova-header-link {
-        color: #0044cc;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
+        color: #0044cc !important;
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: normal !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important;
     }
     .hitova-header-link:hover {
-        text-decoration: underline;
+        text-decoration: underline !important;
     }
     .header-icon-btn {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: #475569;
-        text-decoration: none;
-        width: 28px;
-        height: 28px;
+        position: relative !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: #333333 !important;
+        text-decoration: none !important;
+        width: 28px !important;
+        height: 28px !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .header-icon-btn:hover {
-        color: #002B49;
+        color: #000000 !important;
     }
     .notif-badge {
-        position: absolute;
-        top: -4px;
-        right: -5px;
-        background-color: #ef4444;
-        color: #ffffff;
-        font-size: 10px;
-        font-weight: bold;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        position: absolute !important;
+        top: -4px !important;
+        right: -5px !important;
+        background-color: #ef4444 !important;
+        color: #ffffff !important;
+        font-size: 10px !important;
+        font-weight: bold !important;
+        width: 16px !important;
+        height: 16px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 </style>
 
 <header class="hitova-header">
     <div class="header-logo">
-        <a href="${pageContext.request.contextPath}/jobsearchServlet/JobSearch.action" class="hitova-logo-link">
+        <a href="${pageContext.request.contextPath}/toppage/candidateTop.jsp" class="hitova-logo-link">
             <img src="${pageContext.request.contextPath}/images/Image.png" alt="HITOVA" class="hitova-logo-img">
         </a>
     </div>
 
     <nav class="hitova-header-nav">
         <a href="${pageContext.request.contextPath}/jobsearchServlet/JobSearch.action" class="hitova-header-link">求人検索</a>
-        <a href="${pageContext.request.contextPath}/applicant/applicationList.jsp" class="hitova-header-link">履歴管理</a>
-        <a href="${pageContext.request.contextPath}/chat/chatList.jsp" class="hitova-header-link">チャット</a>
+        <a href="${pageContext.request.contextPath}/jobsearchServlet/ApplicationHistoryList.action" class="hitova-header-link">履歴管理</a>
+        <a href="${pageContext.request.contextPath}/chat/ChatList.action" class="hitova-header-link">チャット</a>
         <a href="${pageContext.request.contextPath}/contact/contact.jsp" class="hitova-header-link">お問い合わせ</a>
 
         <!-- 通知アイコン -->
-        <a href="${pageContext.request.contextPath}/Notification/jsp/tuuti.jsp" class="header-icon-btn" title="通知">
+        <a href="${pageContext.request.contextPath}/Notification/JobSeekerNotification.action" class="header-icon-btn" title="通知">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
             </svg>
@@ -87,12 +121,12 @@
         </a>
 
         <!-- プロフィールアイコン -->
-        <a href="${pageContext.request.contextPath}/profile/profileView.jsp" class="header-icon-btn" title="プロフィール確認" style="color:#0066cc;">
+        <a href="${pageContext.request.contextPath}/profile/ProfileDisplay.action" class="header-icon-btn" title="プロフィール確認" style="color:#0044cc !important;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
         </a>
 
-        <a href="${pageContext.request.contextPath}/login_logout/login.jsp" class="hitova-header-link">ログイン</a>
+        <a href="${pageContext.request.contextPath}/login/Log.action" class="hitova-header-link">ログイン</a>
     </nav>
 </header>
