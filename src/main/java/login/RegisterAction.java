@@ -31,12 +31,12 @@ public class RegisterAction extends Action {
                     || !password.equals(confirmation)
                     || !nickname.matches("(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{4,20}")
                     || !AuthWeb.checked(request, "agreeTerms") || !AuthWeb.checked(request, "agreePrivacy")) {
-                return "/login/error.jsp";
+                return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
             }
             try {
                 LoginAccountDAO accounts = auth.accounts;
                 if (accounts.nicknameExists(nickname)) {
-                    return "/login/error.jsp";
+                    return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
                 }
                 FLoginDAO dao = auth.dao;
                 FirebaseUser user = dao.register(email, password);
@@ -44,18 +44,16 @@ public class RegisterAction extends Action {
                 AuthSupport.Pending pending = auth.beginPending(request, session, user);
                 if (user.isEmailVerified()) {
                     if (!auth.finish(request, session, pending)) {
-                        return "/login/error.jsp";
+                        return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
                     }
-                    // TODO ログイン後の遷移先を設定する。接続まではログイン画面を表示する。
-                    // return "";
-                    return "/login/login.jsp";
+                    return AuthWeb.redirectAfterPost(request, response, "/login/login.jsp");
                 }
                 if (!auth.sendMail(session, pending)) {
-                    return "/login/error.jsp";
+                    return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
                 }
-                return VerifyAction.showPage(request, session, auth, pending);
+                return AuthWeb.redirectAfterPost(request, response, "/login/Verify.action");
             } catch (FirebaseException | SQLException exception) {
-                return "/login/error.jsp";
+                return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
             }
         }
     }

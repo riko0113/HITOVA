@@ -17,6 +17,9 @@ public class LogoutAction extends Action {
             session.invalidate();
         }
 
+        if ("POST".equals(request.getMethod())) {
+            return AuthWeb.redirectAfterPost(request, response, "/login/login.jsp");
+        }
         return "/login/login.jsp";
     }
 }

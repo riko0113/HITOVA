@@ -23,8 +23,6 @@ public class LogAction extends Action {
             if (session == null || !(session.getAttribute(AuthWeb.candidate_key) instanceof Long)) {
                 return "/login/error.jsp";
             }
-            // TODO ログイン後の遷移先を設定する。接続まではログイン画面を表示する。
-            // return "";
             return "/toppage/candidateTop.jsp";
         }
 
@@ -39,7 +37,7 @@ public class LogAction extends Action {
         String password = AuthWeb.field(request, "password", 4096);
 
         if (!AuthWeb.validEmail(email) || password == null || password.isEmpty()) {
-            return "/login/error.jsp";
+            return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
         }
 
         AuthSupport auth = AuthSupport.get(request);
@@ -56,19 +54,17 @@ public class LogAction extends Action {
                 AuthSupport.Pending pending = auth.beginPending(request, session, user);
                 if (user.isEmailVerified()) {
                     if (!auth.finish(request, session, pending)) {
-                        return "/login/error.jsp";
+                        return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
                     }
-                    // TODO ログイン後の遷移先を設定する。接続まではログイン画面を表示する。
-                    // return "";
-                    return "/toppage/candidateTop.jsp";
+                    return AuthWeb.redirectAfterPost(request, response, "/login/Log.action");
                 }
 
                 if (!auth.allowWaiting(session, user)) {
-                    return "/login/error.jsp";
+                    return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
                 }
-                return VerifyAction.showPage(request, session, auth, pending);
+                return AuthWeb.redirectAfterPost(request, response, "/login/Verify.action");
             } catch (FirebaseException exception) {
-                return "/login/error.jsp";
+                return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
             }
         }
     }
