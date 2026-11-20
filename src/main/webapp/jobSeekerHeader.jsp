@@ -11,12 +11,15 @@
         padding: 0 36px;
         box-sizing: border-box;
     }
-    .hitova-logo {
-        font-size: 28px;
-        font-weight: 900;
-        color: #4CAF50;
+    .hitova-logo-link {
+        display: inline-flex;
+        align-items: center;
         text-decoration: none;
-        letter-spacing: 1px;
+    }
+    .hitova-logo-img {
+        height: 40px;
+        width: auto;
+        vertical-align: middle;
     }
     .hitova-header-nav {
         display: flex;
@@ -63,7 +66,11 @@
 </style>
 
 <header class="hitova-header">
-    <a href="${pageContext.request.contextPath}/jobsearchServlet/JobSearch.action" class="hitova-logo">HITOVA</a>
+    <div class="header-logo">
+        <a href="${pageContext.request.contextPath}/jobsearchServlet/JobSearch.action" class="hitova-logo-link">
+            <img src="${pageContext.request.contextPath}/images/Image.png" alt="HITOVA" class="hitova-logo-img">
+        </a>
+    </div>
 
     <nav class="hitova-header-nav">
         <a href="${pageContext.request.contextPath}/jobsearchServlet/JobSearch.action" class="hitova-header-link">求人検索</a>
