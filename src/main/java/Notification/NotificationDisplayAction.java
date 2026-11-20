@@ -19,15 +19,13 @@ public class NotificationDisplayAction extends Action {
 
         // ログインしていない場合
         if (session == null) {
-            request.setAttribute("errorMessage", "ログインしてください。");
-            return "/Notification/jsp/tuuti.jsp";
+            return "/login/login.jsp";
         }
 
         // アカウントIDを取得
         Long accountId = (Long) session.getAttribute("accountId");
 
         if (accountId == null) {
-            request.setAttribute("errorMessage", "ログインしてください。");
             return "/Notification/jsp/tuuti.jsp";
         }
 
@@ -37,11 +35,6 @@ public class NotificationDisplayAction extends Action {
         // 管理者・組合管理者以外を拒否
         if (!"ADMIN".equals(accountType)
                 && !"UNION_ADMIN".equals(accountType)) {
-
-            request.setAttribute(
-                "errorMessage",
-                "通知を送信する権限がありません。"
-            );
 
             return "/Notification/jsp/tuuti.jsp";
         }
