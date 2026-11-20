@@ -15,6 +15,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import tool.Action;
+import login.AuthWeb;
 
 public class PortfolioAddAction extends Action {
 
@@ -31,11 +32,11 @@ public class PortfolioAddAction extends Action {
 
             // セッションからユーザーIDを取得して未ログインチェック
             HttpSession session = request.getSession();
-            Long userId = (Long) session.getAttribute("candidate_id");
+            Long userId = (Long) session.getAttribute(AuthWeb.candidate_key);
             
             if (userId == null) {
             	// ログイン画面へリダイレクトする処理
-            	response.sendRedirect(request.getContextPath() + "");
+            	response.sendRedirect(request.getContextPath() + "/login/login.jsp");
                 return "null"; 
             }
 

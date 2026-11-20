@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import tool.Action;
+import login.AuthWeb;
 
 public class PortfolioAction extends Action {
     // executeメソッド：FrontControllerから呼ばれるメイン処理
@@ -17,12 +18,12 @@ public class PortfolioAction extends Action {
         try {
         	HttpSession session = request.getSession();
         	
-        	Long userId = (Long) session.getAttribute("candidate_id");
+        	Long userId = (Long) session.getAttribute(AuthWeb.candidate_key);
             
             //未ログインの場合のチェック
             if (userId == null) {
                 // ログイン画面へリダイレクトする処理
-            	response.sendRedirect(request.getContextPath() + "");
+            	response.sendRedirect(request.getContextPath() + "/login/login.jsp");
                 return "null";
             }
             

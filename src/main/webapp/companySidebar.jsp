@@ -36,7 +36,7 @@
             <a href="${pageContext.request.contextPath}/company/companyTop.jsp" class="company-sidebar-link">トップページ</a>
         </li>
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/applicant/ApplicantList.action?job_id=${3001}" class="company-sidebar-link" name="applicants">
+            <a href="${pageContext.request.contextPath}/applicant/ApplicantList.action" class="company-sidebar-link" name="applicants">
                 応募者一覧
             </a>
         </li>
