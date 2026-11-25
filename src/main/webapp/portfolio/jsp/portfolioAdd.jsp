@@ -12,7 +12,7 @@
     <h1>作品追加</h1>
 </div>
 
-<form action="${pageContext.request.contextPath}/portfolio/portfolioAdd.action" method="post" enctype="multipart/form-data">
+<form action="${pageContext.request.contextPath}/portfolio/PortfolioAdd.action" method="post" enctype="multipart/form-data">
 
     <div class="form-box">
         
@@ -35,7 +35,7 @@
 
         <!-- ファイル添付 -->
         <span>ファイル添付 (100MBまで)</span>
-        <input type="file" name="work_file">
+        <input type="file" name="work_file" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,video/quicktime">
         <!-- サーブレットから渡されたエラーメッセージを表示 -->
         <p id="fileError" class="error">${fileError}</p>
 
