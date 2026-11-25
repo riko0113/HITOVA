@@ -1,7 +1,7 @@
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@include page="../../header.jsp" %> 
+<%@include page="../../head.jsp" %> 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/jobSeeker/jobSeekerDetail.css">
 
 <div class="main-layout">

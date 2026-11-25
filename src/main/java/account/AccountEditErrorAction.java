@@ -11,48 +11,39 @@ import tool.Action;
 public class AccountEditErrorAction extends Action {
 
     @Override
-    public String execute(
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        // セッションを取得する
+        // セッション取得
         HttpSession session = request.getSession(false);
 
-        // ログイン状態を確認する
-        if (session == null ||
-                session.getAttribute("candidate_account_id") == null) {
-
-            // 【要確認・変更】
-            // ログイン機能のAction.javaを確認する。
-            // ログインしていない場合の遷移先に変更する。
+        // ログイン確認
+        if (session == null || session.getAttribute("candidate_account_id") == null) {
             return "/login.jsp";
         }
 
-        // 求職者アカウントIDを取得する
-        // 【要確認・変更】
-        // ログイン機能のAction.javaを確認する。
-        // session.setAttribute()の属性名と一致させる。
-        Long candidateId = Long.valueOf(
-                session.getAttribute("candidate_account_id").toString()
-        );
+        // 求職者ID取得
+        Long candidateId = Long.valueOf(session.getAttribute("candidate_account_id").toString());
 
-        // エラーメッセージを取得する
-        String errorMessage =
-                (String) session.getAttribute("accountEditError");
+        // エラーメッセージ取得
+        String errorMessage = (String) session.getAttribute("accountEditError");
+        session.removeAttribute("accountEditError");
 
-        // エラーメッセージを画面に渡す
         request.setAttribute("errorMessage", errorMessage);
 
-        // DAOを生成する
+        // DAO生成
         JobSeekerAccountDAO dao = new JobSeekerAccountDAO();
 
-        // アカウント情報を取得する
+        // アカウント情報取得
         JobSeekerAccount account = dao.search(candidateId);
 
-        // 編集画面にアカウント情報を渡す
+        if (account == null) {
+            request.setAttribute("errorMessage", "アカウント情報を取得できませんでした");
+            return "/account/accountEditError.jsp";
+        }
+
+        // JSPに情報を渡す
         request.setAttribute("account", account);
 
-        // エラー画面に遷移する
         return "/account/accountEditError.jsp";
     }
 }

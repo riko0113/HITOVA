@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
 <!-- ヘッダー -->
-<%@ include page="/header/header.jsp"  %>
+<%@ include page="../../head.jsp"  %>
 <link rel="stylesheet" href="jobSeekerSearch.css">
 
 <div class="main-layout">
