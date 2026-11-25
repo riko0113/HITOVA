@@ -344,8 +344,8 @@
             		${isFavorite ? '保存済み ★' : '求人保存'}
         		</button>
     		</form>
-    		<a href="#review-area" class="side-action-btn" onclick="alert('口コミ一覧画面へ遷移します')">口コミ</a>
-    		<a href="#report-area" class="side-action-btn" onclick="alert('通報フォーム画面へ遷移します')">通報</a>
+    		<a href="${pageContext.request.contextPath}/review/ReviewList.action?job_id=${job.job_id}" class="side-action-btn">口コミ</a>
+    		<a href="${pageContext.request.contextPath}/report/ReportForm.action?job_id=${job.job_id}" class="side-action-btn">通報</a>
 		</div>
                 </div>
 
