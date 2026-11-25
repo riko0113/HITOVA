@@ -1,21 +1,15 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-if (request.getAttribute("employmentTypeList") == null) {
-    response.sendRedirect(
-        request.getContextPath() + "/jobSeeker/JobSeekerSearch.action"
-    );
-    return;
-}
-%>
-
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
+<!-- ヘッダー -->
+<%@ include page="/header/header.jsp"  %>
 <link rel="stylesheet" href="jobSeekerSearch.css">
 
-<!-- ヘッダー -->
-<jsp:include page="/header/header.jsp" />
+<div class="main-layout">
+<%@ include file="../../jobSeekerSidebar.jsp" %>
+<div class="main-content">
 
 <div class="job-seeker-search-container">
 
@@ -266,32 +260,8 @@ if (request.getAttribute("employmentTypeList") == null) {
                 onclick="history.back()">
             戻る
         </button>
-
     </div>
-
 </div>
-
-<!-- ＋さらに追加の処理 -->
-<script>
-    const addButton = document.getElementById("addQualificationButton");
-    const qualificationArea = document.getElementById("customQualificationArea");
-
-    addButton.addEventListener("click", function() {
-        if (qualificationArea.style.display === "none") {
-            qualificationArea.style.display = "block";
-        } else {
-            qualificationArea.style.display = "none";
-        }
-    });
-
-    const clearButton = document.getElementById("clearButton");
-
-    clearButton.addEventListener("click", function () {
-        document.querySelectorAll(".search-condition select").forEach(function (select) {
-            select.selectedIndex = -1;
-        });
-
-        document.getElementById("custom_qualification").value = "";
-        document.getElementById("customQualificationArea").hidden = true;
-    });
-</script>
+</div>
+<script src="${pageContext.request.contextPath}/jobSeeker/jobSeekerSearch.js"></script>
+<%@ include file="../../footer.jsp" %>

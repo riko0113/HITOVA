@@ -1,9 +1,12 @@
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<jsp:include page="/header/header.jsp" />
+<%@include page="../../header.jsp" %> 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/jobSeeker/jobSeekerDetail.css">
 
+<div class="main-layout">
+<%@include file="../../jobSeekerSidebar.jsp" %>
+<div class="main-content">
 <div class="detail-container">
     <h2>求職者詳細</h2>
     <a class="back-link" href="${pageContext.request.contextPath}/jobSeeker/JobSeekerSearch.action">← 検索結果に戻る</a>
@@ -149,5 +152,7 @@
         </div>
     </c:if>
 </div>
+</div>
+<%@ include file="../footer.jsp" %>
 
 
