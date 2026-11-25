@@ -18,14 +18,14 @@ public class JobRegisterAction extends Action {
     ) {
         try {
 
-        	HttpSession session = request.getSession();
-        	
-        	Long userId = (Long) session.getAttribute("company_account_id");
+            HttpSession session = request.getSession();
+            
+            Long userId = (Long) session.getAttribute("company_account_id");
             
             //未ログインの場合のチェック
             if (userId == null) {
                 // ログイン画面へリダイレクトする処理
-            	response.sendRedirect(request.getContextPath() + "");
+                response.sendRedirect(request.getContextPath() + "/login/login.jsp");
                 return "";
             }
             
@@ -33,7 +33,7 @@ public class JobRegisterAction extends Action {
             CompanyDAO c_dao = new CompanyDAO();
             
             //企業情報を返す
-            CompanyAccount companyInfo = c_dao.getCompanyDetails(userId);
+            CompanyAccount companyInfo = c_dao.getCompanyAccountById(userId);
             
             request.setAttribute("companyInfo", companyInfo);
             
@@ -41,7 +41,7 @@ public class JobRegisterAction extends Action {
             JobDAO dao = new JobDAO();
             
             // Listにマスタ情報一覧の結果を返す
-            List<Job> infoList = dao.getInfo(userId);
+            List<Job> infoList = dao.searchAll(userId);
             
             request.setAttribute("infoList", infoList);
             

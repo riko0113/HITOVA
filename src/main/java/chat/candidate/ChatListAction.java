@@ -8,6 +8,7 @@ import bean.ChatMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import login.AuthWeb;
 import tool.Action;
 
 public class ChatListAction extends Action {
@@ -19,11 +20,11 @@ public class ChatListAction extends Action {
 
             // セッションからユーザーIDを取得して未ログインチェック
             HttpSession session = request.getSession();
-            Long userId = (Long) session.getAttribute("");
+            Long userId = (Long) session.getAttribute(AuthWeb.candidate_key);
 
             if (userId == null) {
                 // ログイン画面へリダイレクトする処理
-                response.sendRedirect(request.getContextPath() + "");
+                response.sendRedirect(request.getContextPath() + "/login/login.jsp");
                 return null;
             }
 

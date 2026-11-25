@@ -21,7 +21,7 @@ public class JobInsertAction extends Action {
             
             if (userId == null) {
             	// ログイン画面へリダイレクトする処理
-            	response.sendRedirect(request.getContextPath() + "");
+            	response.sendRedirect(request.getContextPath() + "/login/login.jsp");
                 return "null"; 
             }
 

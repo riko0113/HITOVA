@@ -1,53 +1,61 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <style>
     .company-sidebar {
-        width: 220px;
-        min-width: 220px;
-        background-color: #ffffff;
-        border-right: 1px solid #cbd5e1;
-        box-sizing: border-box;
-        flex-shrink: 0;
+        width: 220px !important;
+        min-width: 220px !important;
+        background-color: #ffffff !important;
+        border-right: 1px solid #cccccc !important;
+        box-sizing: border-box !important;
+        flex-shrink: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: normal !important;
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important;
     }
     .company-sidebar-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .company-sidebar-item {
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e0e0e0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .company-sidebar-link {
-        display: block;
-        padding: 16px 24px;
-        color: #002B49;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
-        transition: background-color 0.15s;
+        display: block !important;
+        padding: 16px 24px !important;
+        margin: 0 !important;
+        color: #222222 !important;
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: bold !important;
+        line-height: 1.4 !important;
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important;
     }
     .company-sidebar-link:hover {
-        background-color: #f1f5f9;
+        background-color: #f5f5f5 !important;
+        color: #222222 !important;
+        text-decoration: none !important;
     }
 </style>
 
 <aside class="company-sidebar">
     <ul class="company-sidebar-list">
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/company/companyTop.jsp" class="company-sidebar-link">トップページ</a>
+            <a href="${pageContext.request.contextPath}/toppage/companyTop.jsp" class="company-sidebar-link">トップページ</a>
         </li>
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/applicant/ApplicantList.action?job_id=${3001}" class="company-sidebar-link" name="applicants">
-                応募者一覧
-            </a>
+            <a href="${pageContext.request.contextPath}/job/JobList.action" class="company-sidebar-link">求人一覧・登録</a>
         </li>
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/company/applicantList.jsp" class="company-sidebar-link">応募者一覧</a>
+            <a href="${pageContext.request.contextPath}/applicant/ApplicantList.action?job_id=${3001}" class="company-sidebar-link">応募者一覧</a>
         </li>
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/chat/chatList.jsp" class="company-sidebar-link">チャット</a>
+            <a href="${pageContext.request.contextPath}/chat/ChatList.action" class="company-sidebar-link">メッセージ</a>
         </li>
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/contact/contact.jsp" class="company-sidebar-link">お問い合わせ</a>
+            <a href="${pageContext.request.contextPath}/companyServlet/AccountInfo.action" class="company-sidebar-link">アカウント情報</a>
         </li>
         <li class="company-sidebar-item">
             <a href="${pageContext.request.contextPath}/company/withdraw.jsp" class="company-sidebar-link">退会</a>

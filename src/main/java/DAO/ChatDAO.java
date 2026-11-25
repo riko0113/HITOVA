@@ -18,10 +18,17 @@ public class ChatDAO extends DAO {
         List<ChatMessage> list = new ArrayList<>();
 
         String sql = "SELECT " +
-                "  m.message_id, m.room_id, m.send_at, m.send_content, m.sender_type, " +
-                "  r.candidate_account_id, r.company_account_id, r.created_at " +
+                "m.message_id, m.room_id, m.send_at, m.send_content, m.sender_type, " +
+                "r.candidate_account_id, r.company_account_id, r.created_at, p.last_name, p.first_name " +
+                "COALESCE(corp.offical_company_name, sole.trade_name) AS company_name " +
                 "FROM chat_messages m " +
                 "JOIN chat_rooms r ON m.room_id = r.room_id " +
+                "LEFT JOIN profiles p ON r.candidate_account_id = p.candidate_account_id " +
+                "LEFT JOIN company_accounts ca ON r.company_account_id = ca.company_account_id " +
+                "LEFT JOIN corporate_informations corp ON r.company_account_id = corp.company_account_id " +
+                "  AND ca.business_type = '法人' " +
+                "LEFT JOIN sole_proprietor_informations sole ON r.company_account_id = sole.company_account_id " +
+                "  AND ca.business_type = '個人事業主' " +
                 "WHERE r.candidate_account_id = ? OR r.company_account_id = ? " +
                 "ORDER BY m.room_id ASC, m.send_at ASC, m.message_id ASC";
 
@@ -145,6 +152,10 @@ public class ChatDAO extends DAO {
         room.setCandidate_account_id(rs.getObject("candidate_account_id", Long.class));
         room.setCompany_account_id(rs.getObject("company_account_id", Long.class));
         room.setCreated_at(rs.getObject("created_at", LocalDateTime.class));
+        room.setCompany_name(rs.getObject("company_name", String.class));
+        //姓と名を結合
+        String full_name = rs.getString("last_name") + rs.getString("first_name");
+        room.setCandidate_name(full_name);
 
         message.setChatRoom(room);
         return message;

@@ -14,7 +14,7 @@
     <h2>作品一覧</h2>
 
     <div class="add-area">
-        <a href="${pageContext.request.contextPath}/portfolio/portfolioAdd.jsp" class="add">作品追加＋</a>
+        <a href="${pageContext.request.contextPath}/portfolio/jsp/portfolioAdd.jsp" class="add">作品追加＋</a>
     </div>
 
     <!-- 作品が1件以上あるか、空（またはnull）かで分岐 -->

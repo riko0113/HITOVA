@@ -1,0 +1,61 @@
+
+/* 全体 */
+.account-container{max-width:850px;margin:30px auto;padding:25px;background:#fff;box-sizing:border-box}
+
+/* タイトル */
+.account-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.account-header h1{font-size:24px;font-weight:normal;margin:0}
+
+/* ボタンエリア */
+.button-container{display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:10px;margin-left:auto}
+
+/* 更新・キャンセルボタン */
+.update-button,.cancel-button{min-width:90px;padding:9px 16px;border-radius:5px;font-size:13px;text-align:center;cursor:pointer;text-decoration:none;box-sizing:border-box;transition:.2s;font-family:inherit}
+
+/* 更新ボタン */
+.update-button{background:#4a90e2;border:1px solid #4a90e2;color:#fff}
+.update-button:hover{background:#357abd}
+
+/* キャンセルボタン */
+.cancel-button{background:#fff;border:1px solid #4a90e2;color:#4a90e2}
+.cancel-button:hover{background:#edf5ff}
+
+/* 各項目の行 */
+.information-row{display:grid;grid-template-columns:130px 20px 1fr;align-items:center;margin-bottom:15px;font-size:14px}
+.information-row>label{font-weight:normal}
+
+/* 入力欄エリア */
+.field-content{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+
+/* ニックネーム入力 */
+.field-content input[type="text"]{width:250px;height:30px;padding:5px 8px;border:1px solid #555;font-size:14px;box-sizing:border-box}
+
+/* 入力欄フォーカス */
+.field-content input[type="text"]:focus,.field-content select:focus{outline:none;border-color:#4a90e2}
+
+/* スカウト機能トグル */
+.scout-toggle{position:relative;display:inline-block;width:48px;height:25px;cursor:pointer}
+.scout-toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#ccc;border-radius:25px;transition:.3s}
+.toggle-slider::before{content:"";position:absolute;width:19px;height:19px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+.scout-toggle input:checked+.toggle-slider{background:#f4a18b}
+.scout-toggle input:checked+.toggle-slider::before{transform:translateX(23px)}
+.scout-toggle .toggle-slider::after{content:"OFF";position:absolute;right:5px;top:6px;font-size:9px;color:#333}
+.scout-toggle input:checked+.toggle-slider::after{content:"ON";left:6px;right:auto}
+
+/* プルダウン */
+.field-content select{width:175px;height:34px;padding:5px 8px;border:1px solid #555;background:#fff;font-size:13px;cursor:pointer;box-sizing:border-box}
+
+/* エラーメッセージ */
+.error-message{color:#e53935;font-size:12px;margin:3px 0}
+.field-content small{font-size:11px;color:#e53935}
+
+/* スマートフォン対応 */
+@media screen and (max-width:600px){
+    .account-container{padding:15px}
+    .account-header{flex-direction:column;align-items:flex-start;gap:15px}
+    .button-container{flex-wrap:wrap;margin-left:0}
+    .information-row{grid-template-columns:110px 15px 1fr;font-size:13px}
+    .field-content input[type="text"]{width:100%;max-width:250px}
+    .field-content select{width:100%;max-width:175px}
+}
