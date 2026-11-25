@@ -3,6 +3,8 @@
     pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<link rel="stylesheet" href="/HITOVA/profileCss/profileInputError.css">
+
 
 <div class="profile-container">
 
@@ -21,12 +23,12 @@
 
     <div class="form-group">
         <label>氏名：</label>
-        <span>姓：${profile.last_name}　　名：${profile.first_name}</span>
+        <span>姓${profile.last_name}　　名${profile.first_name}</span>
     </div>
 
     <div class="form-group">
         <label>カナ：</label>
-        <span>姓：${profile.last_name_kana}　　名：${profile.first_name_kana}</span>
+        <span>姓${profile.last_name_kana}　　名${profile.first_name_kana}</span>
     </div>
 
     <div class="form-group">
@@ -56,7 +58,7 @@
     <h3>希望条件</h3>
 
     <div class="form-group">
-        <label>希望雇用形態ID：</label>
+        <label>希望雇用形態：</label>
         <span>${profile.desired_employment_type_id}</span>
     </div>
 
@@ -66,7 +68,7 @@
     </div>
 
     <div class="form-group">
-        <label>希望職種ID：</label>
+        <label>希望職種：</label>
         <span>${profile.desired_job_type_id}</span>
     </div>
 
@@ -75,28 +77,39 @@
 
     <div class="form-group">
         <label>学校名：</label>
-        <span>${fn:substringAfter(fn:split(profile.highest_education, '、')[0], '学校名：')}</span>
+        <span>
+            ${fn:substringAfter(fn:split(profile.highest_education, ' / ')[0], '学校名：')}
+        </span>
     </div>
 
     <div class="form-group">
         <label>学部・学科：</label>
-        <span>${fn:substringAfter(fn:split(profile.highest_education, '、')[1], '学部・学科：')}</span>
+        <span>
+            ${fn:substringAfter(fn:split(profile.highest_education, ' / ')[1], '学部・学科：')}
+        </span>
     </div>
 
     <div class="form-group">
         <label>卒業年月：</label>
-        <span>${fn:substringAfter(fn:split(profile.highest_education, '、')[2], '卒業年月：')}</span>
+        <span>
+            ${fn:substringAfter(fn:split(profile.highest_education, ' / ')[2], '卒業年月：')}
+        </span>
     </div>
 
     <div class="form-group">
         <label>卒業状況：</label>
-        <span>${fn:substringAfter(fn:split(profile.highest_education, '、')[3], '卒業状況：')}</span>
+        <span>
+            ${fn:substringAfter(fn:split(profile.highest_education, ' / ')[3], '卒業状況：') == 'graduated' ? '卒業' : '卒業見込'}
+        </span>
     </div>
 
     <div class="form-group">
         <label>職歴：</label>
         <span>${profile.work_history}</span>
-        <p>※企業での職務経験がなければアルバイトも可</p>
     </div>
+
+    <p class="profile-note">
+        ※企業での職務経験がなければアルバイトも可
+    </p>
 
 </div>

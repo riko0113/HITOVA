@@ -63,3 +63,92 @@
     padding: 8px 15px;
     cursor: pointer;
 }
+
+/* プロフィール全体 */
+.profile-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 25px;
+}
+
+/* タイトル */
+.profile-container h2 {
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+/* 各セクション */
+.profile-container h3 {
+    margin-top: 30px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    font-size: 19px;
+}
+
+/* 編集ボタン */
+.register-button-area {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.register-button-area button {
+    padding: 8px 25px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.register-button-area button:hover {
+    background-color: #0056b3;
+}
+
+/* 項目と情報を横並びにする */
+.form-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+/* 項目名 */
+.form-group label {
+    min-width: 150px;
+    font-weight: bold;
+}
+
+/* 登録情報 */
+.form-group span {
+    flex: 1;
+    overflow-wrap: anywhere;
+}
+
+/* 注意書き */
+.profile-note {
+    margin-top: 5px;
+    margin-left: 150px;
+    font-size: 13px;
+    color: #666;
+}
+
+/* スマートフォン対応 */
+@media screen and (max-width: 600px) {
+
+    .profile-container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .form-group label {
+        min-width: 120px;
+    }
+
+    .profile-note {
+        margin-left: 0;
+    }
+}
+

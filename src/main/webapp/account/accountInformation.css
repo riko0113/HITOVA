@@ -1,0 +1,38 @@
+
+/* 全体 */
+.account-container{max-width:850px;margin:30px auto;padding:25px;background:#fff;box-sizing:border-box}
+
+/* タイトル */
+.account-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.account-header h1{font-size:24px;font-weight:normal;margin:0}
+
+/* ボタンエリア */
+.button-container{display:flex;align-items:center;gap:10px}
+
+/* ボタン共通 */
+.change-button,.edit-button{display:inline-block;min-width:90px;padding:9px 16px;border-radius:5px;font-size:13px;text-decoration:none;text-align:center;cursor:pointer;transition:.2s;box-sizing:border-box}
+
+/* メールアドレス・パスワード変更 */
+.change-button{background:#fff;border:1px solid #4a90e2;color:#4a90e2}
+.change-button:hover{background:#edf5ff}
+
+/* 編集ボタン */
+.edit-button{background:#4a90e2;border:1px solid #4a90e2;color:#fff}
+.edit-button:hover{background:#357abd}
+
+/* 各情報 */
+.information-row{display:grid;grid-template-columns:130px 20px 1fr;align-items:center;margin-bottom:15px;font-size:14px}
+
+/* 項目名 */
+.information-row>label{font-weight:normal}
+
+/* 情報の値 */
+.information-row>span:last-child{color:#333;word-break:break-word}
+
+/* スマートフォン対応 */
+@media screen and (max-width:600px){
+    .account-container{padding:15px}
+    .account-header{flex-direction:column;align-items:flex-start;gap:15px}
+    .button-container{flex-wrap:wrap}
+    .information-row{grid-template-columns:110px 15px 1fr;font-size:13px}
+}
