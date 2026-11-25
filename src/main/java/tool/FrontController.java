@@ -4,13 +4,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 // すべてのリクエストを受け取る「司令塔」のボス
-@WebServlet(urlPatterns={"*.action"})  
+@WebServlet(urlPatterns={"*.action"})
+@MultipartConfig(
+	    maxFileSize = 100L * 1024 * 1024,      // 1ファイル上限: 100MB
+	    maxRequestSize = 110L * 1024 * 1024,   // リクエスト全体上限: 110MB
+	    fileSizeThreshold = 2 * 1024 * 1024    // ディスク書き出し閾値: 2MB
+)
 public class FrontController extends HttpServlet {
 
     public void doPost(

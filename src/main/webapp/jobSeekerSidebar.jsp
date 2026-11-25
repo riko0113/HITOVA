@@ -49,5 +49,8 @@
         <li class="jobseeker-sidebar-item">
             <a href="${pageContext.request.contextPath}/profile/ProfileDisplay.action" class="jobseeker-sidebar-link">プロフィール確認</a>
         </li>
+        <li class="jobseeker-sidebar-item">
+            <a href="${pageContext.request.contextPath}/portfolio/Portfolio.action" class="jobseeker-sidebar-link">作品管理</a>
+        </li>
     </ul>
 </aside>
