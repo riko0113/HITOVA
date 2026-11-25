@@ -3,12 +3,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<title>通知</title>
+<%@ include file="../../head.jsp" %>
+<%@ include file="../../jobSeekerHeader.jsp" %>
 
 <style>
 h1 {
@@ -48,7 +44,10 @@ text-align: center;
 </head>
 
 <body>
+<div class="main-layout">
+	<%@ include file="../../jobSeekerSidebar.jsp" %>
 
+<div class="main-content">
 <h1>通知</h1>
 
 <div class="notification-container">
@@ -78,7 +77,9 @@ text-align: center;
         </div>
 
     </c:forEach>
-
+	
+		</div>
+	</div>
 </div>
 
 </body>
