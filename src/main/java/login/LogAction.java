@@ -17,13 +17,18 @@ public class LogAction extends Action {
         AuthWeb.noStore(response);
 
         String method = request.getMethod();
-        // URLを直接開いた場合は、セッションの求職者IDでログイン状態を確かめる。
+        // セッションに保存したIDでログイン後の画面を選ぶ。
         if ("GET".equals(method)) {
             HttpSession session = request.getSession(false);
-            if (session == null || !(session.getAttribute(AuthWeb.candidate_key) instanceof Long)) {
-                return "/login/error.jsp";
+            if (session != null) {
+                if (session.getAttribute(AuthWeb.candidate_key) instanceof Long) {
+                    return "/toppage/candidateTop.jsp";
+                }
+                if (session.getAttribute(AuthWeb.company_key) instanceof Long) {
+                    return "/toppage/companyTop.jsp";
+                }
             }
-            return "/toppage/candidateTop.jsp";
+            return "/login/error.jsp";
         }
 
         if (!"POST".equals(method)) {
@@ -53,16 +58,12 @@ public class LogAction extends Action {
                 FirebaseUser user = dao.login(email, password);
                 AuthSupport.Pending pending = auth.beginPending(request, session, user);
                 if (user.isEmailVerified()) {
-                    if (!auth.finish(request, session, pending)) {
-                        return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
-                    }
-                    return AuthWeb.redirectAfterPost(request, response, "/login/Log.action");
+                    AuthSupport.Result result = auth.finish(request, session, pending);
+                    return AuthWeb.redirectForResult(request, response, result, "/login/Log.action");
                 }
 
-                if (!auth.allowWaiting(session, user)) {
-                    return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
-                }
-                return AuthWeb.redirectAfterPost(request, response, "/login/Verify.action");
+                AuthSupport.Result result = auth.checkWaiting(session, user);
+                return AuthWeb.redirectForResult(request, response, result, "/login/Verify.action");
             } catch (FirebaseException exception) {
                 return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
             }

@@ -69,10 +69,8 @@ public class VerifyAction extends Action {
         try {
             FLoginDAO dao = auth.dao;
             pending.user = dao.refresh(pending.user);
-            if (!pending.user.isEmailVerified() || !auth.finish(request, session, pending)) {
-                return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
-            }
-            return AuthWeb.redirectAfterPost(request, response, "/login/Log.action");
+            AuthSupport.Result result = auth.finish(request, session, pending);
+            return AuthWeb.redirectForResult(request, response, result, "/login/Log.action");
         } catch (FirebaseException exception) {
             auth.verificationError(session, exception);
             return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");

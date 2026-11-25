@@ -3,6 +3,7 @@ package login;
 
 import DAO.LoginAccountDAO;
 import DAO.FLoginDAO;
+import bean.CompanyAccount;
 import bean.FirebaseUser;
 import bean.JobSeekerAccount;
 import jakarta.servlet.ServletContext;
@@ -16,6 +17,14 @@ import java.util.function.LongSupplier;
 
 // Firebaseの認証結果を使って、DBの確認とログイン状態の保存を行う。
 final class AuthSupport {
+
+    // DBのアカウント状態ID。3は停止中。
+    private static final long suspended_status_id = 3L;
+
+    // 各Actionが、処理の結果に応じて画面を選べるようにする。
+    enum Result {
+        ALLOWED, SUSPENDED, ERROR
+    }
 
     // 共通の認証処理をアプリ内で保存するときの名前。
     static final String support_key = "login.authSupport";
@@ -151,10 +160,8 @@ final class AuthSupport {
                     ((Pending) old_value).last_mail_attempt;
         }
 
-        // 以前のログイン情報を削除
-        session.removeAttribute(AuthWeb.candidate_key);
-        session.removeAttribute(AuthWeb.nickname_key);
-        session.removeAttribute(AuthWeb.mail_sent_key);
+        // 前の求職者・企業のログイン情報と確認待ちの情報を消す。
+        clearLogin(session);
 
         Pending pending =
                 new Pending(user, now(), prior_attempt);
@@ -177,94 +184,101 @@ final class AuthSupport {
         return Math.max(0L, resend_millis - elapsed);
     }
 
-    boolean sendMail(HttpSession session, Pending pending) {
-        if (!allowWaiting(session, pending.user)) {
-            return false;
+    Result sendMail(HttpSession session, Pending pending) {
+        Result result = checkWaiting(session, pending.user);
+        if (result != Result.ALLOWED) {
+            return result;
         }
-
         pending.last_mail_attempt = now();
         session.removeAttribute(AuthWeb.mail_sent_key);
-
         try {
             if (dao.sendVerification(pending.user)) {
                 session.setAttribute(AuthWeb.mail_sent_key, true);
             }
-
-            return true;
-
+            return Result.ALLOWED;
         } catch (FirebaseException exception) {
             verificationError(session, exception);
-            return false;
+            return Result.ERROR;
         }
     }
 
-    // メール確認とDBの利用状態を確かめ、
-    // 求職者IDとニックネームをセッションに保存する。
-    boolean finish(HttpServletRequest request,
-            HttpSession session, Pending pending) {
-
-        if (!pending.user.isEmailVerified()) {
-            clearLogin(session);
-            return false;
-        }
-
+    // DBの利用状態とメール確認を確かめ、ログインを確定する。
+    Result finish(HttpServletRequest request, HttpSession session, Pending pending) {
         try {
             String uid = pending.user.getUid();
-
             JobSeekerAccount account = accounts.find(uid);
-
-            if (account != null &&
-                    "求職者".equals(account.getAuthority_name()) &&
-                    "仮登録中".equals(account.getAccount_status_name())) {
-
+            CompanyAccount company = null;
+            if (account == null) {
+                company = accounts.findCompany(uid);
+            }
+            if (isSuspended(account, company)) {
+                clearLogin(session);
+                return Result.SUSPENDED;
+            }
+            if (!pending.user.isEmailVerified()) {
+                return Result.ERROR;
+            }
+            if (account != null && "求職者".equals(account.getAuthority_name())
+                    && "仮登録中".equals(account.getAccount_status_name())) {
                 accounts.activate(uid);
                 account = accounts.find(uid);
+                if (isSuspended(account, null)) {
+                    clearLogin(session);
+                    return Result.SUSPENDED;
+                }
             }
-
-            if (!usableAccount(account, false)) {
+            if (!usableCompany(company) && !usableAccount(account, false)) {
                 clearLogin(session);
-                return false;
+                return Result.ERROR;
             }
 
             request.changeSessionId();
-
-            // 認証途中の情報を削除
-            session.removeAttribute(AuthWeb.pending_key);
-            session.removeAttribute(AuthWeb.mail_sent_key);
-            session.removeAttribute(AuthWeb.nickname_key);
-
-            // 求職者IDをセッションに保存
-            session.setAttribute(
-                    AuthWeb.candidate_key,
-                    account.getCandidate_id()
-            );
-
-            // ニックネームをセッションに保存
-            session.setAttribute(
-                    AuthWeb.nickname_key,
-                    account.getNick_name()
-            );
-
-            return true;
-
+            clearLogin(session);
+            if (company != null) {
+                session.setAttribute(AuthWeb.company_key, company.getCompany_account_id());
+            } else {
+                session.setAttribute(AuthWeb.candidate_key, account.getCandidate_id());
+                session.setAttribute(AuthWeb.nickname_key, account.getNick_name());
+            }
+            return Result.ALLOWED;
         } catch (SQLException exception) {
             clearLogin(session);
-            return false;
+            return Result.ERROR;
         }
     }
 
-    boolean allowWaiting(HttpSession session, FirebaseUser user) {
+    // 新しいログインやメールの再送で、確認待ちに進めるかを確かめる。
+    Result checkWaiting(HttpSession session, FirebaseUser user) {
         try {
-            if (usableAccount(
-                    accounts.find(user.getUid()), true)) {
-                return true;
+            String uid = user.getUid();
+            JobSeekerAccount account = accounts.find(uid);
+            CompanyAccount company = null;
+            if (account == null) {
+                company = accounts.findCompany(uid);
             }
-
+            if (isSuspended(account, company)) {
+                clearLogin(session);
+                return Result.SUSPENDED;
+            }
+            if (usableCompany(company) || usableAccount(account, true)) {
+                return Result.ALLOWED;
+            }
         } catch (SQLException exception) {
         }
-
         clearLogin(session);
-        return false;
+        return Result.ERROR;
+    }
+
+    private static boolean isSuspended(JobSeekerAccount account, CompanyAccount company) {
+        if (account != null) {
+            return account.getAccount_status_id() == suspended_status_id;
+        }
+        return company != null && Long.valueOf(suspended_status_id).equals(company.getAccount_status_id());
+    }
+
+    private static boolean usableCompany(CompanyAccount company) {
+        return company != null && company.getCompany_account_id() != null
+                && "利用中".equals(company.getAccount_status_name());
     }
 
     private static boolean usableAccount(
@@ -287,6 +301,7 @@ final class AuthSupport {
 
         session.removeAttribute(AuthWeb.pending_key);
         session.removeAttribute(AuthWeb.candidate_key);
+        session.removeAttribute(AuthWeb.company_key);
         session.removeAttribute(AuthWeb.mail_sent_key);
 
         // ニックネームも削除

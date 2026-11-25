@@ -43,15 +43,11 @@ public class RegisterAction extends Action {
                 accounts.registerPending(user.getUid(), user.getEmail(), nickname);
                 AuthSupport.Pending pending = auth.beginPending(request, session, user);
                 if (user.isEmailVerified()) {
-                    if (!auth.finish(request, session, pending)) {
-                        return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
-                    }
-                    return AuthWeb.redirectAfterPost(request, response, "/login/login.jsp");
+                    AuthSupport.Result result = auth.finish(request, session, pending);
+                    return AuthWeb.redirectForResult(request, response, result, "/login/login.jsp");
                 }
-                if (!auth.sendMail(session, pending)) {
-                    return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
-                }
-                return AuthWeb.redirectAfterPost(request, response, "/login/Verify.action");
+                AuthSupport.Result result = auth.sendMail(session, pending);
+                return AuthWeb.redirectForResult(request, response, result, "/login/Verify.action");
             } catch (FirebaseException | SQLException exception) {
                 return AuthWeb.redirectAfterPost(request, response, "/login/error.jsp");
             }
