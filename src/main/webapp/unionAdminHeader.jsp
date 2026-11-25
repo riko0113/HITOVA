@@ -136,6 +136,6 @@
             </svg>
         </a>
 
-        <a href="${pageContext.request.contextPath}/login/Logout.action" class="hitova-header-link">ログアウト</a>
+        <a href="${pageContext.request.contextPath}/login/Log.action" class="hitova-header-link">ログイン</a>
     </nav>
 </header>

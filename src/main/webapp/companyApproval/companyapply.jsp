@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%@ include file="../../head.jsp" %>
-<%@ include file="../../unionAdminHeader.jsp" %>
+<%@ include file="/head.jsp" %>
+<%@ include file="/unionAdminHeader.jsp" %>
 
 <style>
     .main-layout {
         display: flex;
         align-items: stretch;
-        min-height: calc(100vh - 60px);
+        min-height: calc(100vh - 64px);
         position: relative;
     }
 
@@ -75,7 +75,7 @@
 
 <div class="main-layout">
 
-    <%@ include file="../../unionAdminSidebar.jsp" %>
+    <%@ include file="/unionAdminSidebar.jsp" %>
 
     <div class="main-content">
 

@@ -23,10 +23,12 @@
         padding: 0 !important;
     }
     .company-sidebar-link {
-        display: block !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
         padding: 16px 24px !important;
         margin: 0 !important;
-        color: #222222 !important;
+        color: #000000 !important;
         text-decoration: none !important;
         font-size: 14px !important;
         font-weight: bold !important;
@@ -35,30 +37,52 @@
     }
     .company-sidebar-link:hover {
         background-color: #f5f5f5 !important;
-        color: #222222 !important;
+        color: #000000 !important;
         text-decoration: none !important;
+    }
+    .company-sidebar .sidebar-arrow {
+        color: #0044cc !important;
+        font-weight: bold !important;
     }
 </style>
 
 <aside class="company-sidebar">
     <ul class="company-sidebar-list">
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/toppage/companyTop.jsp" class="company-sidebar-link">トップページ</a>
+            <a href="${pageContext.request.contextPath}/toppage/companyTop.jsp" class="company-sidebar-link">
+                <span>トップページ</span>
+                <span class="sidebar-arrow">&gt;</span>
+            </a>
         </li>
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/job/JobList.action" class="company-sidebar-link">求人一覧・登録</a>
+            <a href="${pageContext.request.contextPath}/job/JobList.action" class="company-sidebar-link">
+                <span>求人一覧・登録</span>
+                <span class="sidebar-arrow">&gt;</span>
+            </a>
         </li>
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/applicant/ApplicantList.action?job_id=${3001}" class="company-sidebar-link">応募者一覧</a>
+            <a href="${pageContext.request.contextPath}/applicant/ApplicantList.action?job_id=${3001}" class="company-sidebar-link">
+                <span>応募者一覧</span>
+                <span class="sidebar-arrow">&gt;</span>
+            </a>
         </li>
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/chat/ChatList.action" class="company-sidebar-link">メッセージ</a>
+            <a href="${pageContext.request.contextPath}/chat/ChatList.action" class="company-sidebar-link">
+                <span>メッセージ</span>
+                <span class="sidebar-arrow">&gt;</span>
+            </a>
         </li>
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/companyServlet/AccountInfo.action" class="company-sidebar-link">アカウント情報</a>
+            <a href="${pageContext.request.contextPath}/companyServlet/AccountInfo.action" class="company-sidebar-link">
+                <span>アカウント情報</span>
+                <span class="sidebar-arrow">&gt;</span>
+            </a>
         </li>
         <li class="company-sidebar-item">
-            <a href="${pageContext.request.contextPath}/company/withdraw.jsp" class="company-sidebar-link">退会</a>
+            <a href="${pageContext.request.contextPath}/login/logout.jsp" class="company-sidebar-link">
+                <span>ログアウト・退会</span>
+                <span class="sidebar-arrow">&gt;</span>
+            </a>
         </li>
     </ul>
 </aside>

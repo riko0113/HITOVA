@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <style>
     html {
         overflow-y: scroll !important;
@@ -67,6 +68,14 @@
     .hitova-header-link:hover {
         text-decoration: underline !important;
     }
+    .hitova-user-name {
+        color: #000000 !important;
+        font-size: 14px !important;
+        font-weight: bold !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important;
+    }
     .header-icon-btn {
         position: relative !important;
         display: inline-flex !important;
@@ -127,6 +136,14 @@
             </svg>
         </a>
 
-        <a href="${pageContext.request.contextPath}/login/Log.action" class="hitova-header-link">ログイン</a>
+        <!-- ログイン状態に応じた表示切り替え -->
+        <c:choose>
+            <c:when test="${not empty sessionScope.nickname}">
+                <span class="hitova-user-name"><c:out value="${sessionScope.nickname}" /> 様</span>
+            </c:when>
+            <c:otherwise>
+                <a href="${pageContext.request.contextPath}/login/Log.action" class="hitova-header-link">ログイン</a>
+            </c:otherwise>
+        </c:choose>
     </nav>
 </header>
