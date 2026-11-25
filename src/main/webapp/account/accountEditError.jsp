@@ -8,7 +8,7 @@
 
 <div class="main-layout">
     <%@ include file="../../jobSeekerSidebar.jsp" %>
-    <div class="main-content">
+<div class="main-content">
         <main class="account-container">
 
             <!-- 画面タイトル・ボタン -->

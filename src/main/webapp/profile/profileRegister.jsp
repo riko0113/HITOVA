@@ -7,9 +7,9 @@
 
 
 <div class ="main-layout">
-<%@ include file="" %>
+<%@ include file="../../jobSeeker/Sidebar" %>
 
-<div class="main-content"></div>
+<div class="main-content"></div> 
 
 <link rel="stylesheet" href="/HITOVA/profileCss/profileInputError.css">
 
@@ -230,4 +230,4 @@
 </div>
 </div>
 </div>
-<%@ include file="../../footer.jsp" %>
+<%@ include file="../../footer.jsp" %> 
