@@ -3,11 +3,11 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ include file="../../head.jsp" %>
 <%@ include file="../../jobSeekerHeader.jsp" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/accountCss/accountEdit.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/accountEdit.css">
 
 <div class="main-layout">
     <%@ include file="../../jobSeekerSidebar.jsp" %>
-    <div class="main-content">
+<div class="main-content">
         <main class="account-container">
             <div class="account-header">
                 <h1>アカウント情報の編集</h1>
