@@ -1,10 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>求人登録</title>
 
 <style>
 /* 各入力フォームの下に余白をつける */
@@ -258,9 +253,14 @@ select:valid {
     background-color: #4fc3f7;
 }
 </style>
-</head>
-
-<body>
+<%@ include file="../../head.jsp" %>
+<%@ include file="../../unionAdminHeader.jsp" %>
+ 
+<div class="main-layout">
+<%@ include file="../../unionAdminSidebar.jsp" %>
+ 
+<div class="main-content">
+<form action="" method="post" enctype="multipart/form-data">
 
 <div class="hutosi">求人登録</div>
 
@@ -459,7 +459,8 @@ select:valid {
 <div class="submit-area">
     <button type="submit">求人を登録・公開する</button>
 </div>
-
+</form>
+</body>
 <script>
 
 //選考プロセスの入力欄を管理する場所

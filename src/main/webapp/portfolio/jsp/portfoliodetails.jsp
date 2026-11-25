@@ -24,9 +24,21 @@
     <label>説明文</label><br>
     <span class="setumei"><c:out value="${portfolio.description}" /></span><br>
 
-    <!-- ファイルURL / ファイル名 -->
+    <!-- ファイル（署名付きURLを用いて画像・動画を出し分け表示） -->
     <label>ファイル</label><br>
-    <span class="setumei"><img src="<c:out value="${portfolio.file_url}" />" alt="作品画像" style="max-width: 300px; height: auto;" /></span><br>
+    <span class="setumei">
+        <c:choose>
+            <c:when test="${not empty presignedUrl and isVideo}">
+                <video src="<c:out value="${presignedUrl}" />" controls playsinline style="max-width: 300px; height: auto;"></video>
+            </c:when>
+            <c:when test="${not empty presignedUrl}">
+                <img src="<c:out value="${presignedUrl}" />" alt="作品画像" style="max-width: 300px; height: auto;" />
+            </c:when>
+            <c:otherwise>
+                ファイルなし
+            </c:otherwise>
+        </c:choose>
+    </span><br>
 
     <div class="button-area">
         <!-- 編集画面へ-->
@@ -34,7 +46,7 @@
            class="hensyu">編集</a>
 
         <!-- 削除画面へ-->
-        <a href="${pageContext.request.contextPath}/portfolio/portfoliodelete.jsp?portfolio_id=${portfolio.portfolio_id}"
+        <a href="${pageContext.request.contextPath}/portfolio/jsp/portfoliodelete.jsp?portfolio_id=${portfolio.portfolio_id}"
            class="sakuzyo">削除</a>
            
         <!-- 一覧画面へ-->

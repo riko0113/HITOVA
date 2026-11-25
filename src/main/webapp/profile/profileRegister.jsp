@@ -1,7 +1,15 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<%@ include file="../../head.jsp" %>
+<%@ include file="../../jobSeekerHeader.jsp" %>
+
+
+<div class ="main-layout">
+<%@ include file="" %>
+
+<div class="main-content"></div>
 
 <link rel="stylesheet" href="/HITOVA/profileCss/profileInputError.css">
 
@@ -220,3 +228,6 @@
     </form>
 
 </div>
+</div>
+</div>
+<%@ include file="../../footer.jsp" %>

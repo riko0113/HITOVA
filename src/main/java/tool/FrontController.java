@@ -11,8 +11,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 // すべてのリクエストを受け取る「司令塔」のボス
-@WebServlet(urlPatterns={"*.action"})  
-@MultipartConfig
+@WebServlet(urlPatterns={"*.action"})
+@MultipartConfig(
+	    maxFileSize = 100L * 1024 * 1024,      // 1ファイル上限: 100MB
+	    maxRequestSize = 110L * 1024 * 1024,   // リクエスト全体上限: 110MB
+	    fileSizeThreshold = 2 * 1024 * 1024    // ディスク書き出し閾値: 2MB
+)
 public class FrontController extends HttpServlet {
 
     public void doPost(
