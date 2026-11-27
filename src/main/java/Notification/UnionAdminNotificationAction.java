@@ -6,6 +6,7 @@ import DAO.NotificationDAO;
 import bean.Notification;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
 public class UnionAdminNotificationAction extends Action {
@@ -15,14 +16,33 @@ public class UnionAdminNotificationAction extends Action {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-        // DAOで全体向け通知を取得
+        HttpSession session = request.getSession();
+
+        Integer unionId = null;
+        Object unionIdObj = session.getAttribute("union_id");
+        if (unionIdObj instanceof Integer) {
+            unionId = (Integer) unionIdObj;
+        } else if (unionIdObj instanceof Long) {
+            unionId = ((Long) unionIdObj).intValue();
+        }
+
         NotificationDAO dao = new NotificationDAO();
+        List<Notification> notificationList = dao.findNotificationsForUnion(unionId);
 
-        List<Notification> notificationList =
-                dao.findNotifications("全体");
+        // 閲覧した通知の最大IDをセッションに保存（既読化）
+        long maxId = 0L;
+        for (Notification n : notificationList) {
+            if (n.getNotification_id() > maxId) {
+                maxId = n.getNotification_id();
+            }
+        }
+        Long prevReadId = (Long) session.getAttribute("lastReadUnionNotifId");
+        if (prevReadId == null || maxId > prevReadId) {
+            session.setAttribute("lastReadUnionNotifId", maxId);
+        }
 
-        // JSPに通知一覧を渡す
         request.setAttribute("notificationList", notificationList);
+        request.setAttribute("unionNotifLoaded", true);
 
         return "/Notification/jsp/unionAdmintuuti.jsp";
     }

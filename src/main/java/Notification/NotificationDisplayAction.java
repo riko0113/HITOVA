@@ -1,9 +1,11 @@
-
 package Notification;
 
+import java.util.List;
+
+import DAO.NotificationDAO;
+import bean.NotificationReceiver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
 // 通知送信画面を表示するAction
@@ -14,32 +16,19 @@ public class NotificationDisplayAction extends Action {
             HttpServletRequest request,
             HttpServletResponse response)
             throws Exception {
-        // セッションを取得
-        HttpSession session = request.getSession(false);
 
-        // ログインしていない場合
-        if (session == null) {
-            return "/login/login.jsp";
-        }
+        NotificationDAO dao = new NotificationDAO();
 
-        // アカウントIDを取得
-        Long accountId = (Long) session.getAttribute("accountId");
+        // 個別指定用の宛先一覧を取得
+        List<NotificationReceiver> userList = dao.findAllJobSeekers();
+        List<NotificationReceiver> companyList = dao.findAllCompanies();
+        List<NotificationReceiver> unionList = dao.findAllUnions();
 
-        if (accountId == null) {
-            return "/Notification/jsp/tuuti.jsp";
-        }
+        request.setAttribute("userList", userList);
+        request.setAttribute("companyList", companyList);
+        request.setAttribute("unionList", unionList);
+        request.setAttribute("sendPageLoaded", true);
 
-        // アカウントの種類を取得
-        String accountType = (String) session.getAttribute("accountType");
-
-        // 管理者・組合管理者以外を拒否
-        if (!"ADMIN".equals(accountType)
-                && !"UNION_ADMIN".equals(accountType)) {
-
-            return "/Notification/jsp/tuuti.jsp";
-        }
-        // 通知送信画面を表示
         return "/Notification/jsp/tuutiSend.jsp";
     }
-    
 }

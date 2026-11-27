@@ -1,37 +1,54 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <style>
     .admin-sidebar {
-        width: 220px;
-        min-width: 220px;
-        background-color: #ffffff;
-        border-right: 1px solid #cccccc;
-        box-sizing: border-box;
-        flex-shrink: 0;
+        width: 220px !important;
+        min-width: 220px !important;
+        max-width: 220px !important;
+        background-color: #ffffff !important;
+        border-right: 1px solid #cccccc !important;
+        box-sizing: border-box !important;
+        flex-shrink: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: normal !important;
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important;
+    }
+    .admin-sidebar * {
+        box-sizing: border-box !important;
+        line-height: normal !important;
     }
     .admin-sidebar-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .admin-sidebar-item {
-        border-bottom: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .admin-sidebar-link {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px 24px;
-        color: #000000;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 16px 24px !important;
+        margin: 0 !important;
+        color: #000000 !important;
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: bold !important;
+        background-color: transparent !important;
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important;
     }
     .admin-sidebar-link:hover {
-        background-color: #f5f5f5;
+        background-color: #f5f5f5 !important;
+        color: #000000 !important;
+        text-decoration: none !important;
     }
     .sidebar-arrow {
-        color: #0044cc;
-        font-weight: bold;
+        color: #0044cc !important;
+        font-weight: bold !important;
+        font-size: 14px !important;
     }
 </style>
 
@@ -56,8 +73,14 @@
             </a>
         </li>
         <li class="admin-sidebar-item">
-            <a href="${pageContext.request.contextPath}/admin/companyManagement.jsp" class="admin-sidebar-link">
-                <span>企業管理</span>
+            <a href="${pageContext.request.contextPath}/companyApproval/CompanyApprovalList.action" class="admin-sidebar-link">
+                <span>企業管理・認証</span>
+                <span class="sidebar-arrow">&gt;</span>
+            </a>
+        </li>
+        <li class="admin-sidebar-item">
+            <a href="${pageContext.request.contextPath}/Notification/NotificationDisplay.action" class="admin-sidebar-link">
+                <span>通知送信</span>
                 <span class="sidebar-arrow">&gt;</span>
             </a>
         </li>

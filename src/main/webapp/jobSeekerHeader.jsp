@@ -1,5 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page import="DAO.NotificationDAO" %>
+<%@ page import="login.AuthWeb" %>
+<%
+    int unreadNotifCount = 0;
+    Object cidObj = session.getAttribute(AuthWeb.candidate_key);
+    if (cidObj instanceof Long) {
+        try {
+            Long lastReadIdObj = (Long) session.getAttribute("lastReadNotifId");
+            long lastReadId = (lastReadIdObj != null) ? lastReadIdObj : 0L;
+            NotificationDAO nDao = new NotificationDAO();
+            unreadNotifCount = nDao.countUnreadAfterId((Long) cidObj, lastReadId);
+        } catch (Exception e) {
+            unreadNotifCount = 0;
+        }
+    }
+    request.setAttribute("unreadNotifCount", unreadNotifCount);
+%>
 <style>
     html {
         overflow-y: scroll !important;
@@ -99,8 +116,9 @@
         color: #ffffff !important;
         font-size: 10px !important;
         font-weight: bold !important;
-        width: 16px !important;
+        min-width: 16px !important;
         height: 16px !important;
+        padding: 0 3px !important;
         border-radius: 50% !important;
         display: flex !important;
         align-items: center !important;
@@ -121,12 +139,14 @@
         <a href="${pageContext.request.contextPath}/chat/ChatList.action" class="hitova-header-link">チャット</a>
         <a href="${pageContext.request.contextPath}/contact/contact.jsp" class="hitova-header-link">お問い合わせ</a>
 
-        <!-- 通知アイコン -->
+        <!-- 通知アイコン（未読がある時だけ件数バッジ表示） -->
         <a href="${pageContext.request.contextPath}/Notification/JobSeekerNotification.action" class="header-icon-btn" title="通知">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
             </svg>
-            <span class="notif-badge">1</span>
+            <c:if test="${unreadNotifCount > 0}">
+                <span class="notif-badge">${unreadNotifCount}</span>
+            </c:if>
         </a>
 
         <!-- プロフィールアイコン -->
@@ -142,7 +162,7 @@
                 <span class="hitova-user-name"><c:out value="${sessionScope.nickname}" /> 様</span>
             </c:when>
             <c:otherwise>
-                <a href="${pageContext.request.contextPath}/login/Log.action" class="hitova-header-link">ログイン</a>
+                <a href="${pageContext.request.contextPath}/login/login.jsp" class="hitova-header-link">ログイン</a>
             </c:otherwise>
         </c:choose>
     </nav>

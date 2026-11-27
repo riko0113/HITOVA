@@ -19,10 +19,10 @@
                 <a href="${pageContext.request.contextPath}/admin/userList.jsp" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">ユーザー一覧</a>
                 <a href="${pageContext.request.contextPath}/admin/userReviews.jsp" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">ユーザー口コミ</a>
                 <a href="${pageContext.request.contextPath}/admin/userAuthority.jsp" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">ユーザー権限変更</a>
-                <a href="${pageContext.request.contextPath}/admin/noticeSending.jsp" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">通知送信</a>
+                <a href="${pageContext.request.contextPath}/Notification/NotificationDisplay.action" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">通知送信</a>
 
                 <a href="${pageContext.request.contextPath}/admin/identityVerification.jsp" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">本人確認審査</a>
-                <a href="${pageContext.request.contextPath}/admin/companyManagement.jsp" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">企業認証</a>
+                <a href="${pageContext.request.contextPath}/companyApproval/CompanyApprovalList.action" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">企業認証</a>
                 <a href="${pageContext.request.contextPath}/admin/taskRegister.jsp" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">課題登録</a>
                 <div></div>
 

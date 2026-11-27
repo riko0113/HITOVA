@@ -152,7 +152,6 @@
                 <span class="search-label">企業名検索</span>
                 <form action="${pageContext.request.contextPath}/unionAdminServlet/CompanySearch.action" method="post" class="search-input-wrapper">
                     <input type="text" name="company_name" value="${searchKeyword}" class="search-input">
-                    <button type="submit" class="search-icon-btn">🔍</button>
                 </form>
             </div>
 
