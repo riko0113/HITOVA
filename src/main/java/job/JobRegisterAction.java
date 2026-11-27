@@ -9,6 +9,7 @@ import bean.Job;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import login.AuthWeb;
 import tool.Action;
 
 public class JobRegisterAction extends Action {
@@ -20,7 +21,7 @@ public class JobRegisterAction extends Action {
 
             HttpSession session = request.getSession();
             
-            Long userId = (Long) session.getAttribute("company_account_id");
+            Long userId = (Long) session.getAttribute(AuthWeb.company_key);
             
             //未ログインの場合のチェック
             if (userId == null) {
@@ -29,21 +30,22 @@ public class JobRegisterAction extends Action {
                 return "";
             }
             
-            // 企業アカウントDAOのインスタンス生成
-            CompanyDAO c_dao = new CompanyDAO();
+            // セッションに企業情報がなければDBから取得して保存
+            CompanyAccount companyInfo = (CompanyAccount) session.getAttribute("companyInfo");
+            if (companyInfo == null) {
+                CompanyDAO c_dao = new CompanyDAO();
+                companyInfo = c_dao.getCompanyAccountById(userId);
+                session.setAttribute("companyInfo", companyInfo);
+            }
             
-            //企業情報を返す
-            CompanyAccount companyInfo = c_dao.getCompanyAccountById(userId);
-            
-            request.setAttribute("companyInfo", companyInfo);
-            
-            // 求人DAOのインスタンス生成
-            JobDAO dao = new JobDAO();
-            
-            // Listにマスタ情報一覧の結果を返す
-            List<Job> infoList = dao.searchAll(userId);
-            
-            request.setAttribute("infoList", infoList);
+            // セッションに選択肢データがなければDBから取得して保存
+            @SuppressWarnings("unchecked")
+            List<Job> infoList = (List<Job>) session.getAttribute("infoList");
+            if (infoList == null) {
+                JobDAO dao = new JobDAO();
+                infoList = dao.searchAll(userId);
+                session.setAttribute("infoList", infoList);
+            }
             
             return "/jobregister/jobregister.jsp"; 
             

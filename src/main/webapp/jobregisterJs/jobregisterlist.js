@@ -108,12 +108,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // 編集ボタン
-    document.querySelectorAll(".edit-button").forEach(function(button) {
-        button.addEventListener("click", function() {
-            // 編集画面への遷移先は後で設定
-        });
-    });
+    document.querySelectorAll(".edit-button").forEach(function (button) {
+    button.addEventListener("click", function () {
 
+        window.location.href = `/job/JobDisplay.action?job_id=${encodeURIComponent(jobId)}`;
+    	});
+
+	});
 });
 
 // サーブレットへステータスを送信する共通関数（公開・非公開用）
