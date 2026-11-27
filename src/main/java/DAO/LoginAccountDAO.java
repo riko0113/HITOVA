@@ -5,9 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import bean.CompanyAccount;
 import bean.JobSeekerAccount;
 
-// PostgreSQLの求職者アカウントを検索・更新する。
+// 求職者アカウントを読み書きし、企業のログイン時に利用状態を取得する。
 public class LoginAccountDAO extends DAO {
     public JobSeekerAccount find(String uid) throws SQLException {
         String sql = "SELECT j.candidate_id, j.nick_name, j.email, j.firebase_id, "
@@ -33,6 +34,28 @@ public class LoginAccountDAO extends DAO {
                 account.setAuthority_id(rs.getLong("authority_id"));
                 account.setAuthority_name(rs.getString("authority_name"));
                 return account;
+            }
+        }
+    }
+
+    // FirebaseのUIDから企業IDと利用状態を取得する。
+    public CompanyAccount findCompany(String uid) throws SQLException {
+        String sql = "SELECT c.company_account_id, c.account_status_id, s.status_name "
+                + "FROM company_accounts c "
+                + "JOIN accounts_status s ON s.account_status_id = c.account_status_id "
+                + "WHERE c.firebase_id = ?";
+
+        try (Connection con = connect(); PreparedStatement st = con.prepareStatement(sql)) {
+            st.setString(1, uid);
+            try (ResultSet rs = st.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+                CompanyAccount company = new CompanyAccount();
+                company.setCompany_account_id(rs.getLong("company_account_id"));
+                company.setAccount_status_id(rs.getLong("account_status_id"));
+                company.setAccount_status_name(rs.getString("status_name"));
+                return company;
             }
         }
     }

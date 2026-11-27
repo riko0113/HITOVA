@@ -15,6 +15,8 @@ public final class AuthWeb {
     static final String pending_key = "authCheck.pending";
     // ログイン済みの求職者IDを保存する名前。他の画面でも使う。
     public static final String candidate_key = "candidate_account_id";
+    // 企業画面で使うログイン済みの企業IDを保存する名前。
+    static final String company_key = "company_account_id";
     static final String mail_sent_key = "login.mailSent";
     public static final String nickname_key = "nickname"; 
     // メール確認待ちを始めてからの有効時間（30分）。
@@ -29,6 +31,18 @@ public final class AuthWeb {
         response.setHeader("Location", request.getContextPath() + path);
         // 遷移先はブラウザが開くので、FrontControllerにはJSPを返さない。
         return null;
+    }
+
+    // 停止中やエラーの場合は、それぞれの案内ページへ移動する。
+    static String redirectForResult(HttpServletRequest request, HttpServletResponse response,
+            AuthSupport.Result result, String success_path) {
+        if (result == AuthSupport.Result.SUSPENDED) {
+            return redirectAfterPost(request, response, "/login/suspended.jsp");
+        }
+        if (result == AuthSupport.Result.ERROR) {
+            return redirectAfterPost(request, response, "/login/error.jsp");
+        }
+        return redirectAfterPost(request, response, success_path);
     }
 
     static void noStore(HttpServletResponse response) {
@@ -49,6 +63,7 @@ public final class AuthWeb {
     static void clear(HttpSession session) {
         session.removeAttribute(pending_key);
         session.removeAttribute(candidate_key);
+        session.removeAttribute(company_key);
         session.removeAttribute(mail_sent_key);
         session.removeAttribute(nickname_key);
         session.removeAttribute(fingerprint_key);
