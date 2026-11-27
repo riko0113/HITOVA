@@ -1,229 +1,204 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-
-<%@ include file="/head.jsp" %>
-<%@ include file="/unionAdminHeader.jsp" %>
-
-<style>
-    .main-layout {
-        display: flex;
-        align-items: stretch;
-        min-height: calc(100vh - 64px);
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%
+    if (request.getAttribute("detailLoaded") == null) {
+        response.sendRedirect(request.getContextPath() + "/companyApproval/CompanyApprovalList.action");
+        return;
     }
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>企業認証 - HITOVA</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: #f8f9fa;
+            color: #222222;
+        }
+        .main-layout {
+            display: flex;
+            min-height: calc(100vh - 64px);
+        }
+        .main-content {
+            flex: 1;
+            padding: 36px 48px;
+            background-color: #ffffff;
+            box-sizing: border-box;
+        }
+        .cert-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .top-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #333333;
+        }
+        .page-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .btn-back {
+            padding: 6px 14px;
+            border: 1px solid #888888;
+            color: #222222;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .cert-box {
+            border: 1px solid #cccccc;
+            padding: 28px 32px;
+            background-color: #ffffff;
+        }
+        .target-company {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0 0 12px 0;
+        }
+        .cert-desc {
+            font-size: 14px;
+            color: #444444;
+            line-height: 1.6;
+            margin: 0 0 28px 0;
+        }
+        .button-area {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .btn-approve {
+            padding: 10px 32px;
+            background-color: #0044cc;
+            color: #ffffff;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-approve:hover {
+            background-color: #003399;
+        }
+        .btn-reject {
+            padding: 10px 32px;
+            background-color: #ffffff;
+            color: #cc0000;
+            border: 1px solid #cc0000;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-reject:hover {
+            background-color: #fff5f5;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            width: 340px;
+            padding: 24px;
+            background-color: #ffffff;
+            border: 1px solid #888888;
+            text-align: center;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .modal-btn-cancel {
+            padding: 8px 18px;
+            background-color: #ffffff;
+            border: 1px solid #888888;
+            cursor: pointer;
+        }
+        .modal-btn-exec {
+            padding: 8px 20px;
+            background-color: #222222;
+            color: #ffffff;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
 
-    .main-content {
-        flex: 1;
-        min-width: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+    <%@ include file="/unionAdminHeader.jsp" %>
 
-    .certification-card {
-        width: 420px;
-        min-height: 300px;
-        margin: 0;
-        padding: 20px;
-        border: 2px solid #999;
-        box-sizing: border-box;
-    }
+    <div class="main-layout">
+        <%@ include file="/unionAdminSidebar.jsp" %>
 
-    .back-button {
-        display: inline-block;
-        padding: 5px 15px;
-        border: 2px solid #91B879;
-        border-radius: 6px;
-        text-decoration: none;
-        color: #333;
-    }
+        <main class="main-content">
+            <div class="cert-container">
 
-    .certification-title {
-        text-align: center;
-        margin: 15px 0 25px;
-    }
+                <div class="top-actions">
+                    <h2 class="page-title">企業認証</h2>
+                    <a href="${pageContext.request.contextPath}/companyApproval/CompanyApprovalDetail.action?id=${company.companyAccountId}" class="btn-back">詳細へ戻る</a>
+                </div>
 
-    .company-name {
-        margin-bottom: 25px;
-    }
+                <div class="cert-box">
+                    <p class="target-company">対象企業：<c:out value="${company.companyName}" />（ID: ${company.companyAccountId}）</p>
+                    <p class="cert-desc">
+                        企業登録申請の内容を確認のうえ、「認証」または「拒否」を選択してください。<br>
+                        実行するとデータベースの審査ステータスが更新されます。
+                    </p>
 
-    .confirmation-text {
-        margin-bottom: 30px;
-    }
+                    <form id="approvalForm" action="${pageContext.request.contextPath}/companyApproval/CompanyApprovalUpdate.action" method="post">
+                        <input type="hidden" name="id" value="${company.companyAccountId}">
+                        <input type="hidden" name="actionType" id="actionTypeInput" value="">
 
-    .button-area {
-        display: flex;
-        justify-content: space-around;
-    }
-
-    .action-button {
-        padding: 8px 25px;
-        background-color: white;
-        border: 2px solid #91B879;
-        border-radius: 6px;
-        cursor: pointer;
-    }
-
-    .action-button:hover {
-        background-color: #eaf3e5;
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.3);
-        justify-content: center;
-        align-items: center;
-    }
-
-    .modal-content {
-        width: 300px;
-        padding: 20px;
-        background-color: white;
-        border: 2px solid #999;
-        text-align: center;
-    }
-
-    .modal-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 25px;
-        margin-top: 25px;
-    }
-
-    .modal-buttons button {
-        padding: 7px 15px;
-        background-color: white;
-        border: 2px solid #91B879;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .ok-button {
-        background-color: #91B879 !important;
-    }
-</style>
-
-<div class="main-layout">
-
-    <%@ include file="/unionAdminSidebar.jsp" %>
-
-    <div class="main-content">
-
-        <div class="certification-card">
-
-            <a href="companyapply.jsp" class="back-button">戻る</a>
-
-            <h3 class="certification-title">企業認証</h3>
-
-            <p class="company-name">
-                企業名：ABC株式会社
-            </p>
-
-            <p class="confirmation-text">
-                企業登録申請の内容を確認しました。
-            </p>
-
-            <div class="button-area">
-
-                <button class="action-button"
-                    onclick="openConfirm('認証')">
-                    認証
-                </button>
-
-                <button class="action-button"
-                    onclick="openConfirm('拒否')">
-                    拒否
-                </button>
+                        <div class="button-area">
+                            <button type="button" class="btn-approve" onclick="openConfirm('APPROVED', '認証')">認証する</button>
+                            <button type="button" class="btn-reject" onclick="openConfirm('REJECTED', '拒否')">拒否する</button>
+                        </div>
+                    </form>
+                </div>
 
             </div>
-
-        </div>
-
+        </main>
     </div>
 
-</div>
-
-<!-- 確認ダイアログ -->
-<div class="modal" id="confirmModal">
-
-    <div class="modal-content">
-
-        <p id="confirmMessage"></p>
-
-        <div class="modal-buttons">
-
-            <button onclick="closeConfirm()">
-                キャンセル
-            </button>
-
-            <button onclick="executeAction()">
-                実行する
-            </button>
-
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <p id="confirmMessage" style="font-size: 14px; font-weight: bold;"></p>
+            <div class="modal-buttons">
+                <button type="button" class="modal-btn-cancel" onclick="closeConfirm()">キャンセル</button>
+                <button type="button" class="modal-btn-exec" onclick="submitApproval()">実行する</button>
+            </div>
         </div>
-
     </div>
 
-</div>
+    <script>
+        function openConfirm(actionValue, label) {
+            document.getElementById("actionTypeInput").value = actionValue;
+            document.getElementById("confirmMessage").textContent = "この企業を「" + label + "」しますか？";
+            document.getElementById("confirmModal").style.display = "flex";
+        }
+        function closeConfirm() {
+            document.getElementById("confirmModal").style.display = "none";
+        }
+        function submitApproval() {
+            document.getElementById("approvalForm").submit();
+        }
+    </script>
 
-<!-- 完了ダイアログ -->
-<div class="modal" id="resultModal">
-
-    <div class="modal-content">
-
-        <p id="resultMessage"></p>
-
-        <div class="modal-buttons">
-
-            <button class="ok-button" onclick="closeResult()">
-                OK
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-<script>
-    let selectedAction = "";
-
-    // 確認ダイアログを開く
-    function openConfirm(action) {
-
-        selectedAction = action;
-
-        document.getElementById("confirmMessage").textContent =
-            "この企業を" + action + "しますか？";
-
-        document.getElementById("confirmModal").style.display = "flex";
-    }
-
-    // 確認ダイアログを閉じる
-    function closeConfirm() {
-
-        document.getElementById("confirmModal").style.display = "none";
-    }
-
-    // 認証・拒否を実行
-    function executeAction() {
-
-        closeConfirm();
-
-        document.getElementById("resultMessage").textContent =
-            "企業を" + selectedAction + "しました。";
-
-        document.getElementById("resultModal").style.display = "flex";
-    }
-
-    // 完了後、申請一覧画面に戻る
-    function closeResult() {
-
-        window.location.href = "companyApproval.jsp";
-    }
-</script>
+</body>
+</html>

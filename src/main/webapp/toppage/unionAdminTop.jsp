@@ -17,7 +17,7 @@
 
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px 20px; max-width: 750px; margin: 0 auto;">
                 <a href="${pageContext.request.contextPath}/unionAdminServlet/CompanyList.action" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">企業一覧</a>
-                <a href="${pageContext.request.contextPath}/unionAdmin/companyApproval.jsp" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">企業登録・承認</a>
+                <a href="${pageContext.request.contextPath}/companyApproval/companyApproval.jsp" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">企業登録・承認</a>
                 <a href="${pageContext.request.contextPath}/unionAdmin/performanceList.jsp" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">実績一覧</a>
 
                 <a href="${pageContext.request.contextPath}/unionAdmin/unionAdminCreate.jsp" style="border: 1px solid #888; height: 56px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #222; font-size: 14px;">ユーザー追加</a>

@@ -1,4 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="DAO.NotificationDAO" %>
+<%
+    int unreadUnionNotifCount = 0;
+    try {
+        Integer headerUnionId = null;
+        Object uObj = session.getAttribute("union_id");
+        if (uObj instanceof Integer) {
+            headerUnionId = (Integer) uObj;
+        } else if (uObj instanceof Long) {
+            headerUnionId = ((Long) uObj).intValue();
+        }
+        long lastReadUnionId = 0L;
+        Object lastUnionObj = session.getAttribute("lastReadUnionNotifId");
+        if (lastUnionObj instanceof Long) {
+            lastReadUnionId = (Long) lastUnionObj;
+        }
+        NotificationDAO headerNotifDao = new NotificationDAO();
+        unreadUnionNotifCount = headerNotifDao.countUnreadUnionAfterId(headerUnionId, lastReadUnionId);
+    } catch (Exception ignored) {
+        unreadUnionNotifCount = 0;
+    }
+%>
 <style>
     html {
         overflow-y: scroll !important;
@@ -109,6 +131,22 @@
     .header-icon-btn:hover {
         color: #000000 !important;
     }
+    .notif-badge {
+        position: absolute !important;
+        top: -4px !important;
+        right: -6px !important;
+        min-width: 16px !important;
+        height: 16px !important;
+        padding: 0 4px !important;
+        border-radius: 8px !important;
+        background-color: #d93025 !important;
+        color: #ffffff !important;
+        font-size: 10px !important;
+        font-weight: bold !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
 </style>
 
 <header class="hitova-header">
@@ -128,6 +166,9 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
             </svg>
+            <% if (unreadUnionNotifCount > 0) { %>
+                <span class="notif-badge"><%= unreadUnionNotifCount > 99 ? "99+" : unreadUnionNotifCount %></span>
+            <% } %>
         </a>
 
         <a href="${pageContext.request.contextPath}/unionAdmin/profile.jsp" class="header-icon-btn" title="プロフィール" style="color:#0044cc !important;">
@@ -136,6 +177,6 @@
             </svg>
         </a>
 
-        <a href="${pageContext.request.contextPath}/login/Log.action" class="hitova-header-link">ログイン</a>
+        <a href="${pageContext.request.contextPath}/login/login.jsp" class="hitova-header-link">ログイン</a>
     </nav>
 </header>

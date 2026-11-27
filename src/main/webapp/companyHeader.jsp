@@ -1,4 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page import="DAO.NotificationDAO" %>
+<%@ page import="bean.CompanyAccount" %>
+<%
+    int companyUnreadNotifCount = 0;
+    try {
+        Long cid = null;
+        if (session.getAttribute("company_account_id") instanceof Long) {
+            cid = (Long) session.getAttribute("company_account_id");
+        } else if (session.getAttribute("companyAccount") instanceof CompanyAccount) {
+            cid = ((CompanyAccount) session.getAttribute("companyAccount")).getCompany_account_id();
+        }
+        if (cid == null) {
+            cid = 2001L;
+        }
+
+        Long lastReadCompanyIdObj = (Long) session.getAttribute("lastReadCompanyNotifId");
+        long lastReadCompanyId = (lastReadCompanyIdObj != null) ? lastReadCompanyIdObj : 0L;
+
+        NotificationDAO nDao = new NotificationDAO();
+        companyUnreadNotifCount = nDao.countUnreadCompanyAfterId(cid, lastReadCompanyId);
+    } catch (Exception e) {
+        companyUnreadNotifCount = 0;
+    }
+    request.setAttribute("companyUnreadNotifCount", companyUnreadNotifCount);
+%>
 <style>
     html, body {
         margin: 0 !important;
@@ -87,8 +113,9 @@
         color: #ffffff !important;
         font-size: 10px !important;
         font-weight: bold !important;
-        width: 16px !important;
+        min-width: 16px !important;
         height: 16px !important;
+        padding: 0 3px !important;
         border-radius: 50% !important;
         display: flex !important;
         align-items: center !important;
@@ -108,12 +135,14 @@
         <a href="${pageContext.request.contextPath}/chat/ChatList.action" class="hitova-header-link">チャット</a>
         <a href="${pageContext.request.contextPath}/contact/contact.jsp" class="hitova-header-link">お問い合わせ</a>
 
-        <!-- 通知アイコン -->
+        <!-- 通知アイコン（未読がある時だけ件数バッジ表示） -->
         <a href="${pageContext.request.contextPath}/Notification/CompanyNotification.action" class="header-icon-btn" title="通知">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
             </svg>
-            <span class="notif-badge">1</span>
+            <c:if test="${companyUnreadNotifCount > 0}">
+                <span class="notif-badge">${companyUnreadNotifCount}</span>
+            </c:if>
         </a>
 
         <!-- アカウントアイコン -->
@@ -123,6 +152,6 @@
             </svg>
         </a>
 
-        <a href="${pageContext.request.contextPath}/login/Log.action" class="hitova-header-link">ログイン</a>
+        <a href="${pageContext.request.contextPath}/login/login.jsp" class="hitova-header-link">ログイン</a>
     </nav>
 </header>

@@ -1,37 +1,54 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <style>
     .jobseeker-sidebar {
-        width: 220px;
-        min-width: 220px;
-        background-color: #ffffff;
-        border-right: 1px solid #cccccc;
-        box-sizing: border-box;
-        flex-shrink: 0;
+        width: 220px !important;
+        min-width: 220px !important;
+        max-width: 220px !important;
+        background-color: #ffffff !important;
+        border-right: 1px solid #cccccc !important;
+        box-sizing: border-box !important;
+        flex-shrink: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: normal !important;
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important;
+    }
+    .jobseeker-sidebar * {
+        box-sizing: border-box !important;
+        line-height: normal !important;
     }
     .jobseeker-sidebar-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .jobseeker-sidebar-item {
-        border-bottom: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .jobseeker-sidebar-link {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px 24px;
-        color: #000000;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 16px 24px !important;
+        margin: 0 !important;
+        color: #000000 !important;
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: bold !important;
+        background-color: transparent !important;
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important;
     }
     .jobseeker-sidebar-link:hover {
-        background-color: #f5f5f5;
+        background-color: #f5f5f5 !important;
+        color: #000000 !important;
+        text-decoration: none !important;
     }
     .sidebar-arrow {
-        color: #0044cc;
-        font-weight: bold;
+        color: #0044cc !important;
+        font-weight: bold !important;
+        font-size: 14px !important;
     }
 </style>
 
@@ -62,6 +79,12 @@
             </a>
         </li>
         <li class="jobseeker-sidebar-item">
+            <a href="${pageContext.request.contextPath}/portfolio/Portfolio.action" class="jobseeker-sidebar-link">
+                <span>作品管理</span>
+                <span class="sidebar-arrow">&gt;</span>
+            </a>
+        </li>
+        <li class="jobseeker-sidebar-item">
             <a href="${pageContext.request.contextPath}/chat/ChatList.action" class="jobseeker-sidebar-link">
                 <span>メッセージ</span>
                 <span class="sidebar-arrow">&gt;</span>
@@ -78,9 +101,6 @@
                 <span>ログアウト・退会</span>
                 <span class="sidebar-arrow">&gt;</span>
             </a>
-        </li>
-        <li class="jobseeker-sidebar-item">
-            <a href="${pageContext.request.contextPath}/portfolio/Portfolio.action" class="jobseeker-sidebar-link">作品管理</a>
         </li>
     </ul>
 </aside>
