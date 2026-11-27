@@ -8,6 +8,7 @@ import bean.ChatMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import login.AuthWeb;
 import tool.Action;
 
 public class ConnectRoomAction extends Action {
@@ -19,7 +20,7 @@ public class ConnectRoomAction extends Action {
 
             // セッションからユーザーIDを取得して未ログインチェック
             HttpSession session = request.getSession();
-            Long userId = (Long) session.getAttribute("");
+            Long userId = (Long) session.getAttribute(AuthWeb.company_key);
 
             if (userId == null) {
                 // ログイン画面へリダイレクトする処理
@@ -44,11 +45,17 @@ public class ConnectRoomAction extends Action {
             // チャットDAOのインスタンス生成
             ChatDAO dao = new ChatDAO();
             
+            Boolean flg = dao.existsRoom(candidateId, userId);
             
+            if (flg == true) {
+            	response.sendRedirect(request.getContextPath() + "/chat/company/ChatList.action");
+            }else {
+            	dao.insertRoom(candidateId, userId);
+            	response.sendRedirect(request.getContextPath() + "/chat/company/ChatList.action");
+            }
             
-            request.setAttribute("", );
 
-            return "/chat/chat_company.jsp";
+            return null;
 
         } catch (Exception e) {
             // サーバー側のログにエラーの詳細を出力する

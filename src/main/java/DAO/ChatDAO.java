@@ -13,22 +13,27 @@ import bean.ChatRoom;
 
 public class ChatDAO extends DAO {
 
-    //初期一括取得用：ユーザーに関わる全チャットルームの全メッセージを古い順に取得
+    // チャットルームと求職者・企業名を結合するための共通SELECT句・FROM句
+    private static final String BASE_CHAT_SELECT_FROM =
+            "SELECT " +
+            "  m.message_id, m.room_id, m.send_at, m.send_content, m.sender_type, " +
+            "  r.candidate_account_id, r.company_account_id, r.created_at, " +
+            "  p.last_name, p.first_name, " +
+            "  COALESCE(corp.offical_company_name, sole.trade_name) AS company_name " +
+            "FROM chat_messages m " +
+            "JOIN chat_rooms r ON m.room_id = r.room_id " +
+            "LEFT JOIN profiles p ON r.candidate_account_id = p.candidate_account_id " +
+            "LEFT JOIN company_accounts ca ON r.company_account_id = ca.company_account_id " +
+            "LEFT JOIN corporate_informations corp ON r.company_account_id = corp.company_account_id " +
+            "  AND ca.business_type = '法人' " +
+            "LEFT JOIN sole_proprietor_informations sole ON r.company_account_id = sole.company_account_id " +
+            "  AND ca.business_type = '個人事業主' ";
+
+    // 初期一括取得用：ユーザーに関わる全チャットルームの全メッセージを古い順に取得
     public List<ChatMessage> searchAllByUserId(Long userId) throws Exception {
         List<ChatMessage> list = new ArrayList<>();
 
-        String sql = "SELECT " +
-                "m.message_id, m.room_id, m.send_at, m.send_content, m.sender_type, " +
-                "r.candidate_account_id, r.company_account_id, r.created_at, p.last_name, p.first_name " +
-                "COALESCE(corp.offical_company_name, sole.trade_name) AS company_name " +
-                "FROM chat_messages m " +
-                "JOIN chat_rooms r ON m.room_id = r.room_id " +
-                "LEFT JOIN profiles p ON r.candidate_account_id = p.candidate_account_id " +
-                "LEFT JOIN company_accounts ca ON r.company_account_id = ca.company_account_id " +
-                "LEFT JOIN corporate_informations corp ON r.company_account_id = corp.company_account_id " +
-                "  AND ca.business_type = '法人' " +
-                "LEFT JOIN sole_proprietor_informations sole ON r.company_account_id = sole.company_account_id " +
-                "  AND ca.business_type = '個人事業主' " +
+        String sql = BASE_CHAT_SELECT_FROM +
                 "WHERE r.candidate_account_id = ? OR r.company_account_id = ? " +
                 "ORDER BY m.room_id ASC, m.send_at ASC, m.message_id ASC";
 
@@ -47,15 +52,11 @@ public class ChatDAO extends DAO {
         return list;
     }
 
-    //Ajax新着取得用：指定ルームで lastMessageId より新しいメッセージだけを取得
+    // Ajax新着取得用：指定ルームで lastMessageId より新しいメッセージだけを取得
     public List<ChatMessage> searchNewMessages(Long roomId, Long lastMessageId) throws Exception {
         List<ChatMessage> list = new ArrayList<>();
 
-        String sql = "SELECT " +
-                "  m.message_id, m.room_id, m.send_at, m.send_content, m.sender_type, " +
-                "  r.candidate_account_id, r.company_account_id, r.created_at " +
-                "FROM chat_messages m " +
-                "JOIN chat_rooms r ON m.room_id = r.room_id " +
+        String sql = BASE_CHAT_SELECT_FROM +
                 "WHERE m.room_id = ? AND m.message_id > ? " +
                 "ORDER BY m.send_at ASC, m.message_id ASC";
 
@@ -74,24 +75,40 @@ public class ChatDAO extends DAO {
         return list;
     }
 
-    //左ペイン用：ユーザーに関わるチャットルームごとの「最新メッセージ1件」を取得（最新ルーム順）
+    // 左ペイン用：ユーザーに関わるチャットルームごとの「最新メッセージ1件」を取得（最新ルーム順）
     public List<ChatMessage> searchLatestByUserId(Long userId) throws Exception {
         List<ChatMessage> list = new ArrayList<>();
-
+        
+        //指定した求職者または企業アカウントが参加しているチャットルームの一覧を、
+        //各ルームの最新メッセージ（未送信ならルーム作成日時）が新しい順に取得する
         String sql = "SELECT " +
                 "  sub.message_id, sub.room_id, sub.send_at, sub.send_content, sub.sender_type, " +
-                "  sub.candidate_account_id, sub.company_account_id, sub.created_at " +
+                "  sub.candidate_account_id, sub.company_account_id, sub.created_at, " +
+                "  sub.last_name, sub.first_name, sub.company_name " +
                 "FROM ( " +
                 "  SELECT " +
-                "    m.message_id, m.room_id, m.send_at, m.send_content, m.sender_type, " +
+                "    m.message_id, r.room_id, m.send_at, m.send_content, m.sender_type, " +
                 "    r.candidate_account_id, r.company_account_id, r.created_at, " +
-                "    ROW_NUMBER() OVER (PARTITION BY r.room_id ORDER BY m.send_at DESC, m.message_id DESC) AS rn " +
-                "  FROM chat_messages m " +
-                "  JOIN chat_rooms r ON m.room_id = r.room_id " +
+                "    p.last_name, p.first_name, " +
+                "    COALESCE(corp.offical_company_name, sole.trade_name) AS company_name, " +
+                "    ROW_NUMBER() OVER ( " +
+                "      PARTITION BY r.room_id " +
+                "      ORDER BY m.send_at DESC NULLS LAST, m.message_id DESC NULLS LAST " +
+                "    ) AS rn " +
+                "  FROM chat_rooms r " +
+                "  LEFT JOIN chat_messages m ON r.room_id = m.room_id " +
+                "  LEFT JOIN profiles p ON r.candidate_account_id = p.candidate_account_id " +
+                "  LEFT JOIN company_accounts ca ON r.company_account_id = ca.company_account_id " +
+                "  LEFT JOIN corporate_informations corp ON r.company_account_id = corp.company_account_id " +
+                "    AND ca.business_type = '法人' " +
+                "  LEFT JOIN sole_proprietor_informations sole ON r.company_account_id = sole.company_account_id " +
+                "    AND ca.business_type = '個人事業主' " +
                 "  WHERE r.candidate_account_id = ? OR r.company_account_id = ? " +
                 ") sub " +
+                // 各ルームの先頭1件のみ抽出
                 "WHERE sub.rn = 1 " +
-                "ORDER BY sub.send_at DESC, sub.message_id DESC";
+                // 最新メッセージ日時（未送信時はルーム作成日時）が新しいルーム順で並べる
+                "ORDER BY COALESCE(sub.send_at, sub.created_at) DESC, sub.message_id DESC NULLS LAST";
 
         try (Connection con = getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
@@ -108,15 +125,11 @@ public class ChatDAO extends DAO {
         return list;
     }
 
-    //指定したルームIDのメッセージ一覧を取得（会話の流れに合わせて昇順）
+    // 指定したルームIDのメッセージ一覧を取得（会話の流れに合わせて昇順）
     public List<ChatMessage> searchMessagesByRoomId(Long roomId) throws Exception {
         List<ChatMessage> list = new ArrayList<>();
 
-        String sql = "SELECT " +
-                "  m.message_id, m.room_id, m.send_at, m.send_content, m.sender_type, " +
-                "  r.candidate_account_id, r.company_account_id, r.created_at " +
-                "FROM chat_messages m " +
-                "JOIN chat_rooms r ON m.room_id = r.room_id " +
+        String sql = BASE_CHAT_SELECT_FROM +
                 "WHERE m.room_id = ? " +
                 "ORDER BY m.send_at ASC, m.message_id ASC";
 
@@ -153,38 +166,75 @@ public class ChatDAO extends DAO {
         room.setCompany_account_id(rs.getObject("company_account_id", Long.class));
         room.setCreated_at(rs.getObject("created_at", LocalDateTime.class));
         room.setCompany_name(rs.getObject("company_name", String.class));
-        //姓と名を結合
-        String full_name = rs.getString("last_name") + rs.getString("first_name");
-        room.setCandidate_name(full_name);
+
+        // 姓と名を結合（両方nullの場合はnull、片方だけある場合はある方だけ結合）
+        String lastName = rs.getString("last_name");
+        String firstName = rs.getString("first_name");
+        if (lastName != null || firstName != null) {
+            room.setCandidate_name((lastName != null ? lastName : "") + (firstName != null ? firstName : ""));
+        }
 
         message.setChatRoom(room);
         return message;
     }
-    
+
     // チャットメッセージを登録する処理
- 	public int insert(Long roomId, String sendContent, boolean senderType) throws Exception {
+    public int insert(Long roomId, String sendContent, boolean senderType) throws Exception {
+        String sql = "INSERT INTO chat_messages (room_id, send_content, sender_type) VALUES (?, ?, ?)";
 
- 		// SQL文の定義（プレースホルダーを使用し、SQLインジェクションを防止）
- 		String sql = "INSERT INTO chat_messages (room_id, send_content, sender_type) VALUES (?, ?, ?)";
+        int rowCount = 0;
 
- 		int rowCount = 0;
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
 
- 		// try-with-resources構文を用いて、ConnectionやPreparedStatementを確実にクローズする
- 		try (Connection con = getConnection();
- 			 PreparedStatement st = con.prepareStatement(sql)) {
+            st.setLong(1, roomId);
+            st.setString(2, sendContent);
+            st.setBoolean(3, senderType);
 
- 			// プレースホルダーに値をセット
- 			st.setLong(1, roomId);
- 			st.setString(2, sendContent);
- 			st.setBoolean(3, senderType);
+            rowCount = st.executeUpdate();
 
- 			// INSERT文を実行し、影響を受けた行数を取得
- 			rowCount = st.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        }
 
- 		} catch (SQLException e) {
- 			throw e; // 呼び出し元（Actionクラス）のtry-catchで捕捉できるように再スロー
- 		}
+        return rowCount;
+    }
+    
+    // 該当のチャットルームが存在するか確認
+    public boolean existsRoom(Long candidateAccountId, Long companyAccountId) throws Exception {
+        String sql = "SELECT 1 FROM chat_rooms " +
+                     "WHERE candidate_account_id = ? AND company_account_id = ?";
 
- 		return rowCount;
- 	}
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setLong(1, candidateAccountId);
+            st.setLong(2, companyAccountId);
+
+            try (ResultSet rs = st.executeQuery()) {
+                return rs.next(); // 1件でもあれば true、なければ false
+            }
+        }
+    }
+    
+    //チャットルーム新規作成
+    public int insertRoom(Long candidateId, Long companyId) throws Exception {
+        String sql = "INSERT INTO chat_rooms (candidate_account_id, company_account_id) VALUES (?, ?)";
+
+        int rowCount = 0;
+
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setLong(1, candidateId);
+            st.setLong(2, companyId);
+
+            rowCount = st.executeUpdate();
+
+        } catch (SQLException e) {
+            throw e;
+        }
+
+        return rowCount;
+    }
 }
