@@ -5,6 +5,7 @@ import DAO.JobDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import login.AuthWeb;
 import tool.Action;
 
 public class JobStatusAction extends Action {
@@ -16,7 +17,7 @@ public class JobStatusAction extends Action {
         	//企業アカウントIDを取り出す
         	HttpSession session = request.getSession();
         	
-        	Long userId = (Long) session.getAttribute("company_account_id");
+        	Long userId = (Long) session.getAttribute(AuthWeb.company_key);
             
             //未ログインの場合のチェック
             if (userId == null) {

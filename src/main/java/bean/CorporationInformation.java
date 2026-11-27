@@ -1,6 +1,6 @@
 package bean;
 
-public class CorporationInformation implements java.io.Serializable{
+public class CorporationInformation extends CompanyAccount{
 
 	private Long company_account_id;
 	private String corporate_number;

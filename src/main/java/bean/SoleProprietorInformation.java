@@ -1,6 +1,6 @@
 package bean;
 
-public class SoleProprietorInformation implements java.io.Serializable{
+public class SoleProprietorInformation extends CompanyAccount{
 
 	private Long company_account_id;
 	private String trade_name;

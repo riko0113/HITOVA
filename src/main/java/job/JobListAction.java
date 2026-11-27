@@ -7,6 +7,7 @@ import bean.Job;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import login.AuthWeb;
 import tool.Action;
 
 public class JobListAction extends Action {
@@ -18,13 +19,13 @@ public class JobListAction extends Action {
 
         	HttpSession session = request.getSession();
         	
-        	Long userId = (Long) session.getAttribute("company_account_id");
+        	Long userId = (Long) session.getAttribute(AuthWeb.company_key);
             
             //未ログインの場合のチェック
             if (userId == null) {
                 // ログイン画面へリダイレクトする処理
             	response.sendRedirect(request.getContextPath() + "/login/login.jsp");
-                return "null";
+                return null;
             }
             
             // 求人DAOのインスタンス生成
@@ -35,7 +36,7 @@ public class JobListAction extends Action {
             
             request.setAttribute("jobList", jobList);
             
-            return ""; 
+            return "/jobregister/jobregisterlist.jsp"; 
             
         } catch (Exception e) {
             //サーバー側のログにエラーの詳細を出力する

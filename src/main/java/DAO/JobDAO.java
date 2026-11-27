@@ -47,12 +47,15 @@ public class JobDAO extends DAO {
                      "j.interview_location, " +
                      "j.publication_status, " +
                      "j.created_at, " +
+                     "COUNT(a.application_id) AS applicant_count, " +
                      "j.updated_at " +
                      "FROM jobs j " +
                      "LEFT JOIN occupations jt ON j.job_type_id = jt.occupations_id " +
                      "LEFT JOIN employments_type et ON j.employment_type_id = et.employment_type_id " +
                      "LEFT JOIN salaries_type st ON j.salary_type_id = st.salary_type_id " +
-                     "WHERE j.company_account_id = ?";
+                     "LEFT JOIN applications_history a ON j.job_id = a.job_id " +
+                     "WHERE j.company_account_id = ? " +
+                     "GROUP BY j.job_id, jt.job_type_name, et.employment_type_name, st.salary_type_name";
 
         // try-with-resources構文でコネクションとステートメントを自動クローズ
         try (Connection con = getConnection();
@@ -97,6 +100,7 @@ public class JobDAO extends DAO {
                     job.setInterview_location(rs.getString("interview_location"));
                     
                     job.setPublication_status(rs.getObject("publication_status") != null ? rs.getBoolean("publication_status") : null);
+                    job.setApplicant_count(rs.getInt("applicant_count"));
                     
                     // 日時データの変換 (Timestamp -> LocalDateTime)
                     Timestamp createdAt = rs.getTimestamp("created_at");
@@ -272,5 +276,243 @@ public class JobDAO extends DAO {
         sb.append("]");
         
         return sb.toString();
+    }
+    
+    // 特定のマスタ情報（職種・雇用形態・給与区分）のリストを取得するメソッド
+    public List<Job> getInfo(Long companyAccountId) throws Exception {
+        List<Job> list = new ArrayList<>();
+        
+        
+        // 必要なカラムだけを選択して重複を除外（必要に応じて DISTINCT を付与）
+        String sql = "SELECT DISTINCT " +
+                     "j.job_type_id, " +
+                     "jt.job_type_name, " +
+                     "j.employment_type_id, " +
+                     "et.employment_type_name, " +
+                     "j.salary_type_id, " +
+                     "st.salary_type_name " +
+                     "FROM jobs j " +
+                     "LEFT JOIN occupations jt ON j.job_type_id = jt.occupations_id " +
+                     "LEFT JOIN employments_type et ON j.employment_type_id = et.employment_type_id " +
+                     "LEFT JOIN salaries_type st ON j.salary_type_id = st.salary_type_id";
+
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            
+            while (rs.next()) {
+                Job job = new Job();
+                
+                // 取得したい項目のみ Bean にセット
+                job.setJob_type_id(rs.getLong("job_type_id"));
+                job.setJob_type_name(rs.getString("job_type_name"));
+                job.setEmployment_type_id(rs.getInt("employment_type_id"));
+                job.setEmployment_type_name(rs.getString("employment_type_name"));
+                job.setSalary_type_id(rs.getInt("salary_type_id"));
+                job.setSalary_type_name(rs.getString("salary_type_name"));
+
+                list.add(job);
+            }
+        }
+        return list;
+    }
+    
+    // 求人IDと企業アカウントIDを指定して1件の求人情報を取得するメソッド
+    public Job searchDetail(Long jobId, Long companyAccountId) throws Exception {
+        Job job = null;
+
+        // SQL文の定義（プレースホルダーを使用し、SQLインジェクションを防止）
+        String sql = "SELECT j.job_id, " +
+                     "j.job_type_id, " +
+                     "jt.job_type_name, " +
+                     "j.company_account_id, " +
+                     "j.employment_type_id, " +
+                     "et.employment_type_name, " +
+                     "j.salary_type_id, " +
+                     "st.salary_type_name, " +
+                     "j.title, " +
+                     "j.description, " +
+                     "j.requirement, " +
+                     "j.headcount, " +
+                     "j.location, " +
+                     "j.access, " +
+                     "j.salary, " +
+                     "j.allowance, " +
+                     "j.transportation_fee, " +
+                     "j.working_hours, " +
+                     "j.holiday, " +
+                     "j.smoking_prevention, " +
+                     "j.image_url, " +
+                     "j.insurance, " +
+                     "j.benefits, " +
+                     "j.workplace_pr, " +
+                     "j.selection_process, " +
+                     "j.interview_location, " +
+                     "j.publication_status, " +
+                     "j.created_at, " +
+                     "j.updated_at " +
+                     "FROM jobs j " +
+                     "LEFT JOIN occupations jt ON j.job_type_id = jt.occupations_id " +
+                     "LEFT JOIN employments_type et ON j.employment_type_id = et.employment_type_id " +
+                     "LEFT JOIN salaries_type st ON j.salary_type_id = st.salary_type_id " +
+                     "WHERE j.job_id = ? AND j.company_account_id = ?";
+        
+        // try-with-resources構文でコネクションとステートメントを自動クローズ
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setLong(1, jobId);
+            pstmt.setLong(2, companyAccountId);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    job = new Job();
+
+                    //プレースホルダーに値をセット
+                    job.setJob_id(rs.getLong("job_id"));
+                    job.setJob_type_id(rs.getLong("job_type_id"));
+                    job.setJob_type_name(rs.getString("job_type_name"));
+                    job.setCompany_account_id(rs.getLong("company_account_id"));
+                    job.setEmployment_type_id(rs.getInt("employment_type_id"));
+                    job.setEmployment_type_name(rs.getString("employment_type_name"));
+                    job.setSalary_type_id(rs.getInt("salary_type_id"));
+                    job.setSalary_type_name(rs.getString("salary_type_name"));
+                    job.setTitle(rs.getString("title"));
+                    job.setDescription(rs.getString("description"));
+                    job.setRequirement(rs.getString("requirement"));
+                    job.setHeadcount(rs.getString("headcount"));
+                    job.setLocation(rs.getString("location"));
+                    job.setaccess(rs.getString("access"));
+                    job.setSalary(rs.getString("salary"));
+                    job.setAllowance(rs.getString("allowance"));
+                    job.setTransportation_fee(rs.getObject("transportation_fee") != null ? rs.getBoolean("transportation_fee") : null);
+                    job.setWorking_hours(rs.getString("working_hours"));
+                    job.setHoliday(rs.getString("holiday"));
+                    job.setSmoking_prevention(rs.getString("smoking_prevention"));
+                    job.setImage_url(rs.getString("image_url"));
+                    job.setInsurance(rs.getString("insurance"));
+                    job.setBenefits(rs.getString("benefits"));
+                    job.setWorkplace_pr(rs.getString("workplace_pr"));
+                    job.setSelection_process(rs.getString("selection_process"));
+                    job.setInterview_location(rs.getString("interview_location"));
+                    job.setPublication_status(rs.getObject("publication_status") != null ? rs.getBoolean("publication_status") : null);
+
+                    Timestamp createdAt = rs.getTimestamp("created_at");
+                    if (createdAt != null) {
+                        job.setCreated_at(createdAt.toLocalDateTime());
+                    }
+
+                    Timestamp updatedAt = rs.getTimestamp("updated_at");
+                    if (updatedAt != null) {
+                        job.setUpdated_at(updatedAt.toLocalDateTime());
+                    }
+                }
+            }
+        }
+        return job;
+    }
+    
+    // 求人情報を更新するメソッド
+    public int update(
+            long jobId,
+            Long userId,
+            int jobTypeId,
+            String title,
+            int employmentTypeId,
+            String description,
+            String requirement,
+            String headcount,
+            String location,
+            String access,
+            int salaryTypeId,
+            String salary,
+            String allowance,
+            boolean transportationFee,
+            String workingHours,
+            String holiday,
+            String smokingPrevention,
+            String[] insurance,
+            String benefits,
+            String imageUrl,
+            String workplacePr,
+            String selectionProcess,
+            String interviewLocation,
+            boolean publicationStatus
+    ) throws Exception {
+
+        // SQL文の定義（WHERE句でjob_idとcompany_account_idを指定して自社の求人のみ更新）
+        String sql = "UPDATE jobs SET "
+                   + "job_type_id = ?, "
+                   + "title = ?, "
+                   + "employment_type_id = ?, "
+                   + "description = ?, "
+                   + "requirement = ?, "
+                   + "headcount = ?, "
+                   + "location = ?, "
+                   + "access = ?, "
+                   + "salary_type_id = ?, "
+                   + "salary = ?, "
+                   + "allowance = ?, "
+                   + "transportation_fee = ?, "
+                   + "working_hours = ?, "
+                   + "holiday = ?, "
+                   + "smoking_prevention = ?, "
+                   + "insurance = ?, "
+                   + "benefits = ?, "
+                   + "image_url = ?, "
+                   + "workplace_pr = ?, "
+                   + "selection_process = ?, "
+                   + "interview_location = ?, "
+                   + "publication_status = ?, "
+                   + "updated_at = CURRENT_TIMESTAMP "
+                   + "WHERE job_id = ? AND company_account_id = ?";
+
+        int rowCount = 0;
+
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+
+            // SET句のプレースホルダーに値をセット
+            st.setInt(1, jobTypeId);
+            st.setString(2, title);
+            st.setInt(3, employmentTypeId);
+            st.setString(4, description);
+            st.setString(5, requirement);
+            st.setString(6, headcount);
+            st.setString(7, location);
+            st.setString(8, access);
+            st.setInt(9, salaryTypeId);
+            st.setString(10, salary);
+            st.setString(11, allowance);
+            st.setBoolean(12, transportationFee);
+            st.setString(13, workingHours);
+            st.setString(14, holiday);
+            st.setString(15, smokingPrevention);
+
+            // insuranceのString[] をJSONB形式に変換してセット
+            PGobject jsonObject = new PGobject();
+            jsonObject.setType("jsonb");
+            jsonObject.setValue(convertStringArrayToJson(insurance));
+            st.setObject(16, jsonObject);
+
+            st.setString(17, benefits);
+            st.setString(18, imageUrl);
+            st.setString(19, workplacePr);
+            st.setString(20, selectionProcess);
+            st.setString(21, interviewLocation);
+            st.setBoolean(22, publicationStatus);
+
+            // WHERE句のプレースホルダーに値をセット
+            st.setLong(23, jobId);
+            st.setLong(24, userId);
+
+            // UPDATE文を実行し、更新された行数を返す
+            rowCount = st.executeUpdate();
+
+        } catch (SQLException e) {
+            throw e;
+        }
+
+        return rowCount;
     }
 }
