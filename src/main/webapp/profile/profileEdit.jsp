@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="/HITOVA/profileCss/profileInputError.css">
-<script src="/HITOVA/js/profileRegister.js"></script>
+<script src="/HITOVA/profilejs/profileRegister.js"></script>
 
 <div class="profile-container">
 
